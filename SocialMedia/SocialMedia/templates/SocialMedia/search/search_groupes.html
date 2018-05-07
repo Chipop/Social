@@ -1,0 +1,100 @@
+{% extends "SocialMedia/search/base_search.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% block title %}{{ block.super }} Recherche : {{ keywords }}{% endblock %}
+
+{% block searchcontent %}
+
+    <!-- Main Content Start -->
+    <div class="main--content col-md-8 pb--60" data-trigger="stickyScroll">
+        <div class="main--content-inner">
+
+            <!-- Title  Start -->
+            <div class="filter--nav pb--30 clearfix titre-search-custom">
+                <div class="filter--link float--left">
+                    <h2 class="h4">Groupes trouvés : {{ groupes.paginator.count }}</h2>
+                </div>
+            </div>
+            <!-- Title  End -->
+
+            {% if groupes %}
+                <!-- Groupes Items Start -->
+                <div class="box--items border-light-custom">
+                    <div class="row gutter--15 AdjustRow">
+                        {% for groupe in groupes|slice:":12" %}
+                            <div class="col-md-3 col-xs-6 col-xxs-12">
+                                <!-- Box Item Start -->
+                                <div class="box--item text-center">
+                                    <a href="group-home.html" class="img" data-overlay="0.1">
+                                        <img src="{{ groupe.photo_profil.image.url }}" alt="" style="height: 100px;">
+                                    </a>
+
+                                    <div class="info">
+
+                                        <div class="title">
+                                            <h2 class="h6"><a href="group-home.html">{{ groupe.nom }}</a></h2>
+                                        </div>
+
+                                        <div class="meta">
+                                            <p><i class="fa mr--8 fa-street-view"></i>Groupe {{ groupe.statut_groupe }}
+                                            </p>
+                                            <p><i class="fa mr--8 fa-user-o"></i>{{ groupe.adherents.count }} Membres
+                                            </p>
+                                        </div>
+
+
+                                        <div class="desc text-darker">
+                                            <p>{{ groupe.description | truncatechars:30 }}</p>
+                                        </div>
+
+                                        <div class="action">
+                                            <a href="group-home.html">Détails du groupe<i
+                                                    class="fa ml--10 fa-caret-right"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Box Item End -->
+                            </div>
+                        {% endfor %}
+                    </div>
+
+
+                </div>
+                <!-- Groupes Items End -->
+            {% endif %}
+
+            {% if groupes.paginator.count is not 0 %}
+                <!-- Page Count Start -->
+                <div class="page--count pt--30 " style="text-align:center;">
+                    <label class="ff--primary fs--14 fw--500 text-darker">
+
+                        {% if groupes.has_previous %}
+                            <a href="?page=1" class="btn-link"><i class="fa fa-caret-left"></i><i
+                                    class="fa fa-caret-left"></i></a>
+                            <a href="?page={{ groupes.previous_page_number }}" class="btn-link"><i
+                                    class="fa fa-caret-left"></i></a>
+                        {% endif %}
+
+                        <a class="btn-link">{{ groupes.number }}/{{ groupes.paginator.num_pages }}</a>
+
+                        {% if groupes.has_next %}
+                            <a href="?page={{ groupes.next_page_number }}" class="btn-link"><i
+                                    class="fa fa-caret-right"></i></a>
+                            <a href="?page={{ groupes.paginator.num_pages }}" class="btn-link"><i
+                                    class="fa fa-caret-right"></i><i class="fa fa-caret-right"></i></a>
+                        {% endif %}
+
+                    </label>
+                </div>
+                <!-- Page Count End -->
+            {% endif %}
+
+
+            <!-- Fin Recherche Groupes -->
+        </div>
+    </div>
+    <!-- Main Content End -->
+
+
+{% endblock searchcontent %}

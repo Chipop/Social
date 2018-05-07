@@ -1,0 +1,119 @@
+{% extends "SocialMedia/search/base_search.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }} Recherche : {{ keywords }}{% endblock %}
+
+{% block searchcontent %}
+
+    <!-- Main Content Start -->
+    <div class="main--content col-md-8 pb--60" data-trigger="stickyScroll">
+        <div class="main--content-inner">
+
+            <!-- Title  Start -->
+            <div class="filter--nav pb--30 clearfix titre-search-custom">
+                <div class="filter--link float--left">
+                    <h2 class="h4">Contacts trouvés : {{ profils.paginator.count }}</h2>
+                </div>
+
+            </div>
+            <!-- Title  End -->
+
+            {% if profils %}
+                <!-- Member Items Start -->
+                <div class="member--items border-light-custom">
+                    <div class="row gutter--15 AdjustRow">
+
+                        {% for profil in profils %}
+                            <div class="col-md-3 col-xs-6 col-xxs-12">
+                                <!-- Member Item Start -->
+                                <div class="member--item online">
+                                    <div class="img img-circle">
+                                        <a href="member-activity-personal.html" class="btn-link">
+                                            <img src="{{ profil.photo_profil.image.url }}" alt=""
+                                                 style="  height: 55px;  ">
+                                        </a>
+                                    </div>
+
+                                    <div class="name">
+                                        <h3 class="h6 fs--12">
+                                            <a href="member-activity-personal.html"
+                                               class="btn-link">{{ profil.user.first_name | title }} {{ profil.user.last_name | upper }}</a>
+                                        </h3>
+                                    </div>
+
+                                    <div class="activity">
+                                        <p><i class="fa mr--8 fa-clock-o"></i>Dernière activité :
+                                            <br>{% if profil.user.last_login %} {{ profil.user.last_login | date }} {% else %} - {% endif %}</p>
+                                    </div>
+
+                                    <div class="actions">
+                                        <ul class="nav">
+                                            <li>
+                                                <a href="#" title="Send Message" class="btn-link" data-toggle="tooltip"
+                                                   data-placement="bottom">
+                                                    <i class="fa fa-envelope-o"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" title="Add Friend" class="btn-link" data-toggle="tooltip"
+                                                   data-placement="bottom">
+                                                    <i class="fa fa-user-plus"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" title="Media" class="btn-link" data-toggle="tooltip"
+                                                   data-placement="bottom">
+                                                    <i class="fa fa-folder-o"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Member Item End -->
+                            </div>
+                        {% endfor %}
+
+                        <!-- Member Item End -->
+                    </div>
+
+                </div>
+            {% endif %}
+
+            {% if profils.paginator.count is not 0 %}
+
+            <!-- Page Count Start -->
+            <div class="page--count pt--30 " style="text-align:center;">
+                <label class="ff--primary fs--14 fw--500 text-darker">
+
+                    {% if profils.has_previous %}
+                        <a href="?page=1" class="btn-link"><i class="fa fa-caret-left"></i><i class="fa fa-caret-left"></i></a>
+                        <a href="?page={{ profils.previous_page_number }}" class="btn-link"><i class="fa fa-caret-left"></i></a>
+                    {% endif %}
+
+                    <a class="btn-link">{{ profils.number }}/{{ profils.paginator.num_pages }}</a>
+
+                    {% if profils.has_next %}
+                        <a href="?page={{ profils.next_page_number }}" class="btn-link"><i class="fa fa-caret-right"></i></a>
+                        <a href="?page={{ profils.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i><i class="fa fa-caret-right"></i></a>
+                    {% endif %}
+
+                </label>
+            </div>
+            <!-- Page Count End -->
+
+        {% endif %}
+
+
+
+
+
+
+        </div>
+        <!-- Member Items End -->
+
+
+    </div>
+    <!-- Main Content End -->
+
+
+{% endblock searchcontent %}

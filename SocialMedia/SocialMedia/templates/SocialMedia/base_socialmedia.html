@@ -1,0 +1,216 @@
+{% extends 'base_main.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+
+{% block stylesheets %}
+    {{ block.super }}
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ==== Document Title ==== -->
+    <title>{% block title %}Réseau social - {% endblock title %}</title>
+
+    <!-- ==== Document Meta ==== -->
+    <meta name="author" content="ThemeLooks">
+    <meta name="description" content="Multipurpose Facebook Network HTML5 Template">
+    <meta name="keywords"
+          content="Facebook media, Facebook network, forum, shop, bootstrap, html5, css3, template, responsive, retina ready">
+
+    <!-- ==== Favicon ==== -->
+    <link rel="icon" href="{% static 'Socialmedia/favicon.png' %}" type="image/png">
+
+    <!-- ==== Google Font ==== -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700%7CRoboto:300,400,400i,500,700">
+
+    <!-- ==== Plugins Bundle ==== -->
+    <link rel="stylesheet" href="{% static 'Socialmedia/css/plugins.min.css' %}">
+
+    <!-- ==== Main Stylesheet ==== -->
+    <link rel="stylesheet" href="{% static 'Socialmedia/style.css' %}">
+
+    <!-- ==== Responsive Stylesheet ==== -->
+    <link rel="stylesheet" href="{% static 'Socialmedia/css/responsive-style.css' %}">
+
+    <!-- ==== Color Scheme Stylesheet ==== -->
+    <link rel="stylesheet" href="{% static 'Socialmedia/css/colors/color-1.css' %}" id="changeColorScheme">
+
+    <!-- ==== Custom Stylesheet ==== -->
+    <link rel="stylesheet" href="{% static 'Socialmedia/css/custom.css' %}">
+
+
+    <!-- ==== HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries ==== -->
+    <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+{% endblock stylesheets %}
+
+
+{% block menu %}
+
+    <!-- Header Navbar Start -->
+    <div class="header--navbar navbar bg-black" data-trigger="sticky">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle style--1 collapsed" data-toggle="collapse"
+                        data-target="#headerNav">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <!-- Header Navbar Logo Start -->
+                <div class="header--navbar-logo navbar-brand">
+                    <a href="/reseausocial/home/">
+                        <h2 class="menu-title">ESPR</h2>
+                    </a>
+                </div>
+                <!-- Header Navbar Logo End -->
+            </div>
+
+            {% if user.is_authenticated %}
+
+                <div id="headerNav" class="navbar-collapse collapse float--right navbar-menu-custom">
+
+
+                    <!-- Header Nav Links Start -->
+                    <ul class="header--nav-links style--1 nav ff--primary">
+
+                        <li class="li-search-menu text-center-menu">
+                            <form action="/reseausocial/search/" name="search-form">
+                                <div class="product--quantity">
+                                    <div class="input-group input-group-menu">
+                                        <input type="text" name="keywords" placeholder="Contacts, jobs, groupes..."
+                                               style="  padding-left: 1px; padding-right: 15px;">
+
+                                        <div class="input-group-addon text-default search-icon-menu"
+                                             onclick="javascript:document.forms['search-form'].submit();">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+
+
+
+                        {% if user.is_authenticated %}
+                            <li>
+                                <a href="{% url 'SocialMedia:profil' %}" class="btn-link text-center-menu">
+                                    <i class="fa mr--8 fa-user-o"></i>
+                                    <span>{{ user.first_name }} </span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle text-center-menu" data-toggle="dropdown">
+                                <span>Amis</span>
+                            </a>
+
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle text-center-menu" data-toggle="dropdown">
+                                <span>Groupes</span>
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li><a href="forums.html">Créer un groupe</a></li>
+                                <li><a href="sub-forums.html">Voir tous les groupes</a></li>
+                                <li><a href="topics.html">Les groupes dont je fais parti</a></li>
+                            </ul>
+                        </li>
+
+
+                        <li class="dropdown ">
+                            <a href="cart.html" title="Demandes d'amitié" class="text-center-menu">
+                                <i class="fa fa-users"></i>
+                                <span class="badge">1</span>
+                            </a>
+
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="cart.html" title="Messages" class="text-center-menu">
+                                <i class="fa fa-comment"></i>
+                                <span class="badge">0</span>
+                            </a>
+
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="cart.html" title="Notifications" class="text-center-menu">
+                                <i class="fa fa-bell"></i>
+                                <span class="badge">3</span>
+                            </a>
+
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="cart.html" title="Notifications" class="text-center-menu">
+                                <i class="fa fa-cog"></i>
+                                <i class="fa fa-sort-down"></i>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li><a href="forums.html">Modifier mes infos</a></li>
+                                <li><a href="sub-forums.html">...</a></li>
+                                <li><a href="topics.html">...</a></li>
+                            </ul>
+
+                        </li>
+
+
+                    </ul>
+                    <!-- Header Nav Links End -->
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Header Navbar End -->
+    </header>
+    <!-- Header Section End -->
+    </div>
+{% endblock menu %}
+
+{% block banner %}
+{% endblock banner %}
+
+
+{% block content %}
+{% endblock content %}
+
+{% block footer %}
+    {{ block.super }}
+{% endblock footer %}
+
+{% block scripts %}
+    {{ block.super }}
+    <div id="backToTop">
+        <a href="#" class="btn"><i class="fa fa-caret-up"></i></a>
+    </div>
+    <!-- Back To Top Button End -->
+
+    <!-- ==== Plugins Bundle ==== -->
+    <script src="{% static 'Socialmedia/js/plugins.min.js' %}"></script>
+
+
+    <!-- ==== Main Script ==== -->
+    <script src="{% static 'Socialmedia/js/main.js' %}"></script>
+
+    <!-- ==== Custom Script ==== -->
+    <script src="{% static 'Socialmedia/js/custom.js' %}"></script>
+    <script>
+        $("#linkReseauSocial").addClass("active");
+        $("#linkReseauSocial1").addClass("active");
+        $("#linkReseauSocial2").addClass("active");
+    </script>
+
+{% endblock scripts %}
