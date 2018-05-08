@@ -12,8 +12,11 @@
                                         <h3 class="h4 fw--700">
                                             <span class="mr--4">A Propos</span>
                                             <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                            <a href="{% url 'SocialMedia:editAbout' %}" ><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
                                         </h3>
                                     </div>
+
 
                                     <div class="profile--info">
                                         <table class="table">
@@ -45,12 +48,16 @@
                                 </div>
                                 <!-- Profile Item End -->
 
+                            <hr style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);">
+
                                 <!-- Profile Item Start -->
                                 <div class="profile--item">
                                     <div class="profile--heading">
                                         <h3 class="h4 fw--700">
                                             <span class="mr--4">Biography</span>
                                             <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                            <a href="javascript:void(0)"><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
                                         </h3>
                                     </div>
 
@@ -60,44 +67,119 @@
                                 </div>
                                 <!-- Profile Item End -->
 
+
+                                <hr style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);">
+
+
                                 <!-- Profile Item Start -->
                                 <div class="profile--item">
+
                                     <div class="profile--heading">
                                         <h3 class="h4 fw--700">
-                                            <span class="mr--4">Work Experience</span>
+                                            <span class="mr--4">Experiences Professionnelles</span>
+                                            <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                        </h3>
+                                    </div>
+
+                                    <div class="profile--info">
+                                            {% for experience in experiences %}
+                                                <div class="row">
+                                                    <div class="col-xs-2"><img src="{{ experience.entreprise.logo.url }}" class="img-responsive img-rounded float--left" /></div>
+                                                    <div class="col-xs-10">
+                                                                <a href="{% url 'SocialMedia:editExperience' experience.id %}"><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
+                                                                <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                                                        <div class="row"><p class="h6 fa--700 text-darkest">{{ experience.poste.nom_poste | default:experience.nom_poste }}</p></div>
+                                                        <div class="row"><p class="h6 fw--600 text-darkest">{{ experience.entreprise.nom }}</div>
+                                                        <div class="row"><p class="h6 fw--500 text-darkest">{{ experience.date_debut|date:"M. Y" }} - {{ experience.date_fin|date:"M. Y" }} &#xb7; {{ experience.date_fin|timeuntil:experience.date_debut   }}</p></div>
+                                                        <div class="row"><p class="h6 fw--400 text-darkest">{{ experience.entreprise.ville }}</div>
+                                                        <div class="row"><p class="h6 fw--400 text-darkest" style="margin-top: 8px;">{{ experience.description}}</div>
+                                                    </div>
+                                                </div>
+                                                {% if not forloop.last %}
+                                                <hr width="50%" style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);height:1px;border:none;color:#1ea1f2;background-color:#1ea1f2"; />
+                                                {% endif %}
+                                            {% endfor %}
+                                    </div>
+                                </div>
+                                <!-- Profile Item End -->
+
+                            <hr style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);">
+
+                                <!-- Profile Item Start -->
+                                <div class="profile--item">
+
+                                    <div class="profile--heading">
+                                        <h3 class="h4 fw--700">
+                                            <span class="mr--4">Formation</span>
+                                            <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                        </h3>
+                                    </div>
+
+
+                                    <div class="profile--info">
+
+                                            {% for formation in formations %}
+                                                <div class="row">
+                                                    <div class="col-xs-2"><img src="{{ formation.ecole.logo.url }}" class="img-responsive img-rounded float--left" /></div>
+                                                    <div class="col-xs-10">
+                                            <a href="{% url 'SocialMedia:editFormation' formation.id %}"><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                                                        <div class="row"><p class="h6 fa--700 text-darkest">{{ formation.ecole.nom }}</p></div>
+                                                        <div class="row"><p class="h6 fw--600 text-darkest">{{ formation.nom_formation }} - {{ formation.domaine }}</div>
+                                                        <div class="row"><p class="h6 fw--500 text-darkest">{{ formation.annee_debut|date:"Y" }} - {{ formation.annee_fin|date:"Y" }}</p></div>
+                                                    </div>
+                                                </div>
+                                                {% if not forloop.last %}
+                                                    <hr width="50%" style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);height:1px;border:none;color:#1ea1f2;background-color:#1ea1f2";></hr>
+                                                {% endif %}
+                                            {% endfor %}
+
+                                    </div>
+                                </div>
+                                <!-- Profile Item End -->
+
+                                <hr style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);">
+
+                                <!-- Profile Item Start -->
+                                <div class="profile--item">
+
+                                    <div class="profile--heading">
+                                        <h3 class="h4 fw--700">
+                                            <span class="mr--4">Actions Benevoles</span>
                                             <i class="ml--10 text-primary fa fa-caret-right"></i>
                                         </h3>
                                     </div>
 
                                     <div class="profile--info">
                                         <dl>
+                                            {% for actionBenevole in actionsBenevoles %}
                                             <dt>
-                                                <p class="h6 fw--700 text-darkest">Graphic Designer 2010 - 2012</p>
-                                                <p><small class="fw--400 fs--12 text-darker">Graphicriver.net at Sydney</small></p>
-                                            </dt>
-                                            <dd>
-                                                <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour which don't look even slightly believable.</p>
-                                            </dd>
 
-                                            <dt>
-                                                <p class="h6 fw--700 text-darkest">Font-End Developer 2012 - 2014</p>
-                                                <p><small class="fw--400 fs--12 text-darker">Themeforest.net at Australia</small></p>
                                             </dt>
                                             <dd>
-                                                <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour which don't look even slightly believable.</p>
+                                                <div class="row">
+                                                    <div class="col-xs-2"><img src="{{ actionBenevole.organisme.image.url }}" alt="Supprimée" class="img-responsive img-rounded"></div>
+                                                    <div class="col-xs-10">
+                                            <a href="javascript:void(0)"><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                                                        <div class="row"><p class="h6 fw--700 text-darkest">{{ actionBenevole.poste.nom_poste | default_if_none:actionBenevole.nom_poste }} <span class="h6 fw--400 text-darkest">entre</span> {{ actionBenevole.date_debut }} - {{ actionBenevole.date_fin }}</p></div>
+                                                        <div class="row"><p class="h6 fw--600 text-darkest">{{ actionBenevole.organisme.nom | default_if_none:actionBenevole.nom_poste }}.</p></div>
+                                                        <div class="row"><p class="h6 fw--600 text-darkest">{{ actionBenevole.date_debut|date:"Y/m/d" }} - {{ actionBenevole.date_fin|date:"Y/m/d" }} &#xb7; {{ actionBenevole.date_fin|timeuntil:actionBenevole.date_debut   }}</p></div>
+                                                        <div class="row"><p><small class="fw--500 fs--12 text-darker">{{ actionBenevole.cause }}</small></p></div>
+                                                        <div class="row"><p class="h6 fw--400 text-darkest">{{ actionBenevole.description }}.</p></div>
+                                                    </div>
+                                                </div>
                                             </dd>
-
-                                            <dt>
-                                                <p class="h6 fw--700 text-darkest">Web Developer 2014 - Still Now</p>
-                                                <p><small class="fw--400 fs--12 text-darker">Codecanyon.net at Sydney</small></p>
-                                            </dt>
-                                            <dd>
-                                                <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour which don't look even slightly believable.</p>
-                                            </dd>
+                                                {% if not forloop.last %}
+                                                <hr width="50%" style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);height:1px;border:none;color:#1ea1f2;background-color:#1ea1f2;" />
+                                                {% endif %}
+                                            {% endfor %}
                                         </dl>
                                     </div>
                                 </div>
                                 <!-- Profile Item End -->
+
+                            <hr style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);">
 
                                 <!-- Profile Item Start -->
                                 <div class="profile--item">
@@ -105,6 +187,8 @@
                                         <h3 class="h4 fw--700">
                                             <span class="mr--4">Contact</span>
                                             <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                            <a href="javascript:void(0)"><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
                                         </h3>
                                     </div>
 
@@ -112,19 +196,19 @@
                                         <table class="table">
                                             <tr>
                                                 <th class="fw--700 text-darkest">Phone</th>
-                                                <td><a href="tel:+16105598246">{{ user.profil.tel }}</a></td>
+                                                <td><a class="h6 fa--400 text-darkest" href="tel:+16105598246">{{ user.profil.tel }}</a></td>
                                             </tr>
                                             <tr>
                                                 <th class="fw--700 text-darkest">E-mail</th>
-                                                <td><a href="#"><span class="__cf_email__" data-cfemail="4622232b2906233e272b362a236825292b">{% if user.email is not None %}{{ user.email }}{% else %}PROTECTED{% endif %}</span></a></td>
+                                                <td><a class="h6 fa--400 text-darkest" href="#"><span class="__cf_email__" data-cfemail="4622232b2906233e272b362a236825292b">{% if user.email is not None %}{{ user.email }}{% else %}PROTECTED{% endif %}</span></a></td>
                                             </tr>
                                             <tr>
                                                 <th class="fw--700 text-darkest">Website</th>
-                                                <td><a href="{{ user.profil.website }}" target="_blank">{{ user.profil.website }}</a></td>
+                                                <td><a class="h6 fa--400 text-darkest" href="{{ user.profil.website }}" target="_blank">{{ user.profil.website }}</a></td>
                                             </tr>
                                             <tr>
                                                 <th class="fw--700 text-darkest">Address</th>
-                                                <td>{{ user.profil.address|default:"Non Rempli" }}</td>
+                                                <td class="h6 fa--400 text-darkest">{{ user.profil.address|default:"Non Rempli" }}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -134,12 +218,8 @@
 
 
                             <!-- Profile Details End -->
-                        </div>
-                    </div>
-                    <!-- Main Content End -->
+
 {% endblock %}
-
-
 
 
 

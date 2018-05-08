@@ -10,6 +10,8 @@ admin.site.register(Groupe)
 admin.site.register(Commentaire)
 admin.site.register(Statut)
 admin.site.register(Suivie)
+admin.site.register(Notification)
+admin.site.register(ReseauSocialFile)
 admin.site.register(ActionBenevole)
 admin.site.register(Ecole)
 admin.site.register(Experience)
@@ -18,9 +20,3 @@ admin.site.register(Langue)
 admin.site.register(OffreEmploi)
 admin.site.register(Organisme)
 admin.site.register(Poste)
-admin.site.register(ReseauSocialFile)
-
-
-
-
-

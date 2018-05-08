@@ -40,6 +40,11 @@ class DemandeGroupe(models.Model):
         return self.emetteur.user.username + " à demandé de rejoidre le groupe " + self.groupe_recepteur.nom
 
 
+class Like(models.Model):
+    user = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE,related_name="like_user")
+    like_date_time = models.DateTimeField(auto_now_add=True)
+
+
 class Statut(models.Model):
     date_statut = models.DateTimeField()
     contenu_statut = models.CharField(max_length=6000)
@@ -49,7 +54,7 @@ class Statut(models.Model):
     mur_profil = models.OneToOneField('main_app.Profil', on_delete=models.CASCADE, null=True, blank=True,
                                       related_name="statut_mur_profil")
     mur_groupe = models.OneToOneField(Groupe, on_delete=models.CASCADE, null=True, blank=True)
-    liked_by = models.ManyToManyField('main_app.Profil', related_name="like")
+    liked_by = models.ManyToManyField('main_app.Profil',related_name="statut_liked_by")
 
 
 class Commentaire(models.Model):
@@ -109,11 +114,6 @@ VALID_IMAGE_EXTENSIONS = [
 ]
 
 
-def valid_url_extension(url, extension_list=VALID_IMAGE_EXTENSIONS):
-    # http://stackoverflow.com/a/10543969/396300
-    return any([url.endswith(e) for e in extension_list])
-
-
 def generate_path(instance, filename):
     extension = os.path.splitext(filename)[1][1:]
     if extension in VALID_IMAGE_EXTENSIONS:
@@ -137,7 +137,9 @@ class ReseauSocialFile(models.Model):
     fichier = models.FileField(upload_to=generate_path)
     date_telechargement = models.DateTimeField()
     album = models.ForeignKey(Album, on_delete=models.CASCADE, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profil = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE)
+    likes = models.ManyToManyField(Like)
+    comment = models.ManyToManyField(Commentaire)
 
     def __str__(self):
         return self.fichier.name

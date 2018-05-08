@@ -1009,12 +1009,6 @@ label > span {
 }
 
 /* 2.7. BACKGROUND OVERLAY */
-[data-overlay] {
-    position: relative;
-    color: #fff;
-    z-index: 0;
-}
-
 [data-overlay]:before {
     content: " ";
     position: absolute;
@@ -4777,9 +4771,9 @@ body.isScrolling #backToTop {
     11. COVER HEADER
 \*------------------------------------*/
 .cover--header.bg--img {
-    padding-top: 215px;
+    padding-top: 130px;
     color: #999;
-    background-size: 100% 300px;
+    background-size: 100% 260px;
     background-position: center top;
 }
 
@@ -5039,10 +5033,6 @@ body.isScrolling #backToTop {
     background-color: #f7f8f9;
 }
 
-.header--navbar .navbar-collapse {
-    padding-left: 0;
-    padding-right: 0;
-}
 
 .header--nav-links {
     margin-left: -15px;

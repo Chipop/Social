@@ -1,6 +1,6 @@
-var toggle = document.getElementById('container');
+/*var toggle = document.getElementById('container');
 var toggleContainer = document.getElementById('toggle-container');
-var toggleNumber;
+var toggleNumber;*/
 
 
 
@@ -9,6 +9,9 @@ var toggleNumber;
 $(document).ready( function() {
 
 $('#photoform .input-group, #photoprofilform .input-group').find(':text').val('');
+
+
+
 
 	$("#btcoverchange, #btprofilchange").click(function() {
         $(".modal-footer").show();

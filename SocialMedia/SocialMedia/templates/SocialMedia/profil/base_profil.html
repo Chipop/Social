@@ -1,241 +1,251 @@
 {% extends "SocialMedia/base_socialmedia.html" %}
 {% load staticfiles %}
 {% load widget_tweaks %}
-
-
 {% block title %}{{ user.username }}{% endblock %}
-
-
 {% block content %}
 
-    <div id="coverpic" class="cover--header pt--80 text-center" data-bg-img="{{ user.profil.photo_couverture.image.url|default:'/media/SocialMedia/default.jpg' }}" data-overlay="0.6" data-overlay-color="white" >
- 
-                    <button id="btcoverchange" class="btchangepic" data-toggle="modal" data-target="#squarespaceModal"><i class="fa fa-picture-o" aria-hidden="true"></i></button>
+    {% block modals %}
+        <!-- line modal for cover -->
+        <div id="#formcover">
+            <div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span
+                                    aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                            <h3 class="modal-title" id="lineModalLabel">Choisir Votre Image</h3>
+                        </div>
+                        <div class="modal-body">
 
-            <div class="container">
-                <div class="cover--avatar online" data-overlay="0.3" data-overlay-color="primary">
+                            <!-- content goes here -->
+                            <form method="post" onsubmit="return " id="photoform" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <div class="input-group">
+                              <span class="input-group-btn">
+                                  <span class="btn btn-default btn-file" style="font-weight: bold;font-size: 22px;">
+                                      Choisir Une Image…{% render_field photoform.image accept='image/*' class="form-control" style="cursor: pointer" id="imgInp" %}
+                                  </span>
+                              </span>
+                                        <input type="text" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="photo">
+                                    <img id='img-upload'/>
+                                </div>
+                                <div class="form-group text-center">
+                                    <button class="mybt"
+                                            style="background-color:#1ea1f2; border: none;border-radius:50px;color:#ffffff;display:inline-block;line-height:44px;text-align:center;text-decoration:none;width:250px;-webkit-text-size-adjust:none;"
+                                            type="submit"><i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                        Changer Photo
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="panel-group uploadprogress hidden">
+                                <h4 class="modal-title">Uploading...</h4>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                            </div>
 
-                    <div class="photprofilcontainer">
-                            <img id="profilpic" class="image " src="{{ user.profil.photo_profil.image.url|default:'/media/SocialMedia/default.jpg' }}" alt="">
-                            <div class="middle">
-                            <div class="text">
-                                <a href="javascript:return false"  title="Photo Profil" class="btn-link" data-toggle="tooltip" data-placement="bottom">
-                                    <i id="btprofilchange" class="btchangepic profilpic fa fa-picture-o" data-toggle="modal" data-target="#squarespaceModalprofil" aria-hidden="true"></i>
-                                </a>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default btcancelupload" data-dismiss="modal"
+                                            role="button"><i class="fa fa-times" aria-hidden="true"></i> Annuler
+                                    </button>
+                                </div>
                             </div>
-                            </div>
+                        </div>
                     </div>
-
-                </div>
-                <div class="cover--user-name">
-
-
-        <h2 class="h3 fw--600">{{ user.first_name }} {{ user.last_name }}</h2>
-                </div>
-
-                <div class="cover--user-desc fw--400 fs--18 fstyle--i text-darkest">
-                    <p>Hello everyone ! There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour.</p>
                 </div>
             </div>
         </div>
-    <!-- Cover Header End -->
+        <!-- line modal for cover -->
+        <div id="#formprofil">
+            <div class="modal fade" id="squarespaceModalprofil" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span
+                                    aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                            <h3 class="modal-title" id="lineModalLabel">Choisir Votre Image De Profil</h3>
+                        </div>
+                        <div class="modal-body">
+
+                            <!-- content goes here -->
+                            <form method="post" onsubmit="return " id="photoprofilform" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <div class="input-group">
+                              <span class="input-group-btn">
+                                  <span class="btn btn-default btn-file1"
+                                        style="font-weight: bold;font-size: 22px;cursor: pointer;">
+                                      Choisir Votre Image De Profil…{% render_field photoform.image class="form-control" accept='image/*' id="imgInp1" %}
+                                  </span>
+                              </span>
+                                        <input type="text" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="photo1">
+                                    <img id='img-upload1'/>
+                                </div>
+                                <div class="form-group text-center">
+                                    <button class="mybt"
+                                            style="background-color:#1ea1f2; border: none;border-radius:50px;color:#ffffff;display:inline-block;line-height:44px;text-align:center;text-decoration:none;width:250px;-webkit-text-size-adjust:none;"
+                                            type="submit"><i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                        Changer Photo
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="panel-group uploadprogress hidden uploadp">
+                                <h4 class="modal-title">Uploading...</h4>
+                                <div class="progress">
+                                    <div class="progress-bar prog" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default btcancelupload btc"
+                                            data-dismiss="modal" role="button"><i class="fa fa-times"
+                                                                                  aria-hidden="true"></i> Annuler
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    {% endblock %}
+
+
 
     <!-- Page Wrapper Start -->
-    <section class="page--wrapper pt--80 pb--20">
-        <div class="container">
-            <div class="row">
+    <section class="page--wrapper pb--20">
+        <div class="container-fluid">
+            <div class="row  pt--40" style="padding: 40px 10%; ">
 
-                <!-- Main Content Start -->
-                <div class="main--content col-md-8 pb--60" data-trigger="stickyScroll">
-                    <div class="main--content-inner drop--shadow">
-                        <!-- Content Nav Start -->
-                        <div class="content--nav pb--30">
-                            <ul class="nav ff--primary fs--14 fw--500 bg-lighter profil_links_menu">
-                                <li><a href="">Activity</a></li>
-                                <li class="active"><a href="{% url 'SocialMedia:profil' %}">Profil</a></li>
-                                <li><a href="{% url 'SocialMedia:demandes' %}">Demandes</a></li>
-                                <li><a href="{% url 'SocialMedia:groupes' %}">Groups</a></li>
-                                <li><a href="member-forum-topics.html">Forum</a></li>
-                                <li><a href="member-media-all.html">Media</a></li>
-                            </ul>
+                <div class="col-md-8 pb--60">
+
+                    <div class="row main--content"
+                         style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);width:95%;margin-left:auto;margin-right:auto;">
+                        <button id="btcoverchange" class="btchangepic" data-toggle="modal"
+                                data-target="#squarespaceModal"><i class="fa fa-picture-o" aria-hidden="true"></i>
+                        </button>
+                        <!-- Cover Header Start -->
+                        <div id="coverpic" class="cover--header pt--80 text-center"
+                             data-bg-img="{{ user.profil.photo_couverture.image.url|default:'/media/SocialMedia/default.jpg' }}"
+                             data-overlay="0.6" data-overlay-color="white">
+                             
+
+
+                            <div style="width: auto;padding-bottom: 30px;">
+                                <div class="cover--avatar online" data-overlay="0.3" data-overlay-color="primary">
+
+                                    <div class="photprofilcontainer">
+                                        <img id="profilpic" class="image "
+                                             src="{{ user.profil.photo_profil.image.url|default:'/media/SocialMedia/default.jpg' }}"
+                                             alt="">
+                                        <div class="middle">
+                                            <div class="text">
+                                                <a href="javascript:return false" title="Photo Profil" class="btn-link"
+                                                   data-toggle="tooltip" data-placement="bottom">
+                                                    <i id="btprofilchange" class="btchangepic profilpic fa fa-picture-o"
+                                                       data-toggle="modal" data-target="#squarespaceModalprofil"
+                                                       aria-hidden="true"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="cover--user-name">
+
+                                    <h2 class="h3 fw--600">{{ user.first_name }} {{ user.last_name }}</h2>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <a href="{% url 'SocialMedia:editAbout' %}"><i
+                                                class="fa fa-pencil-square-o float--right"
+                                                style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                                    </div>
+                                    <div class="col">
+                                        <a href="javascript:void(0)"><i class="fa fa-plus-square float--right"
+                                                                        style="font-size:20px;margin-right: 20px;"
+                                                                        aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+
+                                <div class="cover--user-desc fw--400 fs--18 fstyle--i text-darkest"
+                                     style="margin-top: 0;">
+                                    <p style="margin: 0;">
+                                        {% if poste_actuel is not None and poste_actuel_renseigne is not None %}Poste
+                                            Actuel: {{ poste_actuel.nom_poste }} • {% else %}Non Specialisé
+                                            • {% endif %}{{ ecole.ecole__nom|default:ecole_renseignee|default_if_none:"Non Mentionnée" }}
+                                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+
+                                    </p>
+                                    <p style="margin: 0;">
+                                        {% if user.profil.entreprise is not None %}employé chez
+                                            {{ user.profil.entreprise.nom }} située à {{ user.profil.entreprise.ville }}
+                                            , {{ user.profil.entreprise.pays }}{% else %}Non embauché{% endif %} <i
+                                            class="fa fa-briefcase" aria-hidden="true"></i>
+
+                                    </p>
+                                    <p style="margin: 0;">
+                                        {% if user.profil.pays is not None or user.profil.pays is not None %}
+                                            {{ user.profil.ville }}, {{ user.profil.pays }}
+                                            <i class="fa fa-globe" aria-hidden="true"></i>{% endif %}
+
+                                    </p>
+
+                                </div>
+
+                            </div>
                         </div>
-                        <!-- Content Nav End -->
-                        {% block contentProfil %}
-                            <!-- Profile Details Start -->
-                            <div class="profile--details fs--14">
-                                <!-- Profile Item Start -->
-                                <div class="profile--item">
-                                    <div class="profile--heading">
-                                        <h3 class="h4 fw--700">
-                                            <span class="mr--4">A Propos</span>
-                                            <i class="ml--10 text-primary fa fa-caret-right"></i>
-                                        </h3>
-                                    </div>
+                        <!-- Cover Header End -->
 
-                                    <div class="profile--info">
-                                        <table class="table">
-                                            <tbody style="float:left;">
-                                            <tr>
-                                                <th class="fw--700 text-darkest">Linked Accounts</th>
-                                                <td>
-                                                    <a href="{{ user.profil.facebook }}" target="_blank"
-                                                       class="btn-link"><i style="font-size:20px;color:#3b5999"
-                                                                           class="fa fa-facebook-square"
-                                                                           aria-hidden="true"></i></a>
-                                                    <a href="{{ user.profil.youtube }}" target="_blank"
-                                                       class="btn-link"><i style="font-size:20px;color:#cd201f"
-                                                                           class="fa fa-youtube-square"
-                                                                           aria-hidden="true"></i></a>
-                                                    <a href="{{ user.profil.instagram }}" target="_blank"
-                                                       class="btn-link"><i style="font-size:20px;color:#e4405f"
-                                                                           class="fa fa-instagram"
-                                                                           aria-hidden="true"></i></a>
-                                                    <a href="{{ user.profil.linkedin }}" target="_blank"
-                                                       class="btn-link"><i style="font-size:20px;color:#0077B5"
-                                                                           class="fa fa-linkedin-square"
-                                                                           aria-hidden="true"></i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="fw--700 text-darkest">Nom Complet</th>
-                                                <td><a href="#" class="btn-link">{{ user.first_name }}</a></td>
-                                            </tr>
-                                            <tr>
-                                                <th class="fw--700 text-darkest">Entreprise</th>
-                                                <td>
-                                                    <a href="https://www.google.com/search?q={{ user.profil.entreprise.nom }}"
-                                                       target="_blank"
-                                                       class="btn-link">{{ user.profil.entreprise.nom }}</a></td>
-                                            </tr>
-                                            <tr>
-                                                <th class="fw--700 text-darkest">Date De Naissance</th>
-                                                <td>{{ user.profil.date_naissance }}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <!-- Profile Item End -->
+                    </div>
 
-                                <!-- Profile Item Start -->
-                                <div class="profile--item">
-                                    <div class="profile--heading">
-                                        <h3 class="h4 fw--700">
-                                            <span class="mr--4">Biography</span>
-                                            <i class="ml--10 text-primary fa fa-caret-right"></i>
-                                        </h3>
-                                    </div>
-
-                                    <div class="profile--info">
-                                        <p>Hello ! I’m <a
-                                                href="{% url 'SocialMedia:profil' %}">{{ user.first_name }} {{ user.last_name }}</a>. {{ user.profil.biography }}
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- Profile Item End -->
-
-                                <!-- Profile Item Start -->
-                                <div class="profile--item">
-                                    <div class="profile--heading">
-                                        <h3 class="h4 fw--700">
-                                            <span class="mr--4">Work Experience</span>
-                                            <i class="ml--10 text-primary fa fa-caret-right"></i>
-                                        </h3>
-                                    </div>
-
-                                    <div class="profile--info">
-                                        <dl>
-                                            <dt>
-                                                <p class="h6 fw--700 text-darkest">Graphic Designer 2010 - 2012</p>
-                                                <p>
-                                                    <small class="fw--400 fs--12 text-darker">Graphicriver.net at
-                                                        Sydney
-                                                    </small>
-                                                </p>
-                                            </dt>
-                                            <dd>
-                                                <p>There are many variations of passages of Lorem Ipsum available, but
-                                                    the majority have suffered alteration in some form, by injected
-                                                    humour which don't look even slightly believable.</p>
-                                            </dd>
-
-                                            <dt>
-                                                <p class="h6 fw--700 text-darkest">Font-End Developer 2012 - 2014</p>
-                                                <p>
-                                                    <small class="fw--400 fs--12 text-darker">Themeforest.net at
-                                                        Australia
-                                                    </small>
-                                                </p>
-                                            </dt>
-                                            <dd>
-                                                <p>There are many variations of passages of Lorem Ipsum available, but
-                                                    the majority have suffered alteration in some form, by injected
-                                                    humour which don't look even slightly believable.</p>
-                                            </dd>
-
-                                            <dt>
-                                                <p class="h6 fw--700 text-darkest">Web Developer 2014 - Still Now</p>
-                                                <p>
-                                                    <small class="fw--400 fs--12 text-darker">Codecanyon.net at Sydney
-                                                    </small>
-                                                </p>
-                                            </dt>
-                                            <dd>
-                                                <p>There are many variations of passages of Lorem Ipsum available, but
-                                                    the majority have suffered alteration in some form, by injected
-                                                    humour which don't look even slightly believable.</p>
-                                            </dd>
-                                        </dl>
-                                    </div>
-                                </div>
-                                <!-- Profile Item End -->
-
-                                <!-- Profile Item Start -->
-                                <div class="profile--item">
-                                    <div class="profile--heading">
-                                        <h3 class="h4 fw--700">
-                                            <span class="mr--4">Contact</span>
-                                            <i class="ml--10 text-primary fa fa-caret-right"></i>
-                                        </h3>
-                                    </div>
-
-                                    <div class="profile--info">
-                                        <table class="table">
-                                            <tr>
-                                                <th class="fw--700 text-darkest">Phone</th>
-                                                <td><a href="tel:+16105598246">{{ user.profil.tel }}</a></td>
-                                            </tr>
-                                            <tr>
-                                                <th class="fw--700 text-darkest">E-mail</th>
-                                                <td><a href="#"><span class="__cf_email__"
-                                                                      data-cfemail="4622232b2906233e272b362a236825292b">{% if user.email is not None %}
-                                                    {{ user.email }}{% else %}PROTECTED{% endif %}</span></a></td>
-                                            </tr>
-                                            <tr>
-                                                <th class="fw--700 text-darkest">Website</th>
-                                                <td><a href="{{ user.profil.website }}"
-                                                       target="_blank">{{ user.profil.website }}</a></td>
-                                            </tr>
-                                            <tr>
-                                                <th class="fw--700 text-darkest">Address</th>
-                                                <td>{{ user.profil.address|default:"Non Rempli" }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                                <!-- Profile Item End -->
+                    <!-- Main Content Start -->
+                    <div class="row main--content pt--40" data-trigger="stickyScroll"
+                         style=";width:95%;margin-left:auto;margin-right:auto;">
+                        <div class="main--content-inner drop--shadow">
+                            <!-- Content Nav Start -->
+                            <div class="content--nav pb--30">
+                                <ul class="nav ff--primary fs--14 fw--500 bg-lighter profil_links_menu">
+                                    <li><a href="">Activity</a></li>
+                                    <li class="active"><a href="{% url 'SocialMedia:profil' %}">Profil</a></li>
+                                    <li><a href="{% url 'SocialMedia:demandes' %}">Demandes <span id="nbdemandeBadge"
+                                                                                                  class="badge">{{ nbdemandes }}</span></a>
+                                    </li>
+                                    <li><a href="{% url 'SocialMedia:groupes' %}">Groups</a></li>
+                                </ul>
                             </div>
+                            <!-- Content Nav End -->
+                            {% block contentProfil %}
 
 
-                            <!-- Profile Details End -->
-                            </div>
-                            </div>
-                            <!-- Main Content End -->
-                        {% endblock %}
+                            {% endblock %}
+                        </div>
+                    </div>
+                    <!-- Main Content End -->
+
+                </div>
 
                 {% block sideBar %}
+
                     <!-- Main Sidebar Start -->
-                    <div class="main--sidebar col-md-4 pb--60" data-trigger="stickyScroll">
+                    <div class="col-md-4 main--sidebar pb--60" data-trigger="stickyScroll">
                         <!-- Widget Start -->
                         <div class="widget">
                             <h2 class="h4 fw--700 widget--title">Find A Buddy</h2>
@@ -413,133 +423,17 @@
                         <!-- Widget End -->
                     </div>
                     <!-- Main Sidebar End -->
+
+                    </div>
+
                 {% endblock %}
 
-            </div>
+        </div>
         </div>
     </section>
     <!-- Page Wrapper End -->
 
-    {% block Modals %}
-        <!-- line modal for cover -->
-        <div id="#formcover">
-            <div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span
-                                    aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                            <h3 class="modal-title" id="lineModalLabel">Choisir Votre Image</h3>
-                        </div>
-                        <div class="modal-body">
 
-                            <!-- content goes here -->
-                            <form method="post" onsubmit="return " id="photoform" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <div class="input-group">
-                              <span class="input-group-btn">
-                                  <span class="btn btn-default btn-file" style="font-weight: bold;font-size: 22px;">
-                                      Choisir Une Image…{% render_field photoform.image accept='image/*' class="form-control" style="cursor: pointer" id="imgInp" %}
-                                  </span>
-                              </span>
-                                        <input type="text" class="form-control" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group" id="photo">
-                                    <img id='img-upload'/>
-                                </div>
-                                <div class="form-group text-center">
-                                    <button class="mybt"
-                                            style="background-color:#1ea1f2; border: none;border-radius:50px;color:#ffffff;display:inline-block;line-height:44px;text-align:center;text-decoration:none;width:250px;-webkit-text-size-adjust:none;"
-                                            type="submit"><i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                        Changer Photo
-                                    </button>
-                                </div>
-                            </form>
-                            <div class="panel-group uploadprogress hidden">
-                                <h4 class="modal-title">Uploading...</h4>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <div class="btn-group btn-group-justified" role="group" aria-label="group button">
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-default btcancelupload" data-dismiss="modal"
-                                            role="button"><i class="fa fa-times" aria-hidden="true"></i> Annuler
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- line modal for cover -->
-        <div id="#formprofil">
-            <div class="modal fade" id="squarespaceModalprofil" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span
-                                    aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                            <h3 class="modal-title" id="lineModalLabel">Choisir Votre Image De Profil</h3>
-                        </div>
-                        <div class="modal-body">
-
-                            <!-- content goes here -->
-                            <form method="post" onsubmit="return " id="photoprofilform" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <div class="input-group">
-                              <span class="input-group-btn">
-                                  <span class="btn btn-default btn-file1"
-                                        style="font-weight: bold;font-size: 22px;cursor: pointer;">
-                                      Choisir Votre Image De Profil…{% render_field photoform.image class="form-control" accept='image/*' id="imgInp1" %}
-                                  </span>
-                              </span>
-                                        <input type="text" class="form-control" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group" id="photo1">
-                                    <img id='img-upload1'/>
-                                </div>
-                                <div class="form-group text-center">
-                                    <button class="mybt"
-                                            style="background-color:#1ea1f2; border: none;border-radius:50px;color:#ffffff;display:inline-block;line-height:44px;text-align:center;text-decoration:none;width:250px;-webkit-text-size-adjust:none;"
-                                            type="submit"><i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                        Changer Photo
-                                    </button>
-                                </div>
-                            </form>
-                            <div class="panel-group uploadprogress hidden uploadp">
-                                <h4 class="modal-title">Uploading...</h4>
-                                <div class="progress">
-                                    <div class="progress-bar prog" role="progressbar" style="width: 0%;">0%</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <div class="btn-group btn-group-justified" role="group" aria-label="group button">
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-default btcancelupload btc"
-                                            data-dismiss="modal" role="button"><i class="fa fa-times"
-                                                                                  aria-hidden="true"></i> Annuler
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endblock %}
 
 {% endblock %}
 
@@ -549,6 +443,17 @@
 {% block scripts %}
     {{ block.super }}
     <script>
+
+        {% if messages %}
+            {% for msg in messages %}
+                swal({
+                    title: '{{ msg }}',
+                    animation: false,
+                    customClass: 'animated tada',
+                    type: '{{ msg.tags }}'
+                });
+            {% endfor %}
+        {% endif %}
 
         $("#photoform").on("submit", function (event) {
             console.log($('#photoprofilform .input-group').find(':text').val());
@@ -598,6 +503,7 @@
                     $("#squarespaceModal").modal("hide");
                     swal("Photo De Couverture A Ete Changée Avec Succé", "{{ user.username }}", "success");
                     $("#coverpic").css("background-image", "url(" + data.url + ")");
+                    document.getElementById("coverpic").style.backgroundImage = "url(" + data.url + ")";
                 },
                 error: function () {
                 },
@@ -655,6 +561,7 @@
                     $("#squarespaceModalprofil").modal("hide");
                     swal("Photo De Profil A Ete Changée Avec Succé", "{{ user.username }}", "success");
                     $("#profilpic").attr("src", data.url);
+                    document.getElementById("profilpic").src = data.url;
                 },
                 error: function () {
                 },

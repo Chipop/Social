@@ -59,7 +59,7 @@ class Profil(models.Model):
     civilité = models.CharField(max_length=255, blank=False, null=False)
     adresse_profile = models.CharField(max_length=255, blank=False, null=False)
     is_first_socialmedia = models.BooleanField(default=True)
-    genre = models.CharField(u'Genre', max_length=1, choices=GENRE_CHOICES, blank=False, default='homme')
+    genre = models.CharField(u'Genre', choices=GENRE_CHOICES, blank=False, default='homme', max_length=20)
 
     def __str__(self):
         return self.user.username
