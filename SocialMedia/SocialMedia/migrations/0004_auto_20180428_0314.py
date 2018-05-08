@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='profil',
+            model_name='myprofil',
             name='date_naissance',
             field=models.DateField(blank=True, null=True),
         ),

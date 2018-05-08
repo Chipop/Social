@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             field=models.FileField(null=True, upload_to=''),
         ),
         migrations.AddField(
-            model_name='profil',
+            model_name='myprofil',
             name='genre',
             field=models.CharField(choices=[('homme', 'Homme'), ('femme', 'Femme')], default='homme', max_length=1, verbose_name='Genre'),
         ),

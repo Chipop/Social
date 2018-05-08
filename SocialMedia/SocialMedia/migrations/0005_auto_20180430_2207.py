@@ -17,19 +17,19 @@ class Migration(migrations.Migration):
             name='typeEntreprise',
         ),
         migrations.RemoveField(
-            model_name='profil',
+            model_name='myprofil',
             name='entreprise',
         ),
         migrations.RemoveField(
-            model_name='profil',
+            model_name='myprofil',
             name='photo_couverture',
         ),
         migrations.RemoveField(
-            model_name='profil',
+            model_name='myprofil',
             name='photo_profil',
         ),
         migrations.RemoveField(
-            model_name='profil',
+            model_name='myprofil',
             name='user',
         ),
         migrations.AlterField(

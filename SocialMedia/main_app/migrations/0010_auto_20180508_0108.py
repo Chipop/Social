@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='profil',
+            model_name='myprofil',
             name='genre',
             field=models.CharField(choices=[('homme', 'Homme'), ('femme', 'Femme')], default='homme', max_length=20, verbose_name='Genre'),
         ),

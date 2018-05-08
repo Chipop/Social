@@ -1,250 +1,108 @@
 {% extends "SocialMedia/base_socialmedia.html" %}
 {% load staticfiles %}
 {% load widget_tweaks %}
-{% block title %}{{ user.username }}{% endblock %}
+{% block title %}{{ profil.user.username }}{% endblock %}
 {% block content %}
 
-    {% block modals %}
-        <!-- line modal for cover -->
-        <div id="#formcover">
-            <div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span
-                                    aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                            <h3 class="modal-title" id="lineModalLabel">Choisir Votre Image</h3>
-                        </div>
-                        <div class="modal-body">
 
-                            <!-- content goes here -->
-                            <form method="post" onsubmit="return " id="photoform" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <div class="input-group">
-                              <span class="input-group-btn">
-                                  <span class="btn btn-default btn-file" style="font-weight: bold;font-size: 22px;">
-                                      Choisir Une Image…{% render_field photoform.image accept='image/*' class="form-control" style="cursor: pointer" id="imgInp" %}
-                                  </span>
-                              </span>
-                                        <input type="text" class="form-control" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group" id="photo">
-                                    <img id='img-upload'/>
-                                </div>
-                                <div class="form-group text-center">
-                                    <button class="mybt"
-                                            style="background-color:#1ea1f2; border: none;border-radius:50px;color:#ffffff;display:inline-block;line-height:44px;text-align:center;text-decoration:none;width:250px;-webkit-text-size-adjust:none;"
-                                            type="submit"><i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                        Changer Photo
-                                    </button>
-                                </div>
-                            </form>
-                            <div class="panel-group uploadprogress hidden">
-                                <h4 class="modal-title">Uploading...</h4>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
-                                </div>
-                            </div>
 
-                        </div>
-                        <div class="modal-footer">
-                            <div class="btn-group btn-group-justified" role="group" aria-label="group button">
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-default btcancelupload" data-dismiss="modal"
-                                            role="button"><i class="fa fa-times" aria-hidden="true"></i> Annuler
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- line modal for cover -->
-        <div id="#formprofil">
-            <div class="modal fade" id="squarespaceModalprofil" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span
-                                    aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                            <h3 class="modal-title" id="lineModalLabel">Choisir Votre Image De Profil</h3>
-                        </div>
-                        <div class="modal-body">
 
-                            <!-- content goes here -->
-                            <form method="post" onsubmit="return " id="photoprofilform" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <div class="input-group">
-                              <span class="input-group-btn">
-                                  <span class="btn btn-default btn-file1"
-                                        style="font-weight: bold;font-size: 22px;cursor: pointer;">
-                                      Choisir Votre Image De Profil…{% render_field photoform.image class="form-control" accept='image/*' id="imgInp1" %}
-                                  </span>
-                              </span>
-                                        <input type="text" class="form-control" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group" id="photo1">
-                                    <img id='img-upload1'/>
-                                </div>
-                                <div class="form-group text-center">
-                                    <button class="mybt"
-                                            style="background-color:#1ea1f2; border: none;border-radius:50px;color:#ffffff;display:inline-block;line-height:44px;text-align:center;text-decoration:none;width:250px;-webkit-text-size-adjust:none;"
-                                            type="submit"><i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                        Changer Photo
-                                    </button>
-                                </div>
-                            </form>
-                            <div class="panel-group uploadprogress hidden uploadp">
-                                <h4 class="modal-title">Uploading...</h4>
-                                <div class="progress">
-                                    <div class="progress-bar prog" role="progressbar" style="width: 0%;">0%</div>
-                                </div>
-                            </div>
+        <!-- Page Wrapper Start -->
+        <section class="page--wrapper pb--20">
+            <div class="container-fluid">
+                <div class="row  pt--40" style="padding: 40px 10%; ">
+
+				<div class="col-md-8 pb--60" >
+
+                    <div class="row main--content" style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);width:95%;margin-left:auto;margin-right:auto;">
+
+				<!-- Cover Header Start -->
+				<div id="coverpic" class="cover--header pt--80 text-center" data-bg-img="{{ profil.photo_couverture.image.url|default:'/media/SocialMedia/default.jpg' }}" data-overlay="0.6" data-overlay-color="white" >
+		       {% if not is_followed %}
+                    <form id="follow" method="POST">{% csrf_token %}
+                <button id="btfollow"  class="bttn-jelly bttn-md bttn-default float-right"><i class="fa fa-plus-circle" aria-hidden="true"></i> Suivre Profile</button>
+                </form>
+                {% else %}
+                    <form id="follow" method="POST">{% csrf_token %}
+                <button id="btfollow" class="bttn-jelly bttn-md bttn-default float-right"><i class="fa fa-undo" aria-hidden="true"></i> Ne Plus Suivre</button>
+                </form>
+                {% endif %}
+                {% if not is_friend %}
+                    <form  id="Friend" method="POST">{% csrf_token %}
+                    <button id="btFriend" class="bttn-jelly bttn-md bttn-primary "><i class="fa fa-user-plus" aria-hidden="true"></i> Ajouter Ami</button>
+                </form>
+                {% else %}
+                    <form id="Friend" method="POST">{% csrf_token %}
+                    <button id="btFriend" class="bttn-jelly bttn-md bttn-primary "><i class="fa fa-user-times" aria-hidden="true"></i> Ne Plus Etre Amis</button>
+                </form>
+                {% endif %}
+
+
+
+					<div style="width: auto;padding-bottom: 30px;">
+						<div class="cover--avatar online" data-overlay="0.3" data-overlay-color="primary">
+
+							<div class="photprofilcontainer">
+									<img id="profilpic" class="image" style="cursor: pointer;" src="{{ profil.photo_profil.image.url|default:'/media/SocialMedia/default.jpg' }}" alt="">
+
+							</div>
+
+						</div>
+
+						<div class="cover--user-name">
+
+				<h2 class="h3 fw--600">{{ profil.user.first_name }} {{ profil.user.last_name }}</h2>
+
+
+						</div>
+
+						<div class="cover--user-desc fw--400 fs--18 fstyle--i text-darkest" style="margin-top: 0;">
+                            <p style="margin: 0;">
+							    {% if poste_actuel is not None and poste_actuel_renseigne is not None %}Poste Actuel: {{ poste_actuel.nom_poste }} • {% else %}Non Specialisé • {% endif %}{{ ecole.ecole__nom|default:ecole_renseignee|default_if_none:"Non Mentionnée" }} <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+
+                            </p>
+							<p style="margin: 0;">
+                                {% if profil.entreprise is not None %}employé chez {{ profil.entreprise.nom }} située à {{ profil.entreprise.ville }}, {{ profil.entreprise.pays }}{% else %}Non embauché{% endif %} <i class="fa fa-briefcase" aria-hidden="true"></i>
+
+                            </p>
+                            <p style="margin: 0;">
+							    {% if profil.pays is not None or profil.pays is not None %}{{ profil.ville }}, {{ profil.pays }} <i class="fa fa-globe" aria-hidden="true"></i>{% endif %}
+
+                            </p>
 
                         </div>
-                        <div class="modal-footer">
-                            <div class="btn-group btn-group-justified" role="group" aria-label="group button">
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-default btcancelupload btc"
-                                            data-dismiss="modal" role="button"><i class="fa fa-times"
-                                                                                  aria-hidden="true"></i> Annuler
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
+					</div>
+				</div>
+			<!-- Cover Header End -->
 
-    {% endblock %}
-
-
-
-    <!-- Page Wrapper Start -->
-    <section class="page--wrapper pb--20">
-        <div class="container-fluid">
-            <div class="row  pt--40" style="padding: 40px 10%; ">
-
-                <div class="col-md-8 pb--60">
-
-                    <div class="row main--content"
-                         style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);width:95%;margin-left:auto;margin-right:auto;">
-                        <button id="btcoverchange" class="btchangepic" data-toggle="modal"
-                                data-target="#squarespaceModal"><i class="fa fa-picture-o" aria-hidden="true"></i>
-                        </button>
-                        <!-- Cover Header Start -->
-                        <div id="coverpic" class="cover--header pt--80 text-center"
-                             data-bg-img="{{ user.profil.photo_couverture.image.url|default:'/media/SocialMedia/default.jpg' }}"
-                             data-overlay="0.6" data-overlay-color="white">
-                             
-
-
-                            <div style="width: auto;padding-bottom: 30px;">
-                                <div class="cover--avatar online" data-overlay="0.3" data-overlay-color="primary">
-
-                                    <div class="photprofilcontainer">
-                                        <img id="profilpic" class="image "
-                                             src="{{ user.profil.photo_profil.image.url|default:'/media/SocialMedia/default.jpg' }}"
-                                             alt="">
-                                        <div class="middle">
-                                            <div class="text">
-                                                <a href="javascript:return false" title="Photo Profil" class="btn-link"
-                                                   data-toggle="tooltip" data-placement="bottom">
-                                                    <i id="btprofilchange" class="btchangepic profilpic fa fa-picture-o"
-                                                       data-toggle="modal" data-target="#squarespaceModalprofil"
-                                                       aria-hidden="true"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="cover--user-name">
-
-                                    <h2 class="h3 fw--600">{{ user.first_name }} {{ user.last_name }}</h2>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <a href="{% url 'SocialMedia:editAbout' %}"><i
-                                                class="fa fa-pencil-square-o float--right"
-                                                style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
-                                    </div>
-                                    <div class="col">
-                                        <a href="javascript:void(0)"><i class="fa fa-plus-square float--right"
-                                                                        style="font-size:20px;margin-right: 20px;"
-                                                                        aria-hidden="true"></i></a>
-                                    </div>
-                                </div>
-
-                                <div class="cover--user-desc fw--400 fs--18 fstyle--i text-darkest"
-                                     style="margin-top: 0;">
-                                    <p style="margin: 0;">
-                                        {% if poste_actuel is not None and poste_actuel_renseigne is not None %}Poste
-                                            Actuel: {{ poste_actuel.nom_poste }} • {% else %}Non Specialisé
-                                            • {% endif %}{{ ecole.ecole__nom|default:ecole_renseignee|default_if_none:"Non Mentionnée" }}
-                                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-
-                                    </p>
-                                    <p style="margin: 0;">
-                                        {% if user.profil.entreprise is not None %}employé chez
-                                            {{ user.profil.entreprise.nom }} située à {{ user.profil.entreprise.ville }}
-                                            , {{ user.profil.entreprise.pays }}{% else %}Non embauché{% endif %} <i
-                                            class="fa fa-briefcase" aria-hidden="true"></i>
-
-                                    </p>
-                                    <p style="margin: 0;">
-                                        {% if user.profil.pays is not None or user.profil.pays is not None %}
-                                            {{ user.profil.ville }}, {{ user.profil.pays }}
-                                            <i class="fa fa-globe" aria-hidden="true"></i>{% endif %}
-
-                                    </p>
-
-                                </div>
-
-                            </div>
-                        </div>
-                        <!-- Cover Header End -->
-
-                    </div>
+				</div>
 
                     <!-- Main Content Start -->
-                    <div class="row main--content pt--40" data-trigger="stickyScroll"
-                         style=";width:95%;margin-left:auto;margin-right:auto;">
+                    <div class="row main--content pt--40"  data-trigger="stickyScroll" style=";width:95%;margin-left:auto;margin-right:auto;">
                         <div class="main--content-inner drop--shadow">
                             <!-- Content Nav Start -->
                             <div class="content--nav pb--30">
                                 <ul class="nav ff--primary fs--14 fw--500 bg-lighter profil_links_menu">
                                     <li><a href="">Activity</a></li>
-                                    <li class="active"><a href="{% url 'SocialMedia:profil' %}">Profil</a></li>
-                                    <li><a href="{% url 'SocialMedia:demandes' %}">Demandes <span id="nbdemandeBadge"
-                                                                                                  class="badge">{{ nbdemandes }}</span></a>
-                                    </li>
+                                    <li class="active"><a href="{% url 'SocialMedia:myprofil' %}">Profil</a></li>
                                     <li><a href="{% url 'SocialMedia:groupes' %}">Groups</a></li>
                                 </ul>
                             </div>
                             <!-- Content Nav End -->
-                            {% block contentProfil %}
+{% block contentProfil %}
 
 
-                            {% endblock %}
-                        </div>
+{% endblock %}
+                </div>
                     </div>
                     <!-- Main Content End -->
 
                 </div>
 
-                {% block sideBar %}
+{% block sideBar %}
 
-                    <!-- Main Sidebar Start -->
+					<!-- Main Sidebar Start -->
                     <div class="col-md-4 main--sidebar pb--60" data-trigger="stickyScroll">
                         <!-- Widget Start -->
                         <div class="widget">
@@ -259,8 +117,7 @@
                                                 <label>
                                                     <span class="text-darker ff--primary fw--500">I Am</span>
 
-                                                    <select name="gender" class="form-control form-sm"
-                                                            data-trigger="selectmenu">
+                                                    <select name="gender" class="form-control form-sm" data-trigger="selectmenu">
                                                         <option value="male">Male</option>
                                                         <option value="female">Female</option>
                                                         <option value="other">Other</option>
@@ -274,8 +131,7 @@
                                                 <label>
                                                     <span class="text-darker ff--primary fw--500">Looking For</span>
 
-                                                    <select name="lookingfor" class="form-control form-sm"
-                                                            data-trigger="selectmenu">
+                                                    <select name="lookingfor" class="form-control form-sm" data-trigger="selectmenu">
                                                         <option value="female">Female</option>
                                                         <option value="male">Male</option>
                                                         <option value="other">Other</option>
@@ -289,8 +145,7 @@
                                                 <label>
                                                     <span class="text-darker ff--primary fw--500">Age</span>
 
-                                                    <select name="age" class="form-control form-sm"
-                                                            data-trigger="selectmenu">
+                                                    <select name="age" class="form-control form-sm" data-trigger="selectmenu">
                                                         <option value="18to25">18 to 25</option>
                                                         <option value="25to30">25 to 30</option>
                                                         <option value="30to35">30 to 35</option>
@@ -306,8 +161,7 @@
                                                 <label>
                                                     <span class="text-darker ff--primary fw--500">City</span>
 
-                                                    <select name="city" class="form-control form-sm"
-                                                            data-trigger="selectmenu">
+                                                    <select name="city" class="form-control form-sm" data-trigger="selectmenu">
                                                         <option value="newyork">New York</option>
                                                         <option value="California">California</option>
                                                         <option value="Atlanta">Atlanta</option>
@@ -321,8 +175,7 @@
                                                 <label>
                                                     <span class="text-darker ff--primary fw--500">Filter Country</span>
 
-                                                    <select name="city" class="form-control form-sm"
-                                                            data-trigger="selectmenu">
+                                                    <select name="city" class="form-control form-sm" data-trigger="selectmenu">
                                                         <option value="unitedstates">United States</option>
                                                         <option value="australia">Australia</option>
                                                         <option value="turkey">Turkey</option>
@@ -348,8 +201,7 @@
 
                             <!-- Text Widget Start -->
                             <div class="text--widget">
-                                <p>There are many variations of passages of Lorem Ipsum available, but the majority have
-                                    suffered alteration in some look even slightly believable.</p>
+                                <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some  look even slightly believable.</p>
                             </div>
                             <!-- Text Widget End -->
                         </div>
@@ -414,8 +266,7 @@
                             <!-- Ad Widget Start -->
                             <div class="ad--widget">
                                 <a href="#">
-                                    <img src="{% static 'SocialMedia/img/widgets-img/ad.jpg' %}" alt=""
-                                         class="center-block">
+                                    <img src="{% static 'SocialMedia/img/widgets-img/ad.jpg' %}" alt="" class="center-block">
                                 </a>
                             </div>
                             <!-- Ad Widget End -->
@@ -424,14 +275,14 @@
                     </div>
                     <!-- Main Sidebar End -->
 
-                    </div>
+                </div>
 
-                {% endblock %}
+{% endblock %}
 
-        </div>
-        </div>
-    </section>
-    <!-- Page Wrapper End -->
+                </div>
+            </div>
+        </section>
+        <!-- Page Wrapper End -->
 
 
 
@@ -440,138 +291,121 @@
 
 
 
+
 {% block scripts %}
     {{ block.super }}
     <script>
 
-        {% if messages %}
+    {% if messages %}
             {% for msg in messages %}
-                swal({
-                    title: '{{ msg }}',
-                    animation: false,
-                    customClass: 'animated tada',
-                    type: '{{ msg.tags }}'
+            swal({
+                  title: '{{ msg }}',
+                  animation: false,
+                  customClass: 'animated tada',
+                   type: '{{ msg.tags }}'
                 });
             {% endfor %}
         {% endif %}
 
-        $("#photoform").on("submit", function (event) {
-            console.log($('#photoprofilform .input-group').find(':text').val());
-            if ($('#photoform .input-group').find(':text').val().length == 0) {
-                swal({
-                    type: 'error',
-                    title: 'Aucune Photo Selectionnée',
-                    text: 'Veuillez Selectionner Une Photo',
-                    type: 'error'
-                });
-                return false;
-            } else if ($('#photoform .input-group').find(':text').val().length > 100) {
-                swal({
-                    type: 'error',
-                    title: 'Nombre De Caractere Depasse la limite',
-                    text: 'Veuillez Changer Le Nom de la photo Ou Selectionner Une Autre'
-                });
-                return false;
-            }
+        $("#profilpic").on('click', function(e){
+            swal({
+              imageUrl: $(this).attr('src'),
+              imageWidth: 1000,
+              imageHeight: 1512,
+              customClass: 'animated tada',
+              showCloseButton: true,
+            })
+        });
+
+        $("#follow").on("submit",function(event){
             event.preventDefault();
-            $('.modal-footer').slideToggle(1500);
-            setTimeout(function () {
-                $(".uploadprogress").removeClass('hidden');
-            }, 1000);
-            var form_data = new FormData($(this)[0]);
-            $.ajax({
-                xhr: function () {
+            $.ajax({xhr: function () {
                     var xhr = new window.XMLHttpRequest();
                     xhr.upload.addEventListener("progress", function (e) {
-                        var progress = parseInt(e.loaded / e.total * 100, 10);
-                        var strProgress = progress + "%";
-                        var strProgress = progress + "%";
-                        $(".progress-bar").css({"width": strProgress});
-                        $(".progress-bar").text(strProgress);
                     }, false);
                     xhr.addEventListener("progress", function (evt) {
-
+                        $("#btfollow").html('<i class="fa fa-spinner" aria-hidden="true"></i> Chargement');
                     }, false);
                     return xhr;
                 },
-                url: '{% url "SocialMedia:changephotocouverture" %}',
-                type: $(this).attr('method'),
-                processData: false,
-                contentType: false,
-                data: form_data,
-                success: function (data) {
-                    $("#squarespaceModal").modal("hide");
-                    swal("Photo De Couverture A Ete Changée Avec Succé", "{{ user.username }}", "success");
-                    $("#coverpic").css("background-image", "url(" + data.url + ")");
-                    document.getElementById("coverpic").style.backgroundImage = "url(" + data.url + ")";
+                url: '{% url "SocialMedia:followProfil" profil.id %}',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if( data.follow ){
+                        $("#btfollow").html('<i class="fa fa-undo" aria-hidden="true"></i> Ne Plus Suivre');
+                            swal({
+                              position: 'center',
+                              type: 'success',
+                              title: data.message,
+                              showConfirmButton: false,
+                              timer: 1500
+                            })
+                    }else
+                        {
+                        $("#btfollow").html('<i class="fa fa-plus-circle" aria-hidden="true"></i> Suivre Profile');
+                            swal({
+                              position: 'center',
+                              type: 'success',
+                              title: data.message,
+                              showConfirmButton: false,
+                              timer: 1500
+                            })
+                        }
                 },
-                error: function () {
-                },
-                stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
-                    $("#squarespaceModal").modal("hide");
+                error: function() { },
+                stop: function (e) {
                     swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
                 }
             });
+        })
 
-        });
-
-        $("#photoprofilform").on("submit", function (event) {
-            if ($('#photoprofilform .input-group').find(':text').val().length == 0) {
-                swal({
-                    type: 'error',
-                    title: 'Aucune Photo Selectionnée',
-                    text: 'Veuillez Selectionner Une Photo'
-                });
-                return false;
-            } else if ($('#photoprofilform .input-group').find(':text').val().length > 100) {
-                swal({
-                    type: 'error',
-                    title: 'Nombre De Caractere Depasse la limite',
-                    text: 'Veuillez Changer Le Nom de la photo Ou Selectionner Une Autre'
-                });
-                return false;
-            }
+    $("#Friend").on("submit",function(event){
             event.preventDefault();
-            $('.modal-footer').slideToggle(1500);
-            setTimeout(function () {
-                $(".uploadp").removeClass('hidden');
-            }, 1000);
-            var form_data = new FormData($(this)[0]);
-            $.ajax({
-                xhr: function () {
+            $.ajax({xhr: function () {
                     var xhr = new window.XMLHttpRequest();
                     xhr.upload.addEventListener("progress", function (e) {
-                        var progress = parseInt(e.loaded / e.total * 100, 10);
-                        var strProgress = progress + "%";
-                        var strProgress = progress + "%";
-                        $(".prog").css({"width": strProgress});
-                        $(".prog").text(strProgress);
                     }, false);
                     xhr.addEventListener("progress", function (evt) {
-
+                        $("#btFriend").html('<i class="fa fa-spinner" aria-hidden="true"></i> Chargement');
                     }, false);
                     return xhr;
                 },
-                url: '{% url "SocialMedia:changephotoprofil" %}',
-                type: $(this).attr('method'),
-                processData: false,
-                contentType: false,
-                data: form_data,
-                success: function (data) {
-                    $("#squarespaceModalprofil").modal("hide");
-                    swal("Photo De Profil A Ete Changée Avec Succé", "{{ user.username }}", "success");
-                    $("#profilpic").attr("src", data.url);
-                    document.getElementById("profilpic").src = data.url;
+                url: '{% url "SocialMedia:addFriend" profil.id %}',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if( data.friend ){
+                        $("#btFriend").html('<i class="fa fa-user-times" aria-hidden="true"></i> Ne Plus Etre Amis');
+                            swal({
+                              position: 'center',
+                              type: 'success',
+                              title: data.message,
+                              showConfirmButton: false,
+                              timer: 1500
+                            })
+                    }else
+                        {
+                        $("#btFriend").html('<i class="fa fa-user-plus" aria-hidden="true"></i> Ajouter Ami');
+                            swal({
+                              position: 'center',
+                              type: 'success',
+                              title: data.message,
+                              showConfirmButton: false,
+                              timer: 1500
+                            })
+                        }
                 },
-                error: function () {
-                },
-                stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
-                    $("#squarespaceModalprofil").modal("hide");
+                error: function() { },
+                stop: function (e) {
                     swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
                 }
             });
+        })
 
-        });
+
+
+
 
     </script>
 

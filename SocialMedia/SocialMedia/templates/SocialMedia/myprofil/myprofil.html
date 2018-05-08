@@ -1,7 +1,7 @@
-{% extends "SocialMedia/profil/base_profil.html" %}
+{% extends "SocialMedia/myprofil/base_myprofil.html" %}
 {% load staticfiles %}
 {% load widget_tweaks %}
-{% block title %}{{ profil.user.username }}{% endblock %}
+{% block title %}{{ user.username }}{% endblock %}
 
 {% block contentProfil %}
                             <!-- Profile Details Start -->
@@ -12,6 +12,8 @@
                                         <h3 class="h4 fw--700">
                                             <span class="mr--4">A Propos</span>
                                             <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                            <a href="{% url 'SocialMedia:editAbout' %}" ><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
                                         </h3>
                                     </div>
 
@@ -34,11 +36,11 @@
                                             </tr>
                                             <tr>
                                                 <th class="fw--700 text-darkest">Entreprise</th>
-                                                <td><a href="https://www.google.com/search?q={{ profil.entreprise.nom }}" target="_blank" class="btn-link">{{ profil.entreprise|default_if_none:'Non Embauché' }}</a></td>
+                                                <td><a href="https://www.google.com/search?q={{ user.profil.entreprise.nom }}" target="_blank" class="btn-link">{{ user.profil.entreprise.nom }}</a></td>
                                             </tr>
                                             <tr>
                                                 <th class="fw--700 text-darkest">Date De Naissance</th>
-                                                <td>{{ profil.date_naissance|default_if_none:'Non Rempli' }}</td>
+                                                <td>{{ user.profil.date_naissance }}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -54,11 +56,13 @@
                                         <h3 class="h4 fw--700">
                                             <span class="mr--4">Biography</span>
                                             <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                            <a href="javascript:void(0)"><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
                                         </h3>
                                     </div>
 
                                     <div class="profile--info">
-                                        <p>Hello ! I’m <a href="{% url 'SocialMedia:getProfil' user.id %}">{{ user.first_name }} {{ user.last_name }}</a>. {{ user.profil.biography }}</p>
+                                        <p>Hello ! I’m <a href="{% url 'SocialMedia:myprofil' %}">{{ user.first_name }} {{ user.last_name }}</a>. {{ user.profil.biography }}</p>
                                     </div>
                                 </div>
                                 <!-- Profile Item End -->
@@ -154,7 +158,7 @@
                                             </dt>
                                             <dd>
                                                 <div class="row">
-                                                    <div class="col-xs-2"><img src="{{ actionBenevole.organisme.logo.url }}" alt="Supprimée" class="img-responsive img-rounded"></div>
+                                                    <div class="col-xs-2"><img src="{{ actionBenevole.organisme.image.url }}" alt="Supprimée" class="img-responsive img-rounded"></div>
                                                     <div class="col-xs-10">
                                             <a href="javascript:void(0)"><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
                                             <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
@@ -183,6 +187,8 @@
                                         <h3 class="h4 fw--700">
                                             <span class="mr--4">Contact</span>
                                             <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                            <a href="javascript:void(0)"><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
                                         </h3>
                                     </div>
 
@@ -190,19 +196,19 @@
                                         <table class="table">
                                             <tr>
                                                 <th class="fw--700 text-darkest">Phone</th>
-                                                <td><a class="h6 fa--400 text-darkest" href="tel:+16105598246">{{ profil.tel|default_if_none:'Non Rempli' }}</a></td>
+                                                <td><a class="h6 fa--400 text-darkest" href="tel:+16105598246">{{ user.profil.tel }}</a></td>
                                             </tr>
                                             <tr>
                                                 <th class="fw--700 text-darkest">E-mail</th>
-                                                <td><a class="h6 fa--400 text-darkest" href="#"><span class="__cf_email__" data-cfemail="4622232b2906233e272b362a236825292b">{{ user.email|default_if_none:'Protégé'|default:"Non Rempli" }}</span></a></td>
+                                                <td><a class="h6 fa--400 text-darkest" href="#"><span class="__cf_email__" data-cfemail="4622232b2906233e272b362a236825292b">{% if user.email is not None %}{{ user.email }}{% else %}PROTECTED{% endif %}</span></a></td>
                                             </tr>
                                             <tr>
                                                 <th class="fw--700 text-darkest">Website</th>
-                                                <td><a class="h6 fa--400 text-darkest" href="{{ profil.website|default_if_none:"#" }}" target="_blank">{{ profil.website|default_if_none:"Non Rempli" }}</a></td>
+                                                <td><a class="h6 fa--400 text-darkest" href="{{ user.profil.website }}" target="_blank">{{ user.profil.website }}</a></td>
                                             </tr>
                                             <tr>
                                                 <th class="fw--700 text-darkest">Address</th>
-                                                <td class="h6 fa--400 text-darkest">{{ profil.address|default:"Non Rempli" }}</td>
+                                                <td class="h6 fa--400 text-darkest">{{ user.profil.address|default:"Non Rempli" }}</td>
                                             </tr>
                                         </table>
                                     </div>

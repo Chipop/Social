@@ -14,19 +14,19 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='actionbenevole',
-            name='profil',
+            name='myprofil',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='main_app.Profil'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='experience',
-            name='profil',
+            name='myprofil',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='main_app.Profil'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='formation',
-            name='profil',
+            name='myprofil',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='main_app.Profil'),
             preserve_default=False,
         ),

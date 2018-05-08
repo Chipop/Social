@@ -11,12 +11,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='profil',
+            model_name='myprofil',
             name='token_email',
             field=models.CharField(blank=True, default='', max_length=300, null=True),
         ),
         migrations.AddField(
-            model_name='profil',
+            model_name='myprofil',
             name='token_email_expiration',
             field=models.DateTimeField(blank=True, null=True),
         ),

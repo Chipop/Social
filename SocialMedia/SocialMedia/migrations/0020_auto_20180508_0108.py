@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='reseausocialfile',
-            name='profil',
+            name='myprofil',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='main_app.Profil'),
             preserve_default=False,
         ),

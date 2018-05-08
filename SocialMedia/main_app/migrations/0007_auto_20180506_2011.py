@@ -12,12 +12,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='profil',
+            model_name='myprofil',
             name='photo_couverture',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='photo_cover', to='main_app.Image'),
         ),
         migrations.AlterField(
-            model_name='profil',
+            model_name='myprofil',
             name='photo_profil',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='profil_photo', to='main_app.Image'),
         ),

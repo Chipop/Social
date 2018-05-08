@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='profil',
+            model_name='myprofil',
             name='is_first_socialmedia',
             field=models.BooleanField(default=True),
         ),
