@@ -32,6 +32,7 @@ urlpatterns = [
     path('myprofil/edit-formation/<int:pk>/', views.editFormation, name="editFormation"),
 
     path('home/', views.home, name="home"),
+
     path('', views.home, name="home"),
 
     ##Chipop
@@ -44,7 +45,11 @@ urlpatterns = [
 
     path('myprofil/<int:pk>/follow', views.followProfil, name="followProfil"),
 
-    path('myprofil/<int:pk>/addFriend', views.addFriend, name="addFriend"),
+    path('myprofil/<int:pk>/reponse-ami', views.FriendsRequests, name="addFriend"),
+
+    path('myprofil/<int:pk>/get-responses-updates', views.getRequestsUpdates, name="getUpdates"),
 
     path('profil/<int:pk>', views.getProfil, name='getProfil'),
+
+    path('profil/<int:pk>/groupes', views.getProfilGroupes, name='getProfilGroupes'),
 ]

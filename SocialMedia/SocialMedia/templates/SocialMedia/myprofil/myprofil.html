@@ -195,6 +195,10 @@
                                     <div class="profile--info">
                                         <table class="table">
                                             <tr>
+                                                <th class="fw--700 text-darkest">Genre</th>
+                                                <td><a class="h6 fa--400 text-darkest" href="#">{{ user.profil.genre }}</a></td>
+                                            </tr>
+                                            <tr>
                                                 <th class="fw--700 text-darkest">Phone</th>
                                                 <td><a class="h6 fa--400 text-darkest" href="tel:+16105598246">{{ user.profil.tel }}</a></td>
                                             </tr>
@@ -208,7 +212,15 @@
                                             </tr>
                                             <tr>
                                                 <th class="fw--700 text-darkest">Address</th>
-                                                <td class="h6 fa--400 text-darkest">{{ user.profil.address|default:"Non Rempli" }}</td>
+                                                <td class="h6 fa--400 text-darkest">{{ user.profil.adresse_profile|default:"Non Rempli" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="fw--700 text-darkest">Address</th>
+                                                <td class="h6 fa--400 text-darkest">{{ user.profil.service|default:"Non Rempli" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="fw--700 text-darkest">Civilité</th>
+                                                <td class="h6 fa--400 text-darkest">{{ user.profil.civilité|default:"Non Rempli" }}</td>
                                             </tr>
                                         </table>
                                     </div>

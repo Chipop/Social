@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 import os.path
 
 
+
 # Create your models here.
 
 class Notification(models.Model):
@@ -80,6 +81,9 @@ class DemandeAmi(models.Model):
 class Suivie(models.Model):
     follower = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE, related_name="suiveur")
     followed_profil = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE, related_name="suive")
+
+    class Meta:
+        unique_together = ('follower', 'followed_profil',)
 
 
 class Conversation(models.Model):

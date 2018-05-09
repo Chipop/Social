@@ -32,6 +32,9 @@ class Entreprise(models.Model):
     adresse_profile = models.CharField(max_length=255, blank=False, null=False)
     logo = models.FileField(upload_to="", null=True)
 
+    def __str__(self):
+        return self.nom
+
 
 class Profil(models.Model):
     GENRE_CHOICES = [('homme', 'Homme'),

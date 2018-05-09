@@ -1,21 +1,36 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, resolve_url
 from main_app.models import *
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect, QueryDict, HttpResponseNotFound
+from django.template.response import TemplateResponse
 from .models import *
 from .forms import *
 from django.contrib import messages
 from django.views import View
-from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.db.models import Q
 from datetime import datetime, timedelta
+import warnings
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth import logout, login, authenticate
+from django.core import serializers
+from django.core.serializers import json
+from django.urls import reverse
+from django.utils.timezone import now
+from main_app.models import *
+from django.core.mail import send_mail
+from django.template.loader import  get_template
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.forms import (
+    AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm,
+)
+from django.contrib.auth.tokens import default_token_generator
+from .models import *
 
 
 # Haytham
 
-
 def home(request):
-    return render(request, 'SocialMedia/index.html')
+    return render(request, 'SocialMedia/acceuil.html')
 
 def profil(request):
     context = dict()
@@ -38,7 +53,7 @@ def profil(request):
         context['nbdemandes'] = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
         return render(request, 'SocialMedia/myprofil/myprofil.html', context)
     else:
-        messages.error(request, "Veuiller Se Connecter!")
+        messages.error(request, "Veuiller vous connecter!")
         return redirect('main_app:log_in')
 
 def changephotoprofil(request):
@@ -188,6 +203,7 @@ def supprimerDemande(request):
 
 def demandesProfil(request):
     if request.user.is_authenticated:
+        context = dict()
         formDemande = demandeForm(request.POST or None)
         if request.method == "POST" and formDemande.is_valid():
             demande = DemandeAmi.objects.get(id=formDemande.cleaned_data['demande'])
@@ -205,11 +221,18 @@ def demandesProfil(request):
             demandesAmis = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).order_by('id')
             paginator = Paginator(demandesAmis, 3)  # Show 3 Profiles per page
             page = request.GET.get('page')
-            demAmis = paginator.get_page(page)
-            photoform = PhotoForm()
-            return render(request, 'SocialMedia/myprofil/demandesMyProfil.html', {'demandesAmis': demAmis, 'photoform': photoform, 'formDemande':formDemande, "nbdemandes":demandesAmis.count()})
+            context['formDemande'] = formDemande
+            context['nbdemandes'] = demandesAmis.count()
+            context['demandesAmis'] = paginator.get_page(page)
+            context['photoform'] = PhotoForm()
+            context['poste_actuel'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values('poste').values('nom_poste').last()
+            context['poste_actuel_renseigne'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values('nom_poste').last()
+            context['ecole'] = Formation.objects.filter(profil=request.user.profil,ecole__isnull=False).values('ecole__nom').last()
+            context['ecole_renseignee'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=True).values('nom_ecole').last()
+
+            return render(request, 'SocialMedia/myprofil/demandesMyProfil.html', context)
     else:
-        messages.error(request, "Veuiller Se Connecter!")
+        messages.error(request, "Veuiller vous connecter!")
         return redirect('main_app:log_in')
 
 def demandeViaAjax(request):
@@ -251,27 +274,6 @@ def demandeViaAjax(request):
              }
     return JsonResponse(context,safe=False)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def mediaProfil(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -285,34 +287,11 @@ def mediaProfil(request):
                     print(file.date_telechargement)
             return render(request, 'SocialMedia/myprofil/mediaProfil.html',{'profiles': profiles, 'photoform': photoform, 'is_first': request.user.profil.is_first_socialmedia,'nbdemandes': DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()})
     else:
-        messages.error(request, "Veuiller Se Connecter!")
+        messages.error(request, "Veuiller vous connecter!")
         return redirect('main_app:log_in')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def suprimerAmi(request):
     pass
-
-
-
 
 def findfriends(request):
     if request.user.is_authenticated:
@@ -321,7 +300,7 @@ def findfriends(request):
         profiles = Profil.objects.all()
         return render(request, 'SocialMedia/myprofil/demandesMyProfil.html', {'profiles':profiles})
     else:
-        messages.error(request, "Veuiller Se Connecter!")
+        messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
 
 def chat(request):
@@ -364,9 +343,8 @@ def editInterface(request):
             profil_pays = request.user.profil.pays
             return render(request, 'SocialMedia/myprofil/forms/base_forms.html', {'formUserInterface':form})
     else:
-        messages.error(request, "Veuiller Se Connecter!")
+        messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
-
 
 def editAbout(request):
     if request.user.is_authenticated:
@@ -390,7 +368,7 @@ def editAbout(request):
             form = UserAboutEdit(initial={'entreprise':request.user.profil.entreprise})
             return render(request, 'SocialMedia/myprofil/forms/editAboutForm.html', {'editForm':form, 'nom': 'A Propos de', 'entreprises':entreprises})
     else:
-        messages.error(request, "Veuiller Se Connecter!")
+        messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
 
 def editExperience(request, pk):
@@ -420,9 +398,8 @@ def editExperience(request, pk):
                                                'description':exp.description})
             return render(request, 'SocialMedia/myprofil/forms/editExperience.html', {'editForm':form, 'exp':exp.id, 'nom': 'Experience De '})
     else:
-        messages.error(request, "Veuiller Se Connecter!")
+        messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
-
 
 def editFormation(request, pk):
     if request.user.is_authenticated:
@@ -457,9 +434,8 @@ def editFormation(request, pk):
                                               'description':formation.description,})
             return render(request, 'SocialMedia/myprofil/forms/editFormation.html', {'editForm':form, 'nom': 'A Propos de', 'formation':formation.id, 'postes':ecoles})
     else:
-        messages.error(request, "Veuiller Se Connecter!")
+        messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
-
 
 #EndHaytham
 #Chipop
@@ -485,7 +461,6 @@ def search(request):
     return render(request, 'SocialMedia/search/search_all.html',
                   {'keywords': keywords, 'profils': profils, 'groupes': groupes, 'offres': offres})
 
-
 def search_members(request):
     keywords = request.GET.get('keywords')
     if keywords is None or keywords == "":
@@ -502,7 +477,6 @@ def search_members(request):
 
     return render(request, 'SocialMedia/search/search_members.html', {'profils': profils, 'keywords': keywords})
 
-
 def search_groupes(request):
     keywords = request.GET.get('keywords')
     if keywords is None or keywords == "":
@@ -517,7 +491,6 @@ def search_groupes(request):
     groupes = paginator.get_page(page)
 
     return render(request, 'SocialMedia/search/search_groupes.html', {'groupes': groupes, 'keywords': keywords})
-
 
 def search_offres(request):
     keywords = request.GET.get('keywords')
@@ -551,12 +524,15 @@ def search_offres(request):
 
 #Haytham
 def getProfil(request, pk):
+    context = dict()
     try:
-        context = dict()
         if request.user.profil == Profil.objects.get(id=pk):
             messages.info(request, "C'est votre profil")
             return redirect('SocialMedia:myprofil')
         profil = Profil.objects.get(id=pk)
+        if DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil), Q(recepteur=profil) | Q(emetteur=request.user.profil), statut=3).exists():
+            messages.warning(request, "Le profil recherché est bloqué!")
+            return redirect('SocialMedia:myprofil')
         context['profil'] = profil
         context['user'] = profil.user
         context['poste_actuel'] = Experience.objects.filter(profil=profil, actuel=True).values('poste').values('nom_poste').last()
@@ -569,16 +545,19 @@ def getProfil(request, pk):
         context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=profil)
         context['is_followed'] = Suivie.objects.filter(followed_profil=profil, follower=request.user.profil).exists()
         context['is_friend'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil), Q(recepteur=request.user.profil) | Q(recepteur=profil), statut=1).exists()
+        context['is_request_received'] = DemandeAmi.objects.filter(emetteur=profil, recepteur=request.user.profil, statut=0).exists()
+        context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil, statut=0).exists()
         return render(request, 'SocialMedia/profil/profil.html', context)
     except Profil.DoesNotExist:
         messages.error(request, "Le Profil Que Vous cherchez n'existe pas!")
         return redirect('SocialMedia:myprofil')
 
+
 def followProfil(request, pk):
     if request.user.is_authenticated:
         context = dict()
         try:
-            s = Suivie.objects.get(followed_profil=get_object_or_404(Profil, id=pk), follower=request.user.profil)
+            s = Suivie.objects.get(followed_profil=Profil.objects.get(id=pk), follower=request.user.profil)
             s.delete()
             context['statut'] = True
             context['message'] = "Profile devenu non suivi"
@@ -590,30 +569,139 @@ def followProfil(request, pk):
             context['message'] = "Profile est suivi"
             context['follow'] = True
             return JsonResponse(context, safe=False)
+        except Profil.DoesNotExist:
+            context['statut'] = False
+            context['message'] = "Profil a ete supprimé, veuiller actualiser!"
+            context['follow'] = False
+            return JsonResponse(context, safe=False)
 
     else:
-        messages.error(request, "Veuiller Se Connecter!")
+        messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
 
-def addFriend(request, pk):
+def FriendsRequests(request, pk):
     if request.user.is_authenticated:
         context = dict()
+        rep = int(request.POST.get('rep'))
         try:
-            profil = get_object_or_404(Profil, id=pk)
-            demande = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil), Q(recepteur=request.user.profil) | Q(recepteur=profil), statut=1)
-            demande.delete()
+            profil = Profil.objects.get(id=pk)
+            demande = DemandeAmi.objects.get(Q(emetteur=request.user.profil) | Q(emetteur=profil), Q(recepteur=request.user.profil) | Q(recepteur=profil))
             context['statut'] = True
-            context['message'] = "Vous n'etes Plus Ami Avec {}, {}".format(profil.user.first_name, demande.exists())
-            context['friend'] = False
+            if rep == -1:
+                context['message'] = "La demande de {} à été annulée".format(profil.user.username)
+                context['friend'] = False
+                demande.delete()
+            elif rep == -2:
+                context['message'] = "{} à été supprimé de la liste des amis".format(profil.user.username)
+                context['friend'] = False
+                demande.delete()
+            elif rep == 0:
+                demande.statut = rep
+                demande.emetteur = request.user.profil
+                demande.recepteur = profil
+                context['message'] = "Demande à été envoyée à {}".format(profil.user.username)
+                context['friend'] = False
+                demande.save()
+            elif rep == 1:
+                demande.statut = rep
+                context['message'] = "Vous etes Ami Avec {}".format(profil.user.username)
+                context['friend'] = True
+                demande.save()
+            elif rep == 2:
+                demande.statut = rep
+                context['message'] = "Vous avez refuser la demande de {}".format(profil.user.username)
+                context['friend'] = False
+                demande.save()
+            elif rep == 3:
+                demande.statut = rep
+                context['message'] = "{} à été bloqué.".format(profil.user.username)
+                context['friend'] = False
+                demande.save()
             return JsonResponse(context, safe=False)
         except DemandeAmi.DoesNotExist:
-            Suivie.objects.create(followed_profil=get_object_or_404(Profil, id=pk), follower=request.user.profil)
-            context['statut'] = True
-            context['message'] = "Vous etes Ami Avec {}".format(Profil.objects.get(id=pk).user.first_name)
-            context['friend'] = True
+            try:
+                profil = Profil.objects.get(id=pk)
+                if rep == 0:
+                    DemandeAmi.objects.create(recepteur=profil, emetteur=request.user.profil, statut=rep)
+                    context['statut'] = True
+                    context['message'] = "Demande à été envoyée à {}".format(profil.user.username)
+                    context['friend'] = False
+                elif rep == 3:
+                    DemandeAmi.objects.create(emetteur=request.user.profil, recepteur=profil, statut=rep)
+                    context['message'] = "{} à été bloqué.".format(profil.user.username)
+                    context['friend'] = False
+                return JsonResponse(context, safe=False)
+            except Profil.DoesNotExist:
+                context['statut'] = False
+                context['message'] = "Profil a ete supprimé, veuiller actualiser!"
+                context['friend'] = False
+                return JsonResponse(context, safe=False)
+        except Profil.DoesNotExist:
+            context['statut'] = False
+            context['message'] = "Profil a ete supprimé, veuiller actualiser!"
+            context['friend'] = False
             return JsonResponse(context, safe=False)
-
     else:
-        messages.error(request, "Veuiller Se Connecter!")
+        messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
+
+def getRequestsUpdates(request, pk):
+    if request.user.is_authenticated:
+        context = dict()
+        profil = Profil.objects.get(id=pk)
+        context['statut'] = True
+        context['is_blocked'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil),
+                                                             Q(recepteur=request.user.profil) | Q(recepteur=profil),
+                                                             statut=3).exists()
+        context['is_followed'] = Suivie.objects.filter(followed_profil=profil, follower=request.user.profil).exists()
+        context['is_friend'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil),
+                                                             Q(recepteur=request.user.profil) | Q(recepteur=profil),
+                                                             statut=1).exists()
+        context['is_request_received'] = DemandeAmi.objects.filter(emetteur=profil, recepteur=request.user.profil,statut=0).exists()
+        context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,statut=0).exists()
+        return JsonResponse(context, safe=False)
+
+def getProfilGroupes(request, pk):
+    context = dict()
+    try:
+        if request.user.profil == Profil.objects.get(id=pk):
+            messages.info(request, "C'est votre profil")
+            return redirect('SocialMedia:groupes')
+        profil = Profil.objects.get(id=pk)
+        if DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil, statut=3).exists():
+            messages.warning(request, "Les groupes concernent un profil bloqué!")
+            return redirect('SocialMedia:myprofil')
+        if DemandeAmi.objects.filter(recepteur=request.user.profil, emetteur=profil, statut=3).exists():
+            messages.warning(request, "Les groupes du profil recherché vous a bloqué!")
+            return redirect('SocialMedia:myprofil')
+        context['profil'] = profil
+        context['user'] = profil.user
+        context['poste_actuel'] = Experience.objects.filter(profil=profil, actuel=True).values('poste').values(
+            'nom_poste').last()
+        context['poste_actuel_renseigne'] = Experience.objects.filter(profil=profil, actuel=True).values(
+            'nom_poste').last()
+        context['ecole'] = Formation.objects.filter(profil=profil, ecole__isnull=False).values('ecole__nom').last()
+        context['ecole_renseignee'] = Formation.objects.filter(profil=profil, ecole__isnull=True).values(
+            'nom_ecole').last()
+        context['profiles'] = Profil.objects.all().order_by('-id')[:20]
+        context['experiences'] = Experience.objects.filter(profil=profil)
+        context['formations'] = Formation.objects.filter(profil=profil)
+        context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=profil)
+        context['is_followed'] = Suivie.objects.filter(followed_profil=profil, follower=request.user.profil).exists()
+        context['is_friend'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil),
+                                                         Q(recepteur=request.user.profil) | Q(recepteur=profil),
+                                                         statut=1).exists()
+        context['is_request_received'] = DemandeAmi.objects.filter(emetteur=profil, recepteur=request.user.profil,
+                                                                   statut=0).exists()
+        context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
+                                                               statut=0).exists()
+        context['groupes'] = Groupe.objects.filter(id=DemandeGroupe.objects.get(emetteur=profil,reponse=True).id)
+
+        return render(request, 'SocialMedia/profil/groupesProfil.html', context)
+    except Profil.DoesNotExist:
+        messages.error(request, "Le Profil Que Vous cherchez n'existe pas!")
+        return redirect('SocialMedia:myprofil')
+    except DemandeGroupe.DoesNotExist:
+        context['msg'] = "Le profil ne s'appartient à aucun groupe"
+        return render(request, 'SocialMedia/profil/groupesProfil.html',context)
 #EndHaytham

@@ -24,7 +24,9 @@ def test(request):
 
 
 def signup(request):
-
+    if request.user.is_authenticated:
+        messages.info(request, "Vous êtes connecté")
+        return redirect('main_app:home')
     if request.method == 'POST':
         form_inscription = FormProfilInscription(request.POST)
         if form_inscription.is_valid():
