@@ -152,7 +152,7 @@ def groupesProfil(request):
         context['formations'] = Formation.objects.filter(profil=request.user.profil)
         context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=request.user.profil)
         context['nbdemandes'] = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
-        return render(request, 'SocialMedia/myprofil/myprofil.html', context)
+        return render(request, 'SocialMedia/myprofil/groupesMyProfil.html', context)
     else:
         messages.error(request, "Veuiller Se Connecter!")
         return redirect('main_app:log_in')
@@ -517,7 +517,7 @@ def getProfil(request, pk):
             messages.info(request, "C'est votre profil")
             return redirect('SocialMedia:myprofil')
         profil = Profil.objects.get(id=pk)
-        if DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil), Q(recepteur=profil) | Q(emetteur=request.user.profil), statut=3).exists():
+        if DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil), Q(recepteur=profil) | Q(recepteur=request.user.profil), statut=3).exists():
             messages.warning(request, "Le profil recherché est bloqué!")
             return redirect('SocialMedia:myprofil')
         context['profil'] = profil
@@ -535,8 +535,7 @@ def getProfil(request, pk):
         context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil, statut=0).exists()
         return render(request, 'SocialMedia/profil/profil.html', context)
     except Profil.DoesNotExist:
-        messages.error(request, "Le Profil Que Vous cherchez n'existe pas!")
-        return redirect('SocialMedia:myprofil')
+        raise Http404
 
 
 def followProfil(request, pk):
@@ -681,9 +680,7 @@ def getProfilGroupes(request, pk):
                                                                    statut=0).exists()
         context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
                                                                statut=0).exists()
-        context['groupes'] = Groupe.objects.filter(id__in=DemandeGroupe.objects.filter(emetteur=profil).values('groupe_recepteur'))
-        g = Groupe.objects.all().first()
-
+        context['groupes'] = Groupe.objects.filter(id__in=DemandeGroupe.objects.filter(emetteur=profil, reponse=True).values('groupe_recepteur'))
         return render(request, 'SocialMedia/profil/groupesProfil.html', context)
     except Profil.DoesNotExist:
         messages.error(request, "Le Profil Que Vous cherchez n'existe pas!")

@@ -39,6 +39,57 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="base_profil.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/base_profil.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="283">
+              <caret line="83" column="29" lean-forward="false" selection-start-line="83" selection-start-column="29" selection-end-line="83" selection-end-column="29" />
+              <folding>
+                <element signature="e#31052#32012#0#HTML" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/SocialMedia/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="314">
+              <caret line="682" column="145" lean-forward="false" selection-start-line="682" selection-start-column="145" selection-end-line="682" selection-end-column="145" />
+              <folding>
+                <element signature="e#0#77#0" expanded="true" />
+                <element signature="e#975#2505#0" expanded="false" />
+                <element signature="e#2543#3316#0" expanded="false" />
+                <element signature="e#3358#4135#0" expanded="false" />
+                <element signature="e#4164#4803#0" expanded="false" />
+                <element signature="e#4830#5738#0" expanded="false" />
+                <element signature="e#7408#7620#0" expanded="false" />
+                <element signature="e#7622#8359#1" expanded="false" />
+                <element signature="e#8435#10455#0" expanded="false" />
+                <element signature="e#10490#11928#0" expanded="false" />
+                <element signature="e#12877#13298#0" expanded="false" />
+                <element signature="e#13362#13366#0" expanded="false" />
+                <element signature="e#13393#13882#0" expanded="false" />
+                <element signature="e#13916#15237#0" expanded="false" />
+                <element signature="e#15267#16496#0" expanded="false" />
+                <element signature="e#16535#18054#0" expanded="false" />
+                <element signature="e#18092#20307#0" expanded="false" />
+                <element signature="e#20355#21326#0" expanded="false" />
+                <element signature="e#21361#21940#0" expanded="false" />
+                <element signature="e#21975#22399#0" expanded="false" />
+                <element signature="e#22433#23589#0" expanded="false" />
+                <element signature="e#25741#26821#0" expanded="false" />
+                <element signature="e#26861#30080#0" expanded="false" />
+                <element signature="e#30123#31303#0" expanded="false" />
+                <element signature="e#31443#31538#0" expanded="false" />
+                <element signature="e#31699#31820#0" expanded="false" />
+                <element signature="e#31938#32065#0" expanded="false" />
+                <element signature="e#34219#34358#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="admin.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/SocialMedia/admin.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -49,51 +100,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SocialMedia/views.py">
+      <file leaf-file-name="groupesProfil.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/groupesProfil.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="26" column="0" lean-forward="true" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+            <state relative-caret-position="207">
+              <caret line="48" column="159" lean-forward="false" selection-start-line="48" selection-start-column="159" selection-end-line="48" selection-end-column="159" />
               <folding>
-                <element signature="e#0#77#0" expanded="true" />
-                <element signature="e#2543#3316#0" expanded="false" />
-                <element signature="e#3358#4135#0" expanded="false" />
-                <element signature="e#4164#4803#0" expanded="false" />
-                <element signature="e#4830#5738#0" expanded="false" />
-                <element signature="e#5772#7373#0" expanded="false" />
-                <element signature="e#7401#7613#0" expanded="false" />
-                <element signature="e#7615#8352#1" expanded="false" />
-                <element signature="e#8428#10448#0" expanded="false" />
-                <element signature="e#10483#11921#0" expanded="false" />
-                <element signature="e#12870#13291#0" expanded="false" />
-                <element signature="e#13355#13359#0" expanded="false" />
-                <element signature="e#13386#13875#0" expanded="false" />
-                <element signature="e#13909#15230#0" expanded="false" />
-                <element signature="e#15260#16489#0" expanded="false" />
-                <element signature="e#16528#18047#0" expanded="false" />
-                <element signature="e#18085#20300#0" expanded="false" />
-                <element signature="e#20348#21319#0" expanded="false" />
-                <element signature="e#21354#21933#0" expanded="false" />
-                <element signature="e#21968#22392#0" expanded="false" />
-                <element signature="e#22426#23582#0" expanded="false" />
-                <element signature="e#23637#25798#0" expanded="false" />
-                <element signature="e#25836#26916#0" expanded="false" />
-                <element signature="e#26956#30175#0" expanded="false" />
-                <element signature="e#30218#31398#0" expanded="false" />
-                <element signature="e#31538#31633#0" expanded="false" />
-                <element signature="e#31794#31915#0" expanded="false" />
-                <element signature="e#32033#32160#0" expanded="false" />
+                <marker date="1525887787815" expanded="true" signature="4064:6066" ph="..." />
+                <marker date="1525887787815" expanded="false" signature="6146:8158" ph="..." />
+                <marker date="1525887787815" expanded="false" signature="8238:10236" ph="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="forms.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/SocialMedia/forms.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
-              <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="3" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -104,20 +120,6 @@
             <state relative-caret-position="90">
               <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="groupesProfil.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/groupesProfil.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="48" column="162" lean-forward="false" selection-start-line="48" selection-start-column="162" selection-end-line="48" selection-end-column="162" />
-              <folding>
-                <marker date="1525883524580" expanded="true" signature="4067:6069" ph="..." />
-                <marker date="1525883524580" expanded="false" signature="6149:8161" ph="..." />
-                <marker date="1525883524580" expanded="false" signature="8241:10239" ph="..." />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -135,8 +137,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>veuill</find>
-      <find>demandesAmis</find>
       <find>Amis</find>
       <find>ecole_renseignee</find>
       <find>grou</find>
@@ -165,6 +165,8 @@
       <find>mypro</find>
       <find>mypr</find>
       <find>main_app</find>
+      <find>{% c</find>
+      <find>group</find>
     </findStrings>
     <replaceStrings>
       <replace>Facebook</replace>
@@ -209,22 +211,22 @@
         <option value="$PROJECT_DIR$/SocialMedia/static/Socialmedia/css/custom.css" />
         <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/base_socialmedia.html" />
         <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/scripts/base_profil_scripts.js" />
-        <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/base_profil.html" />
         <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/scripts/base_myprofil_scripts.js" />
         <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/base_myprofil.html" />
         <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/scripts/demandesMyProfil_scripts.js" />
         <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/demandesMyProfil.html" />
-        <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/myprofil.html" />
         <option value="$PROJECT_DIR$/SocialMedia/admin.py" />
         <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/profil.html" />
         <option value="$PROJECT_DIR$/SocialMedia/models.py" />
         <option value="$PROJECT_DIR$/SocialNetworkJob/settings.py" />
         <option value="$PROJECT_DIR$/SocialMedia/migrations/0001_initial.py" />
         <option value="$PROJECT_DIR$/main_app/models.py" />
-        <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/groupesProfil.html" />
         <option value="$PROJECT_DIR$/SocialMedia/urls.py" />
-        <option value="$PROJECT_DIR$/SocialMedia/views.py" />
         <option value="$PROJECT_DIR$/SocialMedia/forms.py" />
+        <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/myprofil.html" />
+        <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/base_profil.html" />
+        <option value="$PROJECT_DIR$/SocialMedia/views.py" />
+        <option value="$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/groupesProfil.html" />
       </list>
     </option>
   </component>
@@ -294,6 +296,21 @@
               <item name="SocialMedia" type="462c0819:PsiDirectoryNode" />
               <item name="SocialMedia" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SocialMedia" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SocialMedia" type="462c0819:PsiDirectoryNode" />
+              <item name="SocialMedia" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="SocialMedia" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SocialMedia" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SocialMedia" type="462c0819:PsiDirectoryNode" />
+              <item name="SocialMedia" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="SocialMedia" type="462c0819:PsiDirectoryNode" />
+              <item name="profil" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -389,13 +406,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32952693" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32952693" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.8009788" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24632953" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23146747" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -453,7 +471,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="331">
           <caret line="307" column="19" lean-forward="false" selection-start-line="307" selection-start-column="19" selection-end-line="307" selection-end-column="19" />
-          <folding />
+          <folding>
+            <element signature="e#31052#32012#0#HTML" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -616,38 +636,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/groupesMyProfil.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="6" lean-forward="false" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/mediaProfil.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
           <caret line="9" column="17" lean-forward="false" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/myprofil.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="241" column="14" lean-forward="true" selection-start-line="241" selection-start-column="14" selection-end-line="241" selection-end-column="14" />
-          <folding>
-            <marker date="1525880501305" expanded="false" signature="9558:9573" ph="..." />
-            <marker date="1525880501305" expanded="false" signature="9725:9759" ph="..." />
-            <marker date="1525880501305" expanded="false" signature="10558:10658" ph="..." />
-            <marker date="1525880501305" expanded="false" signature="10969:11008" ph="..." />
-            <marker date="1525880501305" expanded="false" signature="12340:12355" ph="..." />
-            <marker date="1525880501305" expanded="false" signature="12507:12541" ph="..." />
-            <marker date="1525880501305" expanded="false" signature="13988:14089" ph="..." />
-            <marker date="1525880501305" expanded="false" signature="14437:14476" ph="..." />
-            <marker date="1525880501305" expanded="false" signature="15034:15049" ph="..." />
-            <marker date="1525880501305" expanded="false" signature="15201:15235" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -659,64 +652,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/profil.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="117" column="0" lean-forward="true" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#i#0;n#a#0;n#div#1;n#div#0;n#div#1;n#div#3;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#i#0;n#a#1;n#div#1;n#div#0;n#div#1;n#div#3;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#hr#0;n#div#1;n#div#3;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#hr#3;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#i#0;n#a#0;n#div#1;n#div#0;n#dd#0;n#dl#0;n#div#1;n#div#4;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#i#0;n#a#1;n#div#1;n#div#0;n#dd#0;n#dl#0;n#div#1;n#div#4;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#hr#0;n#dl#0;n#div#1;n#div#4;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#hr#4;n#div#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/base_myprofil.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="433" column="29" lean-forward="true" selection-start-line="433" selection-start-column="29" selection-end-line="433" selection-end-column="29" />
-          <folding>
-            <element signature="n#block#2;n#!!top" expanded="false" />
-            <element signature="n#block#5;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/demandesMyProfil.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1824">
-          <caret line="115" column="36" lean-forward="false" selection-start-line="115" selection-start-column="36" selection-end-line="115" selection-end-column="36" />
-          <folding>
-            <element signature="n#block#2;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/findfriends.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="9" column="28" lean-forward="false" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main_app/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="18" column="31" lean-forward="true" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SocialMedia/apps.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -761,22 +700,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/base_profil.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="702" column="0" lean-forward="false" selection-start-line="702" selection-start-column="0" selection-end-line="702" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SocialMedia/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main_app/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="149">
@@ -801,60 +724,139 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/groupesProfil.html">
+    <entry file="file://$PROJECT_DIR$/SocialMedia/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="48" column="162" lean-forward="false" selection-start-line="48" selection-start-column="162" selection-end-line="48" selection-end-column="162" />
+        <state relative-caret-position="35">
+          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/myprofil.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="116" column="0" lean-forward="true" selection-start-line="116" selection-start-column="0" selection-end-line="116" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/groupesMyProfil.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="6" lean-forward="false" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/findfriends.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="9" column="28" lean-forward="false" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/demandesMyProfil.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="549">
+          <caret line="115" column="36" lean-forward="false" selection-start-line="115" selection-start-column="36" selection-end-line="115" selection-end-column="36" />
           <folding>
-            <marker date="1525883524580" expanded="true" signature="4067:6069" ph="..." />
-            <marker date="1525883524580" expanded="false" signature="6149:8161" ph="..." />
-            <marker date="1525883524580" expanded="false" signature="8241:10239" ph="..." />
+            <element signature="n#block#2;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/myprofil/base_myprofil.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="433" column="29" lean-forward="false" selection-start-line="433" selection-start-column="29" selection-end-line="433" selection-end-column="29" />
+          <folding>
+            <element signature="n#block#2;n#!!top" expanded="false" />
+            <element signature="n#block#5;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SocialMedia/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/profil.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1813">
+          <caret line="117" column="0" lean-forward="true" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SocialMedia/apps.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/base_profil.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="83" column="29" lean-forward="false" selection-start-line="83" selection-start-column="29" selection-end-line="83" selection-end-column="29" />
+          <folding>
+            <element signature="e#31052#32012#0#HTML" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SocialMedia/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="26" column="0" lean-forward="true" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+        <state relative-caret-position="314">
+          <caret line="682" column="145" lean-forward="false" selection-start-line="682" selection-start-column="145" selection-end-line="682" selection-end-column="145" />
           <folding>
             <element signature="e#0#77#0" expanded="true" />
+            <element signature="e#975#2505#0" expanded="false" />
             <element signature="e#2543#3316#0" expanded="false" />
             <element signature="e#3358#4135#0" expanded="false" />
             <element signature="e#4164#4803#0" expanded="false" />
             <element signature="e#4830#5738#0" expanded="false" />
-            <element signature="e#5772#7373#0" expanded="false" />
-            <element signature="e#7401#7613#0" expanded="false" />
-            <element signature="e#7615#8352#1" expanded="false" />
-            <element signature="e#8428#10448#0" expanded="false" />
-            <element signature="e#10483#11921#0" expanded="false" />
-            <element signature="e#12870#13291#0" expanded="false" />
-            <element signature="e#13355#13359#0" expanded="false" />
-            <element signature="e#13386#13875#0" expanded="false" />
-            <element signature="e#13909#15230#0" expanded="false" />
-            <element signature="e#15260#16489#0" expanded="false" />
-            <element signature="e#16528#18047#0" expanded="false" />
-            <element signature="e#18085#20300#0" expanded="false" />
-            <element signature="e#20348#21319#0" expanded="false" />
-            <element signature="e#21354#21933#0" expanded="false" />
-            <element signature="e#21968#22392#0" expanded="false" />
-            <element signature="e#22426#23582#0" expanded="false" />
-            <element signature="e#23637#25798#0" expanded="false" />
-            <element signature="e#25836#26916#0" expanded="false" />
-            <element signature="e#26956#30175#0" expanded="false" />
-            <element signature="e#30218#31398#0" expanded="false" />
-            <element signature="e#31538#31633#0" expanded="false" />
-            <element signature="e#31794#31915#0" expanded="false" />
-            <element signature="e#32033#32160#0" expanded="false" />
+            <element signature="e#7408#7620#0" expanded="false" />
+            <element signature="e#7622#8359#1" expanded="false" />
+            <element signature="e#8435#10455#0" expanded="false" />
+            <element signature="e#10490#11928#0" expanded="false" />
+            <element signature="e#12877#13298#0" expanded="false" />
+            <element signature="e#13362#13366#0" expanded="false" />
+            <element signature="e#13393#13882#0" expanded="false" />
+            <element signature="e#13916#15237#0" expanded="false" />
+            <element signature="e#15267#16496#0" expanded="false" />
+            <element signature="e#16535#18054#0" expanded="false" />
+            <element signature="e#18092#20307#0" expanded="false" />
+            <element signature="e#20355#21326#0" expanded="false" />
+            <element signature="e#21361#21940#0" expanded="false" />
+            <element signature="e#21975#22399#0" expanded="false" />
+            <element signature="e#22433#23589#0" expanded="false" />
+            <element signature="e#25741#26821#0" expanded="false" />
+            <element signature="e#26861#30080#0" expanded="false" />
+            <element signature="e#30123#31303#0" expanded="false" />
+            <element signature="e#31443#31538#0" expanded="false" />
+            <element signature="e#31699#31820#0" expanded="false" />
+            <element signature="e#31938#32065#0" expanded="false" />
+            <element signature="e#34219#34358#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SocialMedia/forms.py">
+    <entry file="file://$PROJECT_DIR$/SocialMedia/templates/SocialMedia/profil/groupesProfil.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="3" />
-          <folding />
+        <state relative-caret-position="207">
+          <caret line="48" column="159" lean-forward="false" selection-start-line="48" selection-start-column="159" selection-end-line="48" selection-end-column="159" />
+          <folding>
+            <marker date="1525887787815" expanded="true" signature="4064:6066" ph="..." />
+            <marker date="1525887787815" expanded="false" signature="6146:8158" ph="..." />
+            <marker date="1525887787815" expanded="false" signature="8238:10236" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

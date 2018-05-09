@@ -631,7 +631,36 @@
                     swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
                 }
             });
-        })
+        });
+
+    interval = setInterval(function () {
+        $.ajax({xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function (e) {
+                    }, false);
+                    xhr.addEventListener("progress", function (evt) {
+
+                    }, false);
+                    return xhr;
+                },
+                url: '{% url "SocialMedia:getUpdates" profil.id %}',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if(data.statut) {
+                        if (data.statut) {
+                           printData(data);
+                        }
+
+                    }
+                },
+                error: function() { },
+                stop: function (e) {
+                    swal("la connexion reseau est faible!", "Erreur Fatale", "error");
+                    stopinterval();
+                }
+            });
+    }, 2000);
 
     $('body').on("submit", "#bloque",function(event){
             event.preventDefault();
@@ -654,7 +683,7 @@
                 dataType: 'json',
                 success: function(data) {
                     if( data.friend == false && data.statut ){
-                        clearInterval(inter);
+                        clearInterval(interval);
                             swal({
                                   title: data.message,
                                   text: "Vous serez redirigé vers votre profil",
@@ -727,34 +756,7 @@
 
     }
 
-    inter = setInterval(function () {
-        $.ajax({xhr: function () {
-                    var xhr = new window.XMLHttpRequest();
-                    xhr.upload.addEventListener("progress", function (e) {
-                    }, false);
-                    xhr.addEventListener("progress", function (evt) {
 
-                    }, false);
-                    return xhr;
-                },
-                url: '{% url "SocialMedia:getUpdates" profil.id %}',
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    if(data.statut) {
-                        if (data.statut) {
-                           printData(data);
-                        }
-
-                    }
-                },
-                error: function() { },
-                stop: function (e) {
-                    swal("la connexion reseau est faible!", "Erreur Fatale", "error");
-                    stopinterval();
-                }
-            });
-    }, 2000);
 
     </script>
 {% endblock %}
