@@ -13,7 +13,7 @@ urlpatterns = [
     path('profil/media', views.mediaProfil, name="mediaProfil"),
     path('supprimer-ami/', views.suprimerAmi, name="supprimerAmi"),
     url('rechercher-amis', views.rechercherAmis, name="rechercherAmis"),
-    path('chat', views.chat, name="chat"),
+    #path('chat', views.chat, name="chat"),
     path('uploads', views.uploads.as_view(), name="uploads"),
     path('changephotocouverture', views.changephotocouverture, name="changephotocouverture"),
 

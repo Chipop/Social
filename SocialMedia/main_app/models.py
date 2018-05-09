@@ -28,7 +28,7 @@ class Entreprise(models.Model):
     codePostal = models.IntegerField()
     tel = models.IntegerField()
     typeEntreprise = models.ForeignKey(TypeEntreprise, on_delete=models.CASCADE)
-    civilité = models.CharField(max_length=255, blank=False, null=False)
+    civilite = models.CharField(max_length=255, blank=False, null=False)
     adresse_profile = models.CharField(max_length=255, blank=False, null=False)
     logo = models.FileField(upload_to="", null=True)
 

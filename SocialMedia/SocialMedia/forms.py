@@ -16,7 +16,7 @@ class demandeForm(forms.Form):
     demande = forms.IntegerField(widget=forms.HiddenInput)
     statut = forms.IntegerField(widget=forms.HiddenInput)
 
-
+"""
 class UserInterfaceInfos(forms.Form):
     entreprises = formations = dict()
     postes = dict()
@@ -36,7 +36,7 @@ class UserInterfaceInfos(forms.Form):
     entreprise_pays = forms.CharField(max_length=255)
     profil_ville = forms.CharField(max_length=255)
     profil_pays = forms.CharField(max_length=255)
-
+"""
 
 class UserAboutEdit(forms.Form):
     nom = forms.CharField(initial="A Propos De ")

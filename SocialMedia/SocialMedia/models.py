@@ -34,7 +34,7 @@ class Groupe(models.Model):
 
 class DemandeGroupe(models.Model):
     emetteur = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE)
-    groupe_recepteur = models.OneToOneField(Groupe, on_delete=models.CASCADE)
+    groupe_recepteur = models.ForeignKey(Groupe, on_delete=models.CASCADE)
     reponse = models.BooleanField()
 
     def __str__(self):
@@ -192,8 +192,8 @@ class Experience(models.Model):
 class Ecole(models.Model):
     nom = models.CharField(max_length=300)
     logo = models.ImageField(upload_to="SocialMedia/Image/")
-    
-    
+
+
 class Formation(models.Model):
     titre_formation = models.CharField(max_length=300)
     ecole = models.ForeignKey(Ecole, on_delete=models.CASCADE, null=True, blank=True)

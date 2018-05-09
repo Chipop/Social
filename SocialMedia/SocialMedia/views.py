@@ -16,13 +16,6 @@ from django.core import serializers
 from django.core.serializers import json
 from django.urls import reverse
 from django.utils.timezone import now
-from main_app.models import *
-from django.core.mail import send_mail
-from django.template.loader import  get_template
-from django.contrib.auth import views as auth_views
-from django.contrib.auth.forms import (
-    AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm,
-)
 from django.contrib.auth.tokens import default_token_generator
 from .models import *
 
@@ -134,40 +127,32 @@ def log_in(request):
             messages.warning(request, "Username Ou Mot De Passe Incorrect")
             return redirect('main_app:login')
     else:
-        return render(request, "main_app/authentification/login.html")
+        return redirect('main_app:login')
 
 def groupesProfil(request):
     if request.user.is_authenticated:
-        formDemande = demandeForm(request.POST or None)
-        if request.method == "POST" and formDemande.is_valid():
-            demande = DemandeAmi.objects.get(id=formDemande.cleaned_data['demande'])
-            demande.statut = formDemande.cleaned_data['statut']
-            demande.save()
-            if formDemande.cleaned_data['statut'] == 1:
-                context={'statut': demande.statut,
-                         'ami':demande.emetteur.user.username,
-                         'demande':demande.id,
-                         'nbdemandes':DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
-                         }
-                return JsonResponse(context,safe=False)
-            elif formDemande.cleaned_data['statut'] == 2:
-                context={'statut': demande.statut,
-                         'ami':demande.emetteur.user.username,
-                         'demande':demande.id,
-                         'nbdemandes':DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
-                         }
-                return JsonResponse(context,safe=False)
-            elif formDemande.cleaned_data['statut'] == 3:
-                context={'statut': demande.statut,
-                         'ami':demande.emetteur.user.username,
-                         'demande':demande.id,
-                         'nbdemandes':DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
-                         }
-                return JsonResponse(context,safe=False)
-        else:
-            demandesAmis = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0)
-            photoform = PhotoForm()
-            return render(request, 'SocialMedia/myprofil/groupesMyProfil.html', {'demandesAmis': demandesAmis, 'photoform': photoform, 'formDemande':formDemande})
+        context = dict()
+        p = Profil.objects.get(user=request.user)
+        context['is_first'] = p.is_first_socialmedia
+        if context['is_first']:
+                p.is_first = False
+                p.save()
+        context['userInterfaceForm'] = UserInterfaceInfos()
+        context['poste_actuel'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values('poste').values(
+            'nom_poste').last()
+        context['poste_actuel_renseigne'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values(
+            'nom_poste').last()
+        context['ecole'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=False).values(
+                'ecole__nom').last()
+        context['ecole_renseignee'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=True).values(
+                'nom_ecole').last()
+        context['profiles'] = Profil.objects.all().order_by('-id')[:20]
+        context['photoform'] = PhotoForm()
+        context['experiences'] = Experience.objects.filter(profil=request.user.profil)
+        context['formations'] = Formation.objects.filter(profil=request.user.profil)
+        context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=request.user.profil)
+        context['nbdemandes'] = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
+        return render(request, 'SocialMedia/myprofil/myprofil.html', context)
     else:
         messages.error(request, "Veuiller Se Connecter!")
         return redirect('main_app:log_in')
@@ -180,6 +165,7 @@ def log_out(request):
         messages.error(request, "Veuiller Se Connecter!")
         return redirect('main_app:log_in')
 
+"""
 def register(request):
     if request.user.is_authenticated:
         return redirect('SocialMedia:myprofil')
@@ -197,6 +183,7 @@ def register(request):
         return redirect('main_app:signup')
         #formuser = userform()
         #return render(request, 'main_app/authentification/signup.html', {'formuser':formuser})
+"""
 
 def supprimerDemande(request):
     pass
@@ -534,7 +521,6 @@ def getProfil(request, pk):
             messages.warning(request, "Le profil recherché est bloqué!")
             return redirect('SocialMedia:myprofil')
         context['profil'] = profil
-        context['user'] = profil.user
         context['poste_actuel'] = Experience.objects.filter(profil=profil, actuel=True).values('poste').values('nom_poste').last()
         context['poste_actuel_renseigne'] = Experience.objects.filter(profil=profil, actuel=True).values('nom_poste').last()
         context['ecole'] = Formation.objects.filter(profil=profil, ecole__isnull=False).values('ecole__nom').last()
@@ -695,7 +681,8 @@ def getProfilGroupes(request, pk):
                                                                    statut=0).exists()
         context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
                                                                statut=0).exists()
-        context['groupes'] = Groupe.objects.filter(id=DemandeGroupe.objects.get(emetteur=profil,reponse=True).id)
+        context['groupes'] = Groupe.objects.filter(id__in=DemandeGroupe.objects.filter(emetteur=profil).values('groupe_recepteur'))
+        g = Groupe.objects.all().first()
 
         return render(request, 'SocialMedia/profil/groupesProfil.html', context)
     except Profil.DoesNotExist:

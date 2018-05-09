@@ -329,7 +329,8 @@
 
 {% block scripts %}
     {{ block.super }}
-    <script>
+<script>
+
     {% if messages %}
             {% for msg in messages %}
             swal({
@@ -754,8 +755,8 @@
                 }
             });
     }, 2000);
-    </script>
 
+    </script>
 {% endblock %}
 
 

@@ -104,7 +104,7 @@
                         {% if user.is_authenticated %}
                             <li>
                                 <a href="{% url 'SocialMedia:myprofil' %}" class="btn-link text-center-menu">
-                                    <i class="fa mr--8 fa-user-o"></i>
+                                    <img src="{{ user.profil.photo_profil.image.url }}" style="width: 25px;    height: 25px;" class="img-circle" width="25"  height="25" alt="Cinque Terre">
                                     <span>{{ user.first_name | default:'ESPR-USER' }} </span>
                                 </a>
                             </li>

@@ -28,7 +28,6 @@
 
                                 {% if groupes.exists %}
                                     {% for groupe in groupes %}
-
                                     <div class="col-md-4 col-xs-6 col-xxs-12">
                                         <!-- Box Item Start -->
                                         <div class="box--item text-center">
@@ -47,7 +46,7 @@
 
                                                 <div class="meta">
                                                     <p><i class="fa mr--8 fa-clock-o"></i>Active 8 days ago</p>
-                                                    <p><i class="fa mr--8 fa-user-o"></i>{{ groupe.statut_groupe }} Groupe / 2500 Members</p>
+                                                    <p><i class="fa mr--8 fa-user-o"></i>Groupe {{ groupe.statut_groupe }} / {{ groupe.demandegroupe_set.all.count }} Members</p>
                                                 </div>
 
                                                 <div class="desc text-darker">
@@ -61,7 +60,6 @@
                                         </div>
                                         <!-- Box Item End -->
                                     </div>
-
                                     {% endfor %}
                                 {% else %}
                                 <h1 class="h4 ">{{ msg }}</h1>
