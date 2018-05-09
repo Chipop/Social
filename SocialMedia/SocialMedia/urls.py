@@ -7,10 +7,10 @@ from . import views
 app_name = "SocialMedia"
 
 urlpatterns = [
-    path('myprofil/', views.profil, name='myprofil'),
+    path('profil/', views.profil, name='myprofil'),
     path('ajaxuser/', views.ajaxUser, name="AjaxUser"),
-    path('myprofil/demandes', views.demandesProfil, name="demandes"),
-    path('myprofil/media', views.mediaProfil, name="mediaProfil"),
+    path('profil/demandes', views.demandesProfil, name="demandes"),
+    path('profil/media', views.mediaProfil, name="mediaProfil"),
     path('supprimer-ami/', views.suprimerAmi, name="supprimerAmi"),
     url('rechercher-amis', views.rechercherAmis, name="rechercherAmis"),
     path('chat', views.chat, name="chat"),
@@ -19,17 +19,17 @@ urlpatterns = [
 
     path('changephotoprofil', views.changephotoprofil, name="changephotoprofil"),
 
-    path('myprofil/groupes', views.groupesProfil, name="groupes"),
+    path('profil/groupes', views.groupesProfil, name="groupes"),
 
     path('demandeajax', views.demandeViaAjax, name="demandeViaAjax"),
 
-    path('myprofil/editInterface/', views.editInterface, name="editInterface"),
+    path('profil/editInterface/', views.editInterface, name="editInterface"),
 
-    path('myprofil/edit-about/', views.editAbout, name="editAbout"),
+    path('profil/edit-about/', views.editAbout, name="editAbout"),
 
-    path('myprofil/edit-experience/<int:pk>/', views.editExperience, name="editExperience"),
+    path('profil/edit-experience/<int:pk>/', views.editExperience, name="editExperience"),
 
-    path('myprofil/edit-formation/<int:pk>/', views.editFormation, name="editFormation"),
+    path('profil/edit-formation/<int:pk>/', views.editFormation, name="editFormation"),
 
     path('home/', views.home, name="home"),
 
@@ -43,11 +43,11 @@ urlpatterns = [
 
     ##Haytham
 
-    path('myprofil/<int:pk>/follow', views.followProfil, name="followProfil"),
+    path('profil/<int:pk>/follow', views.followProfil, name="followProfil"),
 
-    path('myprofil/<int:pk>/reponse-ami', views.FriendsRequests, name="addFriend"),
+    path('profil/<int:pk>/reponse-ami', views.FriendsRequests, name="addFriend"),
 
-    path('myprofil/<int:pk>/get-responses-updates', views.getRequestsUpdates, name="getUpdates"),
+    path('profil/<int:pk>/get-responses-updates', views.getRequestsUpdates, name="getUpdates"),
 
     path('profil/<int:pk>', views.getProfil, name='getProfil'),
 

@@ -32,7 +32,7 @@
                                             </tr>
                                             <tr>
                                                 <th class="fw--700 text-darkest">Nom Complet</th>
-                                                <td><a href="#" class="btn-link">{{ user.first_name }}</a></td>
+                                                <td><a href="#" class="btn-link">{% if user.first_name == "" and user.last_name == "" %}Non Rempli {% else %}{{ user.first_name }} {{ user.last_name }}{% endif %}</a></td>
                                             </tr>
                                             <tr>
                                                 <th class="fw--700 text-darkest">Entreprise</th>
