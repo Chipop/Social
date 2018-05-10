@@ -16,6 +16,10 @@ class demandeForm(forms.Form):
     demande = forms.IntegerField(widget=forms.HiddenInput)
     statut = forms.IntegerField(widget=forms.HiddenInput)
 
+class demandeGroupeForm(forms.Form):
+    demande = forms.IntegerField(widget=forms.HiddenInput)
+    reponse = forms.IntegerField(widget=forms.HiddenInput)
+
 
 class UserInterfaceInfos(forms.Form):
     entreprises = formations = dict()

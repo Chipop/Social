@@ -1,7 +1,7 @@
 {% extends "SocialMedia/profil/base_profil.html" %}
 {% load staticfiles %}
 {% load widget_tweaks %}
-{% block title %}{{ user.username }} - Demandes{% endblock %}
+{% block title %}{{ profil.user.username }} - Groupes{% endblock %}
 {% block contentProfil %}
 
                          <!-- Filter Nav Start -->
@@ -24,11 +24,9 @@
                             <!-- Box Items Start -->
                             <div class="box--items">
                                 <div class="row gutter--15 MasonryRow">
-
-
-                                {% if profilGroupes.count != 0 %}
+                                {% if profilGroupes %}
                                     {% for groupe in profilGroupes %}
-                                    <div class="col-md-4 col-xs-6 col-xxs-12">
+                                            <div class="col-md-4 col-xs-6 col-xxs-12">
                                         <!-- Box Item Start -->
                                         <div class="box--item text-center">
                                             <a href="{% url 'SocialMedia:groupe' groupe.id %}" class="img" data-overlay="0.1">
@@ -46,7 +44,7 @@
 
                                                 <div class="meta">
                                                     <p><i class="fa mr--8 fa-clock-o"></i>Active 8 days ago</p>
-                                                    <p><i class="fa mr--8 fa-user-o"></i>Groupe {{ groupe.statut_groupe }} / {{ groupe.demandegroupe_set.all.count }} Members</p>
+                                                    <p><i class="fa mr--8 fa-user-o"></i>Groupe {{ groupe.statut_groupe }} / {{ groupe.adherents.all.count|add:groupe.admins.all.count|add:groupe.moderators.all.count|add:1  }} Members</p>
                                                 </div>
 
                                                 <div class="desc text-darker">
@@ -62,7 +60,7 @@
                                     </div>
                                     {% endfor %}
                                 {% else %}
-                                <h1 class="h4 ">{{ msg }}</h1>
+                                     <h1 class="h4 ">{{ msg }}</h1>
                                 {% endif %}
                                 {% comment %}
                                     <div class="col-md-4 col-xs-6 col-xxs-12">

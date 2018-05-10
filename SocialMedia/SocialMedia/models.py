@@ -24,7 +24,7 @@ class Groupe(models.Model):
     photo_profil = models.OneToOneField('main_app.Image', on_delete=models.CASCADE, related_name="groupe_photo")
     photo_couverture = models.OneToOneField('main_app.Image', on_delete=models.CASCADE, related_name="profil_cover")
     admins = models.ManyToManyField('main_app.Profil', related_name="admin")
-    mederators = models.ManyToManyField('main_app.Profil', related_name="moderateur")
+    moderators = models.ManyToManyField('main_app.Profil', related_name="moderateur")
     creator = models.OneToOneField('main_app.Profil', on_delete=models.CASCADE, related_name="createur")
     adherents = models.ManyToManyField('main_app.Profil', related_name="adherent")
 
@@ -155,7 +155,6 @@ class Poste(models.Model):
 
 class OffreEmploi(models.Model):
     TYPES_EMPLOI = (('plein', 'Plein temps'), ('partiel', 'Temps partiel'))
-
     tel = models.IntegerField()
     email = models.EmailField()
     pays = models.CharField(max_length=300)
@@ -175,6 +174,7 @@ class OffreEmploi(models.Model):
     profil_publicateur = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE,
                                            related_name="profil_publicateur")
     profil_postulants = models.ManyToManyField('main_app.Profil', related_name="profil_postulants" ,blank=True)
+
 
 
 class Experience(models.Model):

@@ -9,7 +9,7 @@ app_name = "SocialMedia"
 urlpatterns = [
     path('profil/', views.profil, name='myprofil'),
     path('ajaxuser/', views.ajaxUser, name="AjaxUser"),
-    path('profil/demandes', views.demandesProfil, name="demandes"),
+    path('profil/demandes/', views.demandesProfil, name="demandes"),
     path('profil/media', views.mediaProfil, name="mediaProfil"),
     path('supprimer-ami/', views.suprimerAmi, name="supprimerAmi"),
     url('rechercher-amis', views.rechercherAmis, name="rechercherAmis"),
@@ -53,5 +53,9 @@ urlpatterns = [
 
     path('profil/<int:pk>/groupes', views.getProfilGroupes, name='getProfilGroupes'),
 
-    path('groupe/<int:pk>/', views.groupe, name="groupe")
+    path('groupe/<int:pk>/', views.groupe, name="groupe"),
+
+    path('groupe/<int:pk>/demandes/', views.demandesGroupe, name="demandesGroupe"),
+
+    path('groupe/<int:pk>/ajax-demandes-groupe/', views.demandesGroupeViaAjax, name="demandesGroupeViaAjax"),
 ]

@@ -1,7 +1,7 @@
 {% extends "SocialMedia/base_socialmedia.html" %}
 {% load staticfiles %}
 {% load widget_tweaks %}
-{% block title %}{{ user.username }}{% endblock %}
+{% block title %}{{ groupe.nom }}{% endblock %}
 {% block content %}
 
     {% block modals %}
@@ -130,91 +130,163 @@
 
 
     <!-- Page Wrapper Start -->
-    <section class="page--wrapper pb--20">
+    <section class="page--wrapper" style="overflow: hidden;">
         <div class="container-fluid">
-            <div class="row  pt--40" style="padding: 40px 10%; ">
-
-                <div class="col-md-8 pb--60">
-
-                    <div class="row main--content"
-                         style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);width:95%;margin-left:auto;margin-right:auto;">
-                    {% if user.profil in groupe.admins.all %}
+            <div class="row main--content">
+                        {% if user.profil in groupe.admins.all %}
                         <button id="btcoverchange" class="btchangepic" data-toggle="modal"
                                 data-target="#squarespaceModal"><i class="fa fa-picture-o" aria-hidden="true"></i>
                         </button>
-                    {% endif %}
+                        {% endif %}
                         <!-- Cover Header Start -->
                         <div id="coverpic" class="cover--header pt--80 text-center"
-                             data-bg-img="{{ groupe.photo_couverture.image.url|default:'/media/SocialMedia/default.jpg' }}"
+                             data-bg-img="{{ groupe.photo_couverture.image.url|default:'/media/SocialMedia/default.jpg' }}" style="background-size: 100% 195px;"
                              data-overlay="0.6" data-overlay-color="white">
                              
 
+                            <div class="row " style="">
+                                <div class="col-md-3 ">
+                                        <div style="width: auto;padding-bottom: 30px;">
+                                            <div class="cover--avatar online" data-overlay="0.3" data-overlay-color="primary">
 
-                            <div style="width: auto;padding-bottom: 30px;">
-                                <div class="cover--avatar online" data-overlay="0.3" data-overlay-color="primary">
-
-                                    <div class="photprofilcontainer">
-                                        <img id="profilpic" class="image "
-                                             src="{{ groupe.photo_profil.image.url|default:'/media/SocialMedia/default.jpg' }}"
-                                             alt="">
-                                        {% if user.profil in groupe.admins.all %}
-                                        <div class="middle">
-                                            <div class="text">
-                                                <a href="javascript:return false" title="Photo Profil" class="btn-link"
-                                                   data-toggle="tooltip" data-placement="bottom">
-                                                    <i id="btprofilchange" class="btchangepic profilpic fa fa-picture-o"
-                                                       data-toggle="modal" data-target="#squarespaceModalprofil"
-                                                       aria-hidden="true"></i>
-                                                </a>
+                                                <div class="photprofilcontainer">
+                                                    <img id="profilpic" class="image "  style="cursor: pointer;height: 130px;width: 130px;"
+                                                         src="{{ groupe.photo_profil.image.url|default:'/media/SocialMedia/default.jpg' }}"
+                                                         alt="" >
+                                                            {% if user.profil in groupe.admins.all %}
+                                                    <div class="middle">
+                                                        <div class="text">
+                                                            <a href="javascript:return false" title="Photo Profil" class="btn-link"
+                                                               data-toggle="tooltip" data-placement="bottom">
+                                                                <i id="btprofilchange" class="btchangepic profilpic fa fa-picture-o"
+                                                                   data-toggle="modal" data-target="#squarespaceModalprofil"
+                                                                   aria-hidden="true"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                            {% endif %}
+                                                </div>
                                             </div>
                                         </div>
-                                        {% endif %}
+                                </div>
+                                <div class="col-md-6 pt--50">
+                                    <div class="row">
+                                            <div class="col cover--user-name">
+
+                                                <h2 class="h3 fw--200">{{ groupe.nom }}</h2>
+                                            </div>
+                                            <div class="col">
+                                                <h3 class="h6">{{ groupe.admins.all.count|add:groupe.moderators.all.count|add:groupe.adherents.all.count|add:1 }} Membres.</h3>
+                                            </div>
                                     </div>
-
+                                    <div class="row">
+                                        <div class="" style="background-color: transparent; ">
+                                            <div class="row">
+                                                <h4>A propos de {{ groupe.nom }}</h4>
+                                            </div>
+                                            <div class="row">
+                                                <p>{{ groupe.description }}.</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="cover--user-name">
 
-                                    <h2 class="h3 fw--600">{{ groupe.nom }}</h2>
-
-                                    <h3 class="h6">{{ groupe.admins.all.count|add:groupe.moderators.all.count|add:groupe.adherents.all.count }} Membres.</h3>
-                                </div>
-
-                                <div class="cover--user-desc fw--400 fs--18 fstyle--i text-darkest"
-                                     style="margin-top: 0;">
-                                        <h1 class="h5 fw--600 ">A propos de {{ groupe.nom }}</h1>
-                                    <p style="margin: 0;">
-                                        {{ groupe.description }}.
-                                    </p>
+                                <div class="col-md-3 pt--80">
                                         <form>
                                             <button class="bttn-material-flat bttn-md bttn-primary h6 fw--500"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Joindre {{ groupe.nom }}</button>
                                         </form>
-                                    <p style="margin: 0;">
-                                        {% if user.profil.pays is not None or user.profil.pays is not None %}
-                                            {{ user.profil.ville }}, {{ user.profil.pays }}
-                                            <i class="fa fa-globe" aria-hidden="true"></i>{% endif %}
-                                    </p>
+
+
                                 </div>
                             </div>
+                            <div class="row" style="margin-left:0px;margin-right:0px;">
+                                <hr width="75%">
+                                <div class="row" style="padding-bottom: 10px;margin-left:0px;margin-right:0px;">
+                                    <div class="col-md-4">
+                                        <div class="row">
+                                            <h1 class="h5 fw--500">Admins</h1>
+                                        </div>
+                                        {% for admin in groupe.admins.all|slice:"2" %}
+                                            <div class="row  mb--10" style="width: 70%; margin-left: auto; margin-right: auto;">
+                                                <div class="col-xs-4"><a href="{% url 'SocialMedia:getProfil' admin.id %}"><img style="height:60px;width:60px;border: 2px solid;" src="{{ admin.photo_profil.image.url }}" class="img-responsive img-circle" /></a></div>
+                                                    <div class="col-xs-8 float--left mt--8">
+                                                        <div class="row"><p class="h6 fa--700 text-darkest">{{ admin.user.username }}</p></div>
+                                                        <div class="row"><p class="h6 fw--400 text-darkest">{{ admin.fonction }}</p></div>
+                                                    </div>
+                                            </div>
+                                        {% endfor %}
+                                        {% if groupe.admins.all.count > 2 %}
+                                            <div class="row page--count ">
+                                            <label class="ff--primary fs--14 fw--500 text-darker">
+                                                <a href="/reseausocial/groupe/{{ groupe.id }}/admins/">Voir la liste du {{ groupe.admins.all.count|add:"-2" }} autre(s) Admin(s)</a>
+                                            </label>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="row">
+                                            <h1 class="h5 fw--500">Moderateurs</h1>
+                                        </div>
+                                        {% for moderator in groupe.moderators.all|slice:"2" %}
+                                            <div class="row  mb--10" style="width: 70%; margin-left: auto; margin-right: auto;">
+                                                <div class="col-xs-4"><a href="{% url 'SocialMedia:getProfil' moderator.id %}"><img style="height:60px;width:60px;border: 2px solid;" src="{{ moderator.photo_profil.image.url }}" class="img-responsive img-circle" /></a></div>
+                                                    <div class="col-xs-8 float--left mt--8">
+                                                        <div class="row"><p class="h6 fa--700 text-darkest">{{ moderator.user.username }}</p></div>
+                                                        <div class="row"><p class="h6 fw--400 text-darkest">{{ moderator.fonction }}</p></div>
+                                                    </div>
+                                            </div>
+                                        {% endfor %}
+                                        {% if groupe.moderators.all.count > 2 %}
+                                            <div class="row page--count ">
+                                            <label class="ff--primary fs--14 fw--500 text-darker">
+                                                <a href="/reseausocial/groupe/{{ groupe.id }}/moderateurs/">Voir la liste du {{ groupe.moderators.all.count|cut:"-2" }} autre(s) Moderateur(s)</a>
+                                            </label>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="row">
+                                            <h1 class="h5 fw--500">Adherents</h1>
+                                        </div>
+                                        {% for adherent in groupe.adherents.all|slice:"2" %}
+                                            <div class="row  mb--10" style="width: 70%; margin-left: auto; margin-right: auto;">
+                                                <div class="col-xs-4"><a href="{% url 'SocialMedia:getProfil' adherent.id %}"><img style="height:60px;width:60px;border: 2px solid;" src="{{ adherent.photo_profil.image.url }}" class="img-responsive img-circle" /></a></div>
+                                                    <div class="col-xs-8 float--left mt--8">
+                                                        <div class="row"><p class="h6 fa--700 text-darkest">{{ adherent.user.username }}</p></div>
+                                                        <div class="row"><p class="h6 fw--400 text-darkest">{{ adherent.fonction }}</p></div>
+                                                    </div>
+                                            </div>
+                                        {% endfor %}
+                                        {% if groupe.adherents.all.count > 2 %}
+                                        <div class="row page--count ">
+                                            <label class="ff--primary fs--14 fw--500 text-darker">
+                                                <a href="/reseausocial/groupe/{{ groupe.id }}/adherents/">Voir la liste du {{ groupe.moderators.all.count|cut:"-2" }} autre(s) Adherent(s)</a>
+                                            </label>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                         <!-- Cover Header End -->
 
-                    </div>
+            </div>
+            <div style="">
+
+                <div class="col-md-8">
 
                     <!-- Main Content Start -->
-                    <div class="row main--content pt--40" data-trigger="stickyScroll"
+                    <div class="row main--content pt--60" data-trigger="stickyScroll"
                          style=";width:95%;margin-left:auto;margin-right:auto;">
                         <div class="main--content-inner drop--shadow">
                             <!-- Content Nav Start -->
                             <div class="content--nav pb--30">
                                 <ul class="nav ff--primary fs--14 fw--500 bg-lighter profil_links_menu">
                                     <li><a href="">Activity</a></li>
-                                    <li class="active"><a href="{% url 'SocialMedia:myprofil' %}">Statuts</a></li>
-                                    {% if user.profil in groupe.admins.all %}
-                                    <li><a href="{% url 'SocialMedia:demandesGroupe' groupe.id %}">Demandes <span id="nbdemandeBadge"
-                                                                                                  class="badge">{{ nbdemandes }}</span></a>
+                                    <li class="active"><a href="{% url 'SocialMedia:myprofil' %}">Profil</a></li>
                                     </li>
-                                    {% endif %}
-                                    <li><a href="{% url 'SocialMedia:groupes' %}">Membres</a></li>
+                                    <li><a href="{% url 'SocialMedia:groupes' %}">Groups</a></li>
                                 </ul>
                             </div>
                             <!-- Content Nav End -->
@@ -225,13 +297,12 @@
                         </div>
                     </div>
                     <!-- Main Content End -->
-
                 </div>
 
                 {% block sideBar %}
 
                     <!-- Main Sidebar Start -->
-                    <div class="col-md-4 main--sidebar pb--60" data-trigger="stickyScroll">
+                    <div class="col-md-4 main--sidebar pt--60" data-trigger="stickyScroll">
                         <!-- Widget Start -->
                         <div class="widget">
                             <h2 class="h4 fw--700 widget--title">Find A Buddy</h2>
@@ -410,9 +481,10 @@
                     </div>
                     <!-- Main Sidebar End -->
 
-                    </div>
+
 
                 {% endblock %}
+            </div>
 
         </div>
         </div>
@@ -429,137 +501,19 @@
 {% block scripts %}
     {{ block.super }}
 <script>
-
-        {% if messages %}
-            {% for msg in messages %}
-                swal({
-                    title: '{{ msg }}',
-                    animation: false,
-                    customClass: 'animated tada',
-                    type: '{{ msg.tags }}'
-                });
-            {% endfor %}
-        {% endif %}
-
-        $("#photoform").on("submit", function (event) {
-            console.log($('#photoprofilform .input-group').find(':text').val());
-            if ($('#photoform .input-group').find(':text').val().length == 0) {
-                swal({
-                    type: 'error',
-                    title: 'Aucune Photo Selectionnée',
-                    text: 'Veuillez Selectionner Une Photo',
-                    type: 'error'
-                });
-                return false;
-            } else if ($('#photoform .input-group').find(':text').val().length > 100) {
-                swal({
-                    type: 'error',
-                    title: 'Nombre De Caractere Depasse la limite',
-                    text: 'Veuillez Changer Le Nom de la photo Ou Selectionner Une Autre'
-                });
-                return false;
-            }
-            event.preventDefault();
-            $('.modal-footer').slideToggle(1500);
-            setTimeout(function () {
-                $(".uploadprogress").removeClass('hidden');
-            }, 1000);
-            var form_data = new FormData($(this)[0]);
-            $.ajax({
-                xhr: function () {
-                    var xhr = new window.XMLHttpRequest();
-                    xhr.upload.addEventListener("progress", function (e) {
-                        var progress = parseInt(e.loaded / e.total * 100, 10);
-                        var strProgress = progress + "%";
-                        var strProgress = progress + "%";
-                        $(".progress-bar").css({"width": strProgress});
-                        $(".progress-bar").text(strProgress);
-                    }, false);
-                    xhr.addEventListener("progress", function (evt) {
-
-                    }, false);
-                    return xhr;
-                },
-                url: '{% url "SocialMedia:changephotocouverture" %}',
-                type: $(this).attr('method'),
-                processData: false,
-                contentType: false,
-                data: form_data,
-                success: function (data) {
-                    $("#squarespaceModal").modal("hide");
-                    swal("Photo De Couverture A Ete Changée Avec Succé", "{{ user.username }}", "success");
-                    $("#coverpic").css("background-image", "url(" + data.url + ")");
-                    document.getElementById("coverpic").style.backgroundImage = "url(" + data.url + ")";
-                },
-                error: function () {
-                },
-                stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
-                    $("#squarespaceModal").modal("hide");
-                    swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
-                }
-            });
-
+    {% if not user.profil in groupe.admins.all %}
+    $("#profilpic").on('click', function(e){
+            swal({
+              imageUrl: $(this).attr('src'),
+              imageWidth: 1000,
+              imageHeight: 1512,
+              customClass: 'animated tada',
+              showCloseButton: true,
+            })
         });
-
-        $("#photoprofilform").on("submit", function (event) {
-            if ($('#photoprofilform .input-group').find(':text').val().length == 0) {
-                swal({
-                    type: 'error',
-                    title: 'Aucune Photo Selectionnée',
-                    text: 'Veuillez Selectionner Une Photo'
-                });
-                return false;
-            } else if ($('#photoprofilform .input-group').find(':text').val().length > 100) {
-                swal({
-                    type: 'error',
-                    title: 'Nombre De Caractere Depasse la limite',
-                    text: 'Veuillez Changer Le Nom de la photo Ou Selectionner Une Autre'
-                });
-                return false;
-            }
-            event.preventDefault();
-            $('.modal-footer').slideToggle(1500);
-            setTimeout(function () {
-                $(".uploadp").removeClass('hidden');
-            }, 1000);
-            var form_data = new FormData($(this)[0]);
-            $.ajax({
-                xhr: function () {
-                    var xhr = new window.XMLHttpRequest();
-                    xhr.upload.addEventListener("progress", function (e) {
-                        var progress = parseInt(e.loaded / e.total * 100, 10);
-                        var strProgress = progress + "%";
-                        var strProgress = progress + "%";
-                        $(".prog").css({"width": strProgress});
-                        $(".prog").text(strProgress);
-                    }, false);
-                    xhr.addEventListener("progress", function (evt) {
-
-                    }, false);
-                    return xhr;
-                },
-                url: '{% url "SocialMedia:changephotoprofil" %}',
-                type: $(this).attr('method'),
-                processData: false,
-                contentType: false,
-                data: form_data,
-                success: function (data) {
-                    $("#squarespaceModalprofil").modal("hide");
-                    swal("Photo De Profil A Ete Changée Avec Succé", "{{ user.username }}", "success");
-                    $("#profilpic").attr("src", data.url);
-                    document.getElementById("profilpic").src = data.url;
-                },
-                error: function () {
-                },
-                stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
-                    $("#squarespaceModalprofil").modal("hide");
-                    swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
-                }
-            });
-
-        });
-
+    {% endif %}
     </script>
+
 
 {% endblock %}
 
