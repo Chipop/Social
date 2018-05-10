@@ -52,4 +52,6 @@ urlpatterns = [
     path('profil/<int:pk>', views.getProfil, name='getProfil'),
 
     path('profil/<int:pk>/groupes', views.getProfilGroupes, name='getProfilGroupes'),
+
+    path('groupe/<int:pk>/', views.groupe, name="groupe")
 ]

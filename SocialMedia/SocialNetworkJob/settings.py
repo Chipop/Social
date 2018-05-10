@@ -29,7 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'SocialMedia',
+    'SocialMedia.apps.SocialMediaConfig',
     'main_app',
     'django.contrib.humanize',
     'django.contrib.admin',

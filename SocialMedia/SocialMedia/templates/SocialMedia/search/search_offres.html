@@ -28,7 +28,7 @@
                             <!-- Member Item Start -->
                             <div class="member--item online">
                                 <div class="img">
-                                    <a href="member-activity-personal.html" class="btn-link">
+                                    <a href="{% url 'SocialMedia:getProfil' offre.id %}" class="btn-link">
                                         <img src="{{ offre.entreprise.logo.url }}" alt=""
                                              style="  height: 55px;  ">
                                     </a>
@@ -36,7 +36,7 @@
 
                                 <div class="name">
                                     <h3 class="h6 fs--12">
-                                        <a href="member-activity-personal.html"
+                                        <a href="{% url 'SocialMedia:getProfil' offre.id %}"
                                            class="btn-link">{{ offre.nom_poste }}</a>
                                     </h3>
                                 </div>

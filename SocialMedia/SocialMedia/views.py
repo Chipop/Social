@@ -660,7 +660,6 @@ def getProfilGroupes(request, pk):
             messages.warning(request, "Les groupes du profil recherché vous a bloqué!")
             return redirect('SocialMedia:myprofil')
         context['profil'] = profil
-        context['user'] = profil.user
         context['poste_actuel'] = Experience.objects.filter(profil=profil, actuel=True).values('poste').values(
             'nom_poste').last()
         context['poste_actuel_renseigne'] = Experience.objects.filter(profil=profil, actuel=True).values(
@@ -680,7 +679,7 @@ def getProfilGroupes(request, pk):
                                                                    statut=0).exists()
         context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
                                                                statut=0).exists()
-        context['groupes'] = Groupe.objects.filter(id__in=DemandeGroupe.objects.filter(emetteur=profil, reponse=True).values('groupe_recepteur'))
+        context['profilGroupes'] = Groupe.objects.filter(id__in=DemandeGroupe.objects.filter(emetteur=profil, reponse=True).values('groupe_recepteur'))
         return render(request, 'SocialMedia/profil/groupesProfil.html', context)
     except Profil.DoesNotExist:
         messages.error(request, "Le Profil Que Vous cherchez n'existe pas!")
@@ -688,4 +687,15 @@ def getProfilGroupes(request, pk):
     except DemandeGroupe.DoesNotExist:
         context['msg'] = "Le profil ne s'appartient à aucun groupe"
         return render(request, 'SocialMedia/profil/groupesProfil.html',context)
+
+def groupe(request, pk):
+    context = dict()
+    try:
+        groupe = Groupe.objects.get(id=pk)
+        context['groupe'] = groupe
+        context['nbmembers'] = groupe.demandegroupe_set.filter(reponse=False).count()
+        return render(request, 'SocialMedia/groupe/groupe.html', context)
+    except Groupe.DoesNotExist:
+        raise Http404
+
 #EndHaytham

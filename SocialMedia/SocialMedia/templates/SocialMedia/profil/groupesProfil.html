@@ -26,27 +26,27 @@
                                 <div class="row gutter--15 MasonryRow">
 
 
-                                {% if groupes.exists %}
-                                    {% for groupe in groupes %}
+                                {% if profilGroupes.count != 0 %}
+                                    {% for groupe in profilGroupes %}
                                     <div class="col-md-4 col-xs-6 col-xxs-12">
                                         <!-- Box Item Start -->
                                         <div class="box--item text-center">
-                                            <a href="group-home.html" class="img" data-overlay="0.1">
-                                                <img src="{{ groupe.photo_couverture.image.url }}" alt="">
+                                            <a href="{% url 'SocialMedia:groupe' groupe.id %}" class="img" data-overlay="0.1">
+                                                <img src="{{ groupe.photo_couverture.image.url|default:'/media/SocialMedia/default.jpg' }}" alt="">
                                             </a>
 
                                             <div class="info">
-                                                <div class="icon fs--18 text-lightest bg-primary">
-                                                    <i class="fa fa-camera"></i>
+                                                <div class="icon fs--18 text-lightest ">
+                                                <img class="img-circle" style="border: #1d89ff 1px solid;width: 50px;height: 50px;" src="{{ groupe.photo_profil.image.url|default:'/media/SocialMedia/default.jpg' }}" alt="">
                                                 </div>
 
                                                 <div class="title">
-                                                    <h2 class="h6"><a href="group-home.html">{{ groupe.nom }}</a></h2>
+                                                    <h2 class="h6"><a href="{% url 'SocialMedia:groupe' groupe.id %}">{{ groupe.nom }}</a></h2>
                                                 </div>
 
                                                 <div class="meta">
                                                     <p><i class="fa mr--8 fa-clock-o"></i>Active 8 days ago</p>
-                                                    <p><i class="fa mr--8 fa-user-o"></i>Groupe {{ groupe.statut_groupe }} / {{ groupe.demandegroupe_set.filter }} Members</p>
+                                                    <p><i class="fa mr--8 fa-user-o"></i>Groupe {{ groupe.statut_groupe }} / {{ groupe.demandegroupe_set.all.count }} Members</p>
                                                 </div>
 
                                                 <div class="desc text-darker">
@@ -54,7 +54,7 @@
                                                 </div>
 
                                                 <div class="action">
-                                                    <a href="group-home.html">{{ groupe.description }}<i class="fa ml--10 fa-caret-right"></i></a>
+                                                    <a href="{% url 'SocialMedia:groupe' groupe.id %}">{{ groupe.description }}<i class="fa ml--10 fa-caret-right"></i></a>
                                                 </div>
                                             </div>
                                         </div>
