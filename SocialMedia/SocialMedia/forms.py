@@ -68,3 +68,11 @@ class UserFormationEdit(forms.Form):
     anneeDebut = forms.DateField()
     anneeFin = forms.DateField()
     description = forms.CharField(widget=forms.Textarea)
+
+
+class FormAjouterLangue(forms.ModelForm):
+    class Meta:
+        model = LangueProfil
+        fields = '__all__'
+
+

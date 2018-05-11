@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 import os.path
 
 
-
 # Create your models here.
 
 class Notification(models.Model):
@@ -42,7 +41,7 @@ class DemandeGroupe(models.Model):
 
 
 class Like(models.Model):
-    user = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE,related_name="like_user")
+    user = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE, related_name="like_user")
     like_date_time = models.DateTimeField(auto_now_add=True)
 
 
@@ -55,7 +54,7 @@ class Statut(models.Model):
     mur_profil = models.OneToOneField('main_app.Profil', on_delete=models.CASCADE, null=True, blank=True,
                                       related_name="statut_mur_profil")
     mur_groupe = models.OneToOneField(Groupe, on_delete=models.CASCADE, null=True, blank=True)
-    liked_by = models.ManyToManyField('main_app.Profil',related_name="statut_liked_by")
+    liked_by = models.ManyToManyField('main_app.Profil', related_name="statut_liked_by")
 
 
 class Commentaire(models.Model):
@@ -174,7 +173,7 @@ class OffreEmploi(models.Model):
     entreprise = models.ForeignKey('main_app.Entreprise', on_delete=models.CASCADE)
     profil_publicateur = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE,
                                            related_name="profil_publicateur")
-    profil_postulants = models.ManyToManyField('main_app.Profil', related_name="profil_postulants" ,blank=True)
+    profil_postulants = models.ManyToManyField('main_app.Profil', related_name="profil_postulants", blank=True)
 
 
 class Experience(models.Model):
@@ -193,6 +192,9 @@ class Ecole(models.Model):
     nom = models.CharField(max_length=300)
     logo = models.ImageField(upload_to="SocialMedia/Image/")
 
+    def __str__(self):
+        return self.nom
+
 
 class Formation(models.Model):
     titre_formation = models.CharField(max_length=300)
@@ -206,10 +208,16 @@ class Formation(models.Model):
     description = models.TextField(null=True, blank=True)
     profil = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.titre_formation
+
 
 class Organisme(models.Model):
     nom = models.CharField(max_length=300)
     logo = models.ImageField(upload_to="SocialMedia/Image/")
+
+    def __str__(self):
+        return self.nom
 
 
 class ActionBenevole(models.Model):
@@ -223,9 +231,26 @@ class ActionBenevole(models.Model):
     description = models.TextField(null=True, blank=True)
     profil = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.profil.user.first_name + " " + self.profil.user.last_name + " fait  " + self.nom_poste + " à " + self.nom_organisme
+
 
 class Langue(models.Model):
-    NIVEAU_LANGUE = (('debutant', 'Débutant'), ('intermediaire', 'Intermédiaire'), ('expert', 'Expert'))
     nom = models.CharField(max_length=300)
-    niveau = models.CharField(max_length=300, choices=NIVEAU_LANGUE)
-    profils = models.ManyToManyField('main_app.Profil', related_name="profils")
+
+    def __str__(self):
+        return self.nom
+
+
+class NiveauLangue(models.Model):
+    niveau = models.CharField(max_length=300)
+
+    def __str__(self):
+        return self.niveau
+
+
+
+class LangueProfil(models.Model):
+    profil = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE,null=True,blank=True)
+    langue = models.ForeignKey(Langue, on_delete=models.CASCADE)
+    niveau = models.ForeignKey(NiveauLangue, on_delete=models.CASCADE)

@@ -41,6 +41,12 @@ urlpatterns = [
     path('search_groupes/', views.search_groupes, name="search_groupes"),
     path('search/', views.search, name="search"),
 
+    path('test',views.test,name="test"),
+    path('myprofil/ajouterLangue/', views.ajouterLangue, name="ajouterLangue"),
+    path('myprofil/modifierLangue/', views.modifierLangue, name="modifierLangue"),
+    path('myprofil/supprimerLangue/', views.supprimerLangue, name="supprimerLangue"),
+    path('myprofil/getModifierLangue/', views.getModifierLangue, name="getModifierLangue"),
+
     ##Haytham
 
     path('profil/<int:pk>/follow', views.followProfil, name="followProfil"),
