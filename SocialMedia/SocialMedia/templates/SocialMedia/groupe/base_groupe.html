@@ -177,7 +177,7 @@
 
                                     <h2 class="h3 fw--600">{{ groupe.nom }}</h2>
 
-                                    <h3 id="NbMembres" class="h6">{{ groupe.admins.all.count|add:groupe.moderators.all.count|add:groupe.adherents.all.count }} Membres.</h3>
+                                    <h3 id="NbMembres" class="h6">{{ nbMembres }} Membres.</h3>
                                 </div>
 
                                 <div class="cover--user-desc fw--400 fs--18 fstyle--i text-darkest"
@@ -186,14 +186,15 @@
                                     <p style="margin: 0;">
                                         {{ groupe.description }}.
                                     </p>
+                                {% if groupe.statut == "publique" and user.profil not in groupe.admins.all and user.profil not in groupe.moderators.all and user.profil not in groupe.adherents.all %}
                                         <form>
                                             <button class="bttn-material-flat bttn-md bttn-primary h6 fw--500"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Joindre {{ groupe.nom }}</button>
                                         </form>
-                                    <p style="margin: 0;">
-                                        {% if user.profil.pays is not None or user.profil.pays is not None %}
-                                            {{ user.profil.ville }}, {{ user.profil.pays }}
-                                            <i class="fa fa-globe" aria-hidden="true"></i>{% endif %}
-                                    </p>
+                                {% else %}
+                                        <form>
+                                            <button class="bttn-material-flat bttn-md bttn-primary h6 fw--500"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Quitter {{ groupe.nom }}</button>
+                                        </form>
+                                {% endif %}
                                     <div id="navTop"></div>
                                 </div>
                             </div>

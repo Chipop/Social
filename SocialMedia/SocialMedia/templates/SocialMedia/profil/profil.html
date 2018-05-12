@@ -234,9 +234,10 @@
 {% block scripts %}
 
     {{ block.super }}
-
+<script>
     $('.profil_links_menu li').removeClass('active');
     $('.profil_links_menu li:eq(1)').addClass('active');
+</script>
 {% endblock %}
 
 

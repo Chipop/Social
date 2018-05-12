@@ -104,6 +104,7 @@
 							    {% if profil.pays is not None or profil.pays is not None %}{{ profil.ville }}, {{ profil.pays }} <i class="fa fa-globe" aria-hidden="true"></i>{% endif %}
 
                             </p>
+                                    <div id="navTop"></div>
 
                         </div>
 
@@ -119,9 +120,9 @@
                             <!-- Content Nav Start -->
                             <div class="content--nav pb--30">
                                 <ul class="nav ff--primary fs--14 fw--500 bg-lighter profil_links_menu">
-                                    <li><a href="">Activity</a></li>
+                                    <li><a href="">Activités</a></li>
                                     <li class="active"><a href="{% url 'SocialMedia:getProfil' profil.id %}">Profil</a></li>
-                                    <li><a href="{% url 'SocialMedia:getProfilGroupes' profil.id %}">Groups</a></li>
+                                    <li><a href="{% url 'SocialMedia:getProfilGroupes' profil.id %}">Groupes <span id="nbGroupesBadge" class="badge">{{ nbGroupes }}</span></a></li>
                                 </ul>
                             </div>
                             <!-- Content Nav End -->

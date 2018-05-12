@@ -49,6 +49,9 @@ class Like(models.Model):
     user = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE,related_name="like_user")
     like_date_time = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.user.user.username+" a aimé un statut ou commentaire"
+
 
 class Statut(models.Model):
     date_statut = models.DateTimeField()
@@ -59,7 +62,10 @@ class Statut(models.Model):
     mur_profil = models.OneToOneField('main_app.Profil', on_delete=models.CASCADE, null=True, blank=True,
                                       related_name="statut_mur_profil")
     mur_groupe = models.OneToOneField(Groupe, on_delete=models.CASCADE, null=True, blank=True)
-    liked_by = models.ManyToManyField('main_app.Profil',related_name="statut_liked_by")
+    likes = models.ManyToManyField(Like)
+
+    def __str__(self):
+        return self.publisher.user.username+" a publié un statut"
 
 
 class Commentaire(models.Model):
@@ -69,7 +75,7 @@ class Commentaire(models.Model):
     user = models.OneToOneField('main_app.Profil', on_delete=models.CASCADE, related_name="commented_user")
     have_image = models.BooleanField(default=False)
     image = models.OneToOneField('main_app.Image', on_delete=models.CASCADE)
-    liked_by = models.ManyToManyField('main_app.Profil')
+    likes = models.ManyToManyField(Like)
 
 
 class DemandeAmi(models.Model):

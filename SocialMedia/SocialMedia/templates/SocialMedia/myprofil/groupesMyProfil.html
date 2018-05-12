@@ -3,7 +3,6 @@
 {% load widget_tweaks %}
 {% block title %}{{ user.username }} - Demandes{% endblock %}
 {% block contentProfil %}
-    {% comment %}
                          <!-- Filter Nav Start -->
                             <div class="filter--nav pb--30 clearfix">
                                 <div class="filter--options float--right">
@@ -23,26 +22,28 @@
 
                             <!-- Box Items Start -->
                             <div class="box--items">
-                                <div class="row gutter--15 MasonryRow">
-                                    <div class="col-md-4 col-xs-6 col-xxs-12">
+                                <div id="groupes" class="row gutter--15 ">
+                                {% if profilGroupes %}
+                                    {% for groupe in profilGroupes %}
+                                            <div class="col-md-4">
                                         <!-- Box Item Start -->
                                         <div class="box--item text-center">
-                                            <a href="group-home.html" class="img" data-overlay="0.1">
-                                                <img src="img/group-img/01.jpg" alt="">
+                                            <a href="{% url 'SocialMedia:groupe' groupe.id %}" class="img" data-overlay="0.1">
+                                                <img src="{{ groupe.photo_couverture.image.url|default:'/media/SocialMedia/default.jpg' }}" alt="">
                                             </a>
 
                                             <div class="info">
-                                                <div class="icon fs--18 text-lightest bg-primary">
-                                                    <i class="fa fa-plane"></i>
+                                                <div class="icon fs--18 text-lightest ">
+                                                <img class="img-circle" style="border: #1d89ff 1px solid;width: 50px;height: 50px;" src="{{ groupe.photo_profil.image.url|default:'/media/SocialMedia/default.jpg' }}" alt="">
                                                 </div>
 
                                                 <div class="title">
-                                                    <h2 class="h6"><a href="group-home.html">Travel ( Just Take A Tour )</a></h2>
+                                                    <h2 class="h6"><a href="{% url 'SocialMedia:groupe' groupe.id %}">{{ groupe.nom }}</a></h2>
                                                 </div>
 
                                                 <div class="meta">
-                                                    <p><i class="fa mr--8 fa-clock-o"></i>Active 8 days ago</p>
-                                                    <p><i class="fa mr--8 fa-user-o"></i>Public Group / 2500 Members</p>
+                                                    <p><i class="fa mr--8 fa-clock-o"></i>Active Today</p>
+                                                    <p><i class="fa mr--8 fa-user-o"></i>Groupe {{ groupe.statut_groupe }} / {{ groupe.adherents.all.count|add:groupe.admins.all.count|add:groupe.moderators.all.count  }} Members</p>
                                                 </div>
 
                                                 <div class="desc text-darker">
@@ -50,197 +51,50 @@
                                                 </div>
 
                                                 <div class="action">
-                                                    <a href="group-home.html">Group Details<i class="fa ml--10 fa-caret-right"></i></a>
+                                                    <a href="{% url 'SocialMedia:groupe' groupe.id %}">{{ groupe.description }}<i class="fa ml--10 fa-caret-right"></i></a>
                                                 </div>
                                             </div>
                                         </div>
                                         <!-- Box Item End -->
                                     </div>
+                                    {% endfor %}
+                                {% else %}
+                                     <h1 class="h4 fw--700 widget--title ">{{ msg }}</h1>
+                                {% endif %}
 
-                                    <div class="col-md-4 col-xs-6 col-xxs-12">
-                                        <!-- Box Item Start -->
-                                        <div class="box--item text-center">
-                                            <a href="group-home.html" class="img" data-overlay="0.1">
-                                                <img src="img/group-img/02.jpg" alt="">
-                                            </a>
-
-                                            <div class="info">
-                                                <div class="icon fs--18 text-lightest bg-primary">
-                                                    <i class="fa fa-music"></i>
-                                                </div>
-
-                                                <div class="title">
-                                                    <h2 class="h6"><a href="group-home.html">Music Lover ( Injoy Yourself )</a></h2>
-                                                </div>
-
-                                                <div class="meta">
-                                                    <p><i class="fa mr--8 fa-clock-o"></i>Active 8 days ago</p>
-                                                    <p><i class="fa mr--8 fa-user-o"></i>Public Group / 2500 Members</p>
-                                                </div>
-
-                                                <div class="desc text-darker">
-                                                    <p>Lorem Ipsum is simply dummy text of the printing &amp; typesetting.</p>
-                                                </div>
-
-                                                <div class="action">
-                                                    <a href="group-home.html">Group Details<i class="fa ml--10 fa-caret-right"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Box Item End -->
-                                    </div>
-
-                                    <div class="col-md-4 col-xs-6 col-xxs-12">
-                                        <!-- Box Item Start -->
-                                        <div class="box--item text-center">
-                                            <a href="group-home.html" class="img" data-overlay="0.1">
-                                                <img src="img/group-img/03.jpg" alt="">
-                                            </a>
-
-                                            <div class="info">
-                                                <div class="icon fs--18 text-lightest bg-primary">
-                                                    <i class="fa fa-camera"></i>
-                                                </div>
-
-                                                <div class="title">
-                                                    <h2 class="h6"><a href="group-home.html">Photography ( Memories )</a></h2>
-                                                </div>
-
-                                                <div class="meta">
-                                                    <p><i class="fa mr--8 fa-clock-o"></i>Active 8 days ago</p>
-                                                    <p><i class="fa mr--8 fa-user-o"></i>Public Group / 2500 Members</p>
-                                                </div>
-
-                                                <div class="desc text-darker">
-                                                    <p>Lorem Ipsum is simply dummy text of the printing &amp; typesetting.</p>
-                                                </div>
-
-                                                <div class="action">
-                                                    <a href="group-home.html">Group Details<i class="fa ml--10 fa-caret-right"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Box Item End -->
-                                    </div>
-
-                                    <div class="col-md-4 col-xs-6 col-xxs-12">
-                                        <!-- Box Item Start -->
-                                        <div class="box--item text-center">
-                                            <a href="group-home.html" class="img" data-overlay="0.1">
-                                                <img src="img/group-img/04.jpg" alt="">
-                                            </a>
-
-                                            <div class="info">
-                                                <div class="icon fs--18 text-lightest bg-primary">
-                                                    <i class="fa fa-paw"></i>
-                                                </div>
-
-                                                <div class="title">
-                                                    <h2 class="h6"><a href="group-home.html">Tasty Food Recipes</a></h2>
-                                                </div>
-
-                                                <div class="meta">
-                                                    <p><i class="fa mr--8 fa-clock-o"></i>Active 8 days ago</p>
-                                                    <p><i class="fa mr--8 fa-user-o"></i>Public Group / 2500 Members</p>
-                                                </div>
-
-                                                <div class="desc text-darker">
-                                                    <p>Lorem Ipsum is simply dummy text of the printing &amp; typesetting.</p>
-                                                </div>
-
-                                                <div class="action">
-                                                    <a href="group-home.html">Group Details<i class="fa ml--10 fa-caret-right"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Box Item End -->
-                                    </div>
-
-                                    <div class="col-md-4 col-xs-6 col-xxs-12">
-                                        <!-- Box Item Start -->
-                                        <div class="box--item text-center">
-                                            <a href="group-home.html" class="img" data-overlay="0.1">
-                                                <img src="img/group-img/05.jpg" alt="">
-                                            </a>
-
-                                            <div class="info">
-                                                <div class="icon fs--18 text-lightest bg-primary">
-                                                    <i class="fa fa-laptop"></i>
-                                                </div>
-
-                                                <div class="title">
-                                                    <h2 class="h6"><a href="group-home.html">Pet Care ( Passionately )</a></h2>
-                                                </div>
-
-                                                <div class="meta">
-                                                    <p><i class="fa mr--8 fa-clock-o"></i>Active 8 days ago</p>
-                                                    <p><i class="fa mr--8 fa-user-o"></i>Public Group / 2500 Members</p>
-                                                </div>
-
-                                                <div class="desc text-darker">
-                                                    <p>Lorem Ipsum is simply dummy text of the printing &amp; typesetting.</p>
-                                                </div>
-
-                                                <div class="action">
-                                                    <a href="group-home.html">Group Details<i class="fa ml--10 fa-caret-right"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Box Item End -->
-                                    </div>
-
-                                    <div class="col-md-4 col-xs-6 col-xxs-12">
-                                        <!-- Box Item Start -->
-                                        <div class="box--item text-center">
-                                            <a href="group-home.html" class="img" data-overlay="0.1">
-                                                <img src="img/group-img/06.jpg" alt="">
-                                            </a>
-
-                                            <div class="info">
-                                                <div class="icon fs--18 text-lightest bg-primary">
-                                                    <i class="fa fa-cutlery"></i>
-                                                </div>
-
-                                                <div class="title">
-                                                    <h2 class="h6"><a href="group-home.html">Technology</a></h2>
-                                                </div>
-
-                                                <div class="meta">
-                                                    <p><i class="fa mr--8 fa-clock-o"></i>Active 8 days ago</p>
-                                                    <p><i class="fa mr--8 fa-user-o"></i>Public Group / 2500 Members</p>
-                                                </div>
-
-                                                <div class="desc text-darker">
-                                                    <p>Lorem Ipsum is simply dummy text of the printing &amp; typesetting.</p>
-                                                </div>
-
-                                                <div class="action">
-                                                    <a href="group-home.html">Group Details<i class="fa ml--10 fa-caret-right"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Box Item End -->
-                                    </div>
                                 </div>
                             </div>
+
+                                    <div class="row text-center">
+                                        <img id="loadingImage" style="display: none; width: 100%; object-fit: contain;" class="img-rounded"  src="{% static 'SocialMedia/loading.gif' %}" />
+                                    </div>
+
                             <!-- Box Items End -->
 
                             <!-- Page Count Start -->
                             <div class="page--count pt--30">
                                 <label class="ff--primary fs--14 fw--500 text-darker">
                                     <span>Viewing</span>
+                                    {% if profilGroupes.has_previous %}
+                                        <button id="btfirst" href="?page=1" class="btn-link"><i class="fa fa-caret-left"></i><i class="fa fa-caret-left"></i></button>
+                                        <button id="btprevious" page="{{ profilGroupes.previous_page_number }}" class="btn-link"><i class="fa fa-caret-left"></i></button>
+                                    {% else %}
+                                        <button id="btfirst" href="1" class="btn-link"><i class="fa fa-caret-left"></i><i class="fa fa-caret-left"></i></button>
+                                        <button id="btprevious" page="1" class="btn-link"><i class="fa fa-caret-left"></i></button>
+                                    {% endif %}
+                                        <input id="RequestsPageNum" type="number" name="page-count" value="{{ profilGroupes.number }}" class="form-control form-sm">
+                                    {% if profilGroupes.has_next %}
+                                        <button id="btnext" page="{{ profilGroupes.next_page_number }}" class="btn-link"><i class="fa fa-caret-right"></i></button>
+                                        <button id="btlast" page="{{ profilGroupes.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i><i class="fa fa-caret-right"></i></button>
+                                    {% else %}
+                                        <button id="btnext" page="{{ profilGroupes.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i></button>
+                                        <button id="btlast" page="{{ profilGroupes.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i><i class="fa fa-caret-right"></i></button>
+                                    {% endif %}
+                                        <span id="numPages">{{ profilGroupes.paginator.num_pages }}</span>
 
-                                    <a href="#" class="btn-link"><i class="fa fa-caret-left"></i></a>
-                                    <input type="number" name="page-count" value="01" class="form-control form-sm">
-                                    <a href="#" class="btn-link"><i class="fa fa-caret-right"></i></a>
-
-                                    <span>of 28</span>
                                 </label>
                             </div>
                             <!-- Page Count End -->
-{% endcomment %}
-    <h2 class="display-2">Page In Construction</h2>
-
 {% endblock %}
 
 {% block scripts %}
@@ -249,38 +103,111 @@
     $('.profil_links_menu li').removeClass('active');
     $('.profil_links_menu li:eq(3)').addClass('active');
 
+$('html, body').animate({
+        scrollTop: $("#navTop").offset().top
+    }, 500);
+
+    function printGroupes(data){
+                    groupeURL = "{% url 'SocialMedia:groupe' 999999 %}".replace(999999, data[0]);
+					NewData='<div class="col-md-4 col-xs-6 col-xxs-12"><!-- Box Item Start -->'+
+                                       ' <div class="box--item text-center">'+
+                                           '<a href='+groupeURL+' class="img" data-overlay="0.1">'+
+                                               ' <img src="'+data[2]+'" alt="">'+
+                                            '</a>'+
+                                           '<div class="info">'+
+                                                '<div class="icon fs--18 text-lightest ">'+
+                                                '<img class="img-circle" style="border: #1d89ff 1px solid;width: 50px;height: 50px;" src="'+data[1]+'" alt="">'+
+                                                '</div>'+
+                                                '<div class="title">'+
+                                                    '<h2 class="h6"><a href="'+groupeURL+'">'+data[4]+'</a></h2>'+
+                                               ' </div>'+
+                                                '<div class="meta">'+
+                                                   ' <p><i class="fa mr--8 fa-clock-o"></i>Active Today</p>'+
+                                                   ' <p><i class="fa mr--8 fa-user-o"></i>Groupe '+data[3]+' / '+data[6]+' Members</p>'+
+                                                '</div>'+
+                                                '<div class="desc text-darker">'+
+                                                    '<p>Lorem Ipsum is simply dummy text of the printing &amp; typesetting.</p>'+
+                                                '</div>'+
+                                                '<div class="action">'+
+                                                    '<a href="'+groupeURL+'">'+data[5]+'<i class="fa ml--10 fa-caret-right"></i></a>'+
+                                                '</div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<!-- Box Item End --></div>';
+            console.log(NewData);
+           $("#groupes").append(NewData);
+
+    }
 
 
-$("#acceptDemande, #refuseDemande, #bloqueDemande").on( "submit", function(event) {
-	event.preventDefault();
-    var form_data = new FormData($(this)[0]);
-    $.ajax({
-        url: '{% url "SocialMedia:demandes" %}',
-        type: $(this).attr('method'),
-        processData: false,
-        contentType: false,
-        data : form_data,
+    function getGroupes(page)
+    {
+        $.ajax({
+        url: '{% url "SocialMedia:groupes" %}',
+        type: 'GET',
+        data : {
+            'page':page,
+            'is_ajax_request': 1,
+        },
+        dataType: 'json',
         success: function(data) {
             if( data.statut ) {
-                    $('.demande'+data.demande).fadeOut(1000,function(){
-                    });
-                    setTimeout(function(){
-                        switch(data.statut) {
-                        case 1:
-                            swal("Vous pouvez maintenant partager vos moments avec "+data.ami, "Demmande Acceptée", "success");
-                            break;
-                        case 2:
-                            swal("Demande de "+data.ami+" a ete refusée", "Demmande Refusée", "success");
-                            break;
-                        case 3:
-                            swal(data.ami+" à éte bloqué", "Utilisateur Bloqué", "success");
-                        }
-                    },1000);
-                    console.log(data);
-                    if( data.nbdemandes == 0)
+                var i=1;
+                console.log(data);
+                    if( data.nbGroupes == 0)
                     {
-                        $("<h2 class='h4 fw--700 widget--title'>Vous N'avez Aucune Demande D'Amis</h2>").insertAfter( "#requests" );
-                        $('#requests').hide(1500);
+                        $("#loadingImage").fadeIn(350, function() {
+                            $("#groupes").html("<h2 class='h4 fw--700 widget--title'>"+data.msg+"</h2>");
+                        });
+                        $("#RequestsPageNum").val('1');
+                        $("#btfirst").hide(250);
+                        $("#btnext").hide(250);
+                        $("#btlast").hide(250);
+                        $("#btnext").hide(250);
+                        $("#btprevious").hide(250);
+                        $("#nbGroupesBadge").text(data.nbGroupes);
+                        //$("#nbDemandes").text(data.nbdemandes+' Demandes.');
+                    }else{
+                        $("#loadingImage").fadeIn(350);
+                            $('#groupes').html('');
+                            setTimeout(function () {
+                            $.each(data.groupes,function(key, value){
+                                    printGroupes(value);
+                                    //$("#NbMembres").text(data.nbMembres+' Membres.');
+                            });
+                            },250);
+                            $("#nbGroupesBadge").text(data.nbGroupes);
+                            //$("#nbDemandes").text(data.nbdemandes+' Demandes.');
+                            $("#btprevious").attr('page', data.previous_page_number);
+                            $("#btnext").attr('page', data.next_page_number);
+                            $("#btlast").attr('page', data.num_pages);
+                            $("#RequestsPageNum").val(data.current_page);
+                            $("#numPages").text(data.num_pages);
+                            if( !data.has_next )
+                            {
+                                $("#btnext").hide(250);
+                                $("#btlast").hide(250);
+                            }else
+                            {
+                                $("#btnext").show(250);
+                                $("#btlast").show(250);
+                            }
+
+                            if( !data.has_previous )
+                            {
+                                $("#btprevious").hide(250);
+                                $("#btfirst").hide(250);
+                            }else
+                            {
+                                $("#btprevious").show(250);
+                                $("#btfirst").show(250);
+                            }
+
+                            if( data.NumPagesExcessed )
+                            {
+                                $("#RequestsPageNum").text(data.num_pages);
+                            }
+
                     }
             }else
                 {
@@ -291,13 +218,33 @@ $("#acceptDemande, #refuseDemande, #bloqueDemande").on( "submit", function(event
                     })
                 }
         },
+        complete: function()
+        {
+            $("#loadingImage").fadeOut(350);
+            $('html, body').animate({
+              scrollTop: $("#navTop").offset().top
+            }, 500)
+        },
         error: function() { },
         stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
-          $("#squarespaceModalprofil").modal("hide");
             swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
         }
     });
+    }
 
-});
+    $("body").on('click', '#btfirst, #btprevious, #btnext, #btlast', function(event){
+        event.preventDefault();
+        pagenum=$(this).attr('page');
+        getGroupes(pagenum);
+    });
+
+    $('#RequestsPageNum').on('keypress', function(e) {
+        if(e.which == 13) {
+         pageNum = $(this).val();
+         getGroupes(pageNum);
+        }
+    });
+
+
 </script>
 {% endblock %}

@@ -44,6 +44,8 @@ def profil(request):
         context['formations'] = Formation.objects.filter(profil=request.user.profil)
         context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=request.user.profil)
         context['nbdemandes'] = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
+        context['nbGroupes'] = len([groupe for groupe in Groupe.objects.all() if request.user.profil == groupe.creator or request.user.profil in groupe.adherents.all() or request.user.profil in groupe.admins.all() or request.user.profil in groupe.moderators.all()])
+
         return render(request, 'SocialMedia/myprofil/myprofil.html', context)
     else:
         messages.error(request, "Veuiller vous connecter!")
@@ -132,27 +134,89 @@ def log_in(request):
 def groupesProfil(request):
     if request.user.is_authenticated:
         context = dict()
-        p = Profil.objects.get(user=request.user)
-        context['is_first'] = p.is_first_socialmedia
-        if context['is_first']:
-                p.is_first = False
-                p.save()
-        context['userInterfaceForm'] = UserInterfaceInfos()
-        context['poste_actuel'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values('poste').values(
-            'nom_poste').last()
-        context['poste_actuel_renseigne'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values(
-            'nom_poste').last()
-        context['ecole'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=False).values(
-                'ecole__nom').last()
-        context['ecole_renseignee'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=True).values(
-                'nom_ecole').last()
-        context['profiles'] = Profil.objects.all().order_by('-id')[:20]
-        context['photoform'] = PhotoForm()
-        context['experiences'] = Experience.objects.filter(profil=request.user.profil)
-        context['formations'] = Formation.objects.filter(profil=request.user.profil)
-        context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=request.user.profil)
-        context['nbdemandes'] = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
-        return render(request, 'SocialMedia/myprofil/groupesMyProfil.html', context)
+        if request.method == "GET" and 'is_ajax_request' in request.GET:
+            groupes = list()
+            for groupe in Groupe.objects.all():
+                print(groupe.admins.all())
+                if request.user.profil in groupe.admins.all() or request.user.profil in groupe.moderators.all() or request.user.profil in  groupe.adherents.all():
+                    g = dict()
+                    g['id'] = groupe.id
+                    g['photo_profil'] = groupe.photo_profil.image.url
+                    g['photo_couverture'] = groupe.photo_couverture.image.url
+                    g['statut'] = groupe.statut_groupe
+                    g['nom'] = groupe.nom
+                    g['description'] = groupe.description
+                    g['nbMembres'] = groupe.admins.all().count()+groupe.moderators.all().count()+groupe.adherents.all().count()
+                    groupes.append(list(g.values()))
+            paginator = Paginator(groupes, 12)  # Show 12 Profiles per page
+            page = request.GET.get('page')
+            profilGroupes = list(paginator.get_page(page))
+            isNumPagesExcessed = False
+            previous_page_number = 1
+            next_page_number = 1
+            if page is None:
+                page = 1
+                previous_page_number = 1
+                next_page_number = 2
+            else:
+                if int(page) > paginator.num_pages:
+                    isNumPagesExcessed = True
+                    page = paginator.num_pages
+                    previous_page_number = page - 1
+                    next_page_number = page
+                elif int(page) < 1:
+                    page = 1
+                    previous_page_number = 1
+                    next_page_number = 2
+                else:
+                    previous_page_number = int(page) - 1
+                    next_page_number = int(page) + 1
+            context = {
+                'statut': True,
+                'has_previous': paginator.get_page(page).has_previous(),
+                'has_next': paginator.get_page(page).has_next(),
+                'previous_page_number': previous_page_number,
+                'next_page_number': next_page_number,
+                'num_pages': paginator.num_pages,
+                'current_page': page,
+                'groupes': list(profilGroupes),
+                'NumPagesExcessed': isNumPagesExcessed,
+                'nbGroupes': len(groupes),
+            }
+            if context['nbGroupes'] == 0:
+                context['msg'] = "Vous n'êtes pas membre d'aucun groupe"
+            return JsonResponse(context, safe=False)
+        else:
+            p = Profil.objects.get(user=request.user)
+            context['is_first'] = p.is_first_socialmedia
+            if context['is_first']:
+                    p.is_first = False
+                    p.save()
+            context['userInterfaceForm'] = UserInterfaceInfos()
+            context['poste_actuel'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values('poste').values(
+                'nom_poste').last()
+            context['poste_actuel_renseigne'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values(
+                'nom_poste').last()
+            context['ecole'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=False).values(
+                    'ecole__nom').last()
+            context['ecole_renseignee'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=True).values(
+                    'nom_ecole').last()
+            context['profiles'] = Profil.objects.all().order_by('-id')[:20]
+            context['photoform'] = PhotoForm()
+            context['experiences'] = Experience.objects.filter(profil=request.user.profil)
+            context['formations'] = Formation.objects.filter(profil=request.user.profil)
+            context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=request.user.profil)
+            context['nbdemandes'] = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
+            profilGroupes = [groupe for groupe in Groupe.objects.all() if request.user.profil == groupe.creator or request.user.profil in groupe.adherents.all() or request.user.profil in groupe.admins.all() or request.user.profil in groupe.moderators.all()]
+            context['nbGroupes'] = len(profilGroupes)
+            page = request.GET.get('page')
+            paginator = Paginator(profilGroupes, 12)
+            context['profilGroupes'] = paginator.get_page(page)
+            context['nbGroupes'] = len(profilGroupes)
+            if len(profilGroupes) == 0:
+                context['msg'] = "Vous n'êtes pas membre d'aucun groupe"
+                return render(request, 'SocialMedia/myprofil/groupesMyProfil.html', context)
+            return render(request, 'SocialMedia/myprofil/groupesMyProfil.html', context)
     else:
         messages.error(request, "Veuiller Se Connecter!")
         return redirect('main_app:log_in')
@@ -165,25 +229,6 @@ def log_out(request):
         messages.error(request, "Veuiller Se Connecter!")
         return redirect('main_app:log_in')
 
-"""
-def register(request):
-    if request.user.is_authenticated:
-        return redirect('SocialMedia:myprofil')
-    if request.method == "POST":
-        userf = userform(request.POST)
-        if userf.is_valid():
-            userf.save()
-            user = authenticate(username=userf.cleaned_data['username'], password=userf.cleaned_data['password1'])
-            if user is not None:
-                login(request, user)
-                return redirect('SocialMedia:finishregistration')
-        else:
-            return redirect('SocialMedia:signup')
-    else:
-        return redirect('main_app:signup')
-        #formuser = userform()
-        #return render(request, 'main_app/authentification/signup.html', {'formuser':formuser})
-"""
 
 def supprimerDemande(request):
     pass
@@ -216,7 +261,8 @@ def demandesProfil(request):
             context['poste_actuel_renseigne'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values('nom_poste').last()
             context['ecole'] = Formation.objects.filter(profil=request.user.profil,ecole__isnull=False).values('ecole__nom').last()
             context['ecole_renseignee'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=True).values('nom_ecole').last()
-
+            context['nbGroupes'] = len([groupe for groupe in Groupe.objects.all() if
+                                        request.user.profil == groupe.creator or request.user.profil in groupe.adherents.all() or request.user.profil in groupe.admins.all() or request.user.profil in groupe.moderators.all()])
             return render(request, 'SocialMedia/myprofil/demandesMyProfil.html', context)
     else:
         messages.error(request, "Veuiller vous connecter!")
@@ -532,6 +578,7 @@ def getProfil(request, pk):
         context['is_friend'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil), Q(recepteur=request.user.profil) | Q(recepteur=profil), statut=1).exists()
         context['is_request_received'] = DemandeAmi.objects.filter(emetteur=profil, recepteur=request.user.profil, statut=0).exists()
         context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil, statut=0).exists()
+        context['nbGroupes'] = len([groupe for groupe in Groupe.objects.all() if profil == groupe.creator or profil in groupe.adherents.all() or profil in groupe.admins.all() or profil in groupe.moderators.all()])
         return render(request, 'SocialMedia/profil/profil.html', context)
     except Profil.DoesNotExist:
         raise Http404
@@ -648,41 +695,98 @@ def getRequestsUpdates(request, pk):
 def getProfilGroupes(request, pk):
     context = dict()
     try:
-        if request.user.profil == Profil.objects.get(id=pk):
-            messages.info(request, "C'est votre profil")
-            return redirect('SocialMedia:groupes')
         profil = Profil.objects.get(id=pk)
-        if DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil, statut=3).exists():
-            messages.warning(request, "Les groupes concernent un profil bloqué!")
-            return redirect('SocialMedia:myprofil')
-        if DemandeAmi.objects.filter(recepteur=request.user.profil, emetteur=profil, statut=3).exists():
-            messages.warning(request, "Les groupes du profil recherché vous a bloqué!")
-            return redirect('SocialMedia:myprofil')
-        context['profil'] = profil
-        context['poste_actuel'] = Experience.objects.filter(profil=profil, actuel=True).values('poste').values(
-            'nom_poste').last()
-        context['poste_actuel_renseigne'] = Experience.objects.filter(profil=profil, actuel=True).values(
-            'nom_poste').last()
-        context['ecole'] = Formation.objects.filter(profil=profil, ecole__isnull=False).values('ecole__nom').last()
-        context['ecole_renseignee'] = Formation.objects.filter(profil=profil, ecole__isnull=True).values(
-            'nom_ecole').last()
-        context['profiles'] = Profil.objects.all().order_by('-id')[:20]
-        context['experiences'] = Experience.objects.filter(profil=profil)
-        context['formations'] = Formation.objects.filter(profil=profil)
-        context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=profil)
-        context['is_followed'] = Suivie.objects.filter(followed_profil=profil, follower=request.user.profil).exists()
-        context['is_friend'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil),
-                                                         Q(recepteur=request.user.profil) | Q(recepteur=profil),
-                                                         statut=1).exists()
-        context['is_request_received'] = DemandeAmi.objects.filter(emetteur=profil, recepteur=request.user.profil,
+        if request.method == "GET" and 'is_ajax_request' in request.GET:
+            groupes = list()
+            for groupe in Groupe.objects.all():
+                print(groupe.admins.all())
+                if profil in groupe.admins.all() or profil in groupe.moderators.all() or profil in  groupe.adherents.all():
+                    g = dict()
+                    g['id'] = groupe.id
+                    g['photo_profil'] = groupe.photo_profil.image.url
+                    g['photo_couverture'] = groupe.photo_couverture.image.url
+                    g['statut'] = groupe.statut_groupe
+                    g['nom'] = groupe.nom
+                    g['description'] = groupe.description
+                    g['nbMembres'] = groupe.admins.all().count()+groupe.moderators.all().count()+groupe.adherents.all().count()
+                    groupes.append(list(g.values()))
+            paginator = Paginator(groupes, 12)  # Show 12 Profiles per page
+            page = request.GET.get('page')
+            profilGroupes = list(paginator.get_page(page))
+            isNumPagesExcessed = False
+            previous_page_number = 1
+            next_page_number = 1
+            if page is None:
+                page = 1
+                previous_page_number = 1
+                next_page_number = 2
+            else:
+                if int(page) > paginator.num_pages:
+                    isNumPagesExcessed = True
+                    page = paginator.num_pages
+                    previous_page_number = page - 1
+                    next_page_number = page
+                elif int(page) < 1:
+                    page = 1
+                    previous_page_number = 1
+                    next_page_number = 2
+                else:
+                    previous_page_number = int(page) - 1
+                    next_page_number = int(page) + 1
+            context = {
+                'statut': True,
+                'has_previous': paginator.get_page(page).has_previous(),
+                'has_next': paginator.get_page(page).has_next(),
+                'previous_page_number': previous_page_number,
+                'next_page_number': next_page_number,
+                'num_pages': paginator.num_pages,
+                'current_page': page,
+                'groupes': list(profilGroupes),
+                'NumPagesExcessed': isNumPagesExcessed,
+                'nbGroupes': len(groupes),
+            }
+            if context['nbGroupes'] == 0:
+                context['msg'] = profil.user.username+" n'est pas un membre d'aucun groupe"
+            return JsonResponse(context, safe=False)
+        else:
+            profilGroupes = [groupe for groupe in Groupe.objects.all() if profil == groupe.creator or profil in groupe.adherents.all() or profil in groupe.admins.all() or profil in groupe.moderators.all()]
+            if request.user.profil == Profil.objects.get(id=pk):
+                messages.info(request, "C'est votre profil")
+                return redirect('SocialMedia:groupes')
+            if DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil, statut=3).exists():
+                messages.warning(request, "Les groupes concernent un profil bloqué!")
+                return redirect('SocialMedia:myprofil')
+            if DemandeAmi.objects.filter(recepteur=request.user.profil, emetteur=profil, statut=3).exists():
+                messages.warning(request, "Les groupes du profil recherché vous a bloqué!")
+                return redirect('SocialMedia:myprofil')
+            context['profil'] = profil
+            context['poste_actuel'] = Experience.objects.filter(profil=profil, actuel=True).values('poste').values(
+                'nom_poste').last()
+            context['poste_actuel_renseigne'] = Experience.objects.filter(profil=profil, actuel=True).values(
+                'nom_poste').last()
+            context['ecole'] = Formation.objects.filter(profil=profil, ecole__isnull=False).values('ecole__nom').last()
+            context['ecole_renseignee'] = Formation.objects.filter(profil=profil, ecole__isnull=True).values(
+                'nom_ecole').last()
+            context['profiles'] = Profil.objects.all().order_by('-id')[:20]
+            context['experiences'] = Experience.objects.filter(profil=profil)
+            context['formations'] = Formation.objects.filter(profil=profil)
+            context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=profil)
+            context['is_followed'] = Suivie.objects.filter(followed_profil=profil, follower=request.user.profil).exists()
+            context['is_friend'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil),
+                                                             Q(recepteur=request.user.profil) | Q(recepteur=profil),
+                                                             statut=1).exists()
+            context['is_request_received'] = DemandeAmi.objects.filter(emetteur=profil, recepteur=request.user.profil,
+                                                                       statut=0).exists()
+            context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
                                                                    statut=0).exists()
-        context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
-                                                               statut=0).exists()
-        context['profilGroupes'] = [groupe for groupe in Groupe.objects.all() if profil == groupe.creator or profil in groupe.adherents.all() or profil in groupe.admins.all() or profil in groupe.moderators.all()]
-        if len(context['profilGroupes']) == 0:
-            context['msg'] = profil.user.username+" n'est pas un membre d'aucun groupe"
+            page = request.GET.get('page')
+            paginator = Paginator(profilGroupes, 12)
+            context['profilGroupes'] = paginator.get_page(page)
+            context['nbGroupes'] = len(profilGroupes)
+            if len(profilGroupes) == 0:
+                context['msg'] = profil.user.username+" n'est pas un membre d'aucun groupe"
+                return render(request, 'SocialMedia/profil/groupesProfil.html', context)
             return render(request, 'SocialMedia/profil/groupesProfil.html', context)
-        return render(request, 'SocialMedia/profil/groupesProfil.html', context)
     except Profil.DoesNotExist:
         messages.error(request, "Le Profil Que Vous cherchez n'existe pas!")
         return redirect('SocialMedia:myprofil')
@@ -819,8 +923,8 @@ def membresGroupe(request, pk):
                     return JsonResponse(context,safe=False)
                 groupeMembers = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user)
                 context['statut'] = True
-                context['nbMembers'] = len(groupeMembers)
-                print(context)
+                context['nbMembers'] = groupeMembers.count()
+                context['profil'] = profil.id
                 return JsonResponse(context,safe=False)
             elif request.method == "GET":
                 groupeMembers = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user)
@@ -881,12 +985,12 @@ def membersGroupeViaAjax(request, pk):
         'nbMembres': (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(id=request.user.profil.id).count()
     }
     return JsonResponse(context, safe=False)
-
+"""
 def joinGroupe(request, pk):
     if request.user.is_authenticated:
         if
     else:
         messages.error(request, "Veuiller vous connecter")
         return redirect('main_app:log_in')
-
+"""
 #EndHaytham

@@ -20,11 +20,11 @@
                             <!-- Filter Nav End -->
 
                             <!-- Member Items Start -->
-                        {% if nbdemandes != 0 %}
                             <div class="member--items">
                                 <div id="requests" class="row">
+                        {% if nbdemandes != 0 %}
                             {% for demande in demandesAmis %}
-                                    <div class="col-sm-3 demande{{ demande.id }}">
+                                    <div class="col-sm-4 demande{{ demande.id }}">
                                         <!-- Member Item Start -->
                                         <div class="member--item online">
                                             <div class="img img-circle">
@@ -79,13 +79,14 @@
                                             </div>
                                         </div>
                                     </div>
+
                             {% endfor %}
-                                </div>
-                            </div>
-                                        <!-- Member Item End -->
                             {% else %}
                                 <h2 class="h4 fw--700 widget--title">Vous N'avez Aucune Demande D'Amis</h2>
                             {% endif %}
+                                </div>
+                            </div>
+                                        <!-- Member Item End -->
                                 <div class="row text-center">
                                                             <img id="loadingImage" style="display: none; width: 100%; object-fit: contain;" class="img-rounded"  src="{% static 'SocialMedia/loading.gif' %}" />
                                 </div>
@@ -127,7 +128,6 @@
 $('html, body').animate({
         scrollTop: $("#navTop").offset().top
     }, 500);
-    }, 250);
 
     function printRequests(emetteurId, demandeId, results)
     {
@@ -217,7 +217,8 @@ $('html, body').animate({
             if( data.statut ) {
                     if( data.nbdemandes == 0)
                     {
-                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Vous N'avez Aucune Demande D'Amis</h2>");$("#RequestsPageNum").val('1');
+                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Vous N'avez Aucune Demande D'Amis</h2>");
+                        $("#RequestsPageNum").val('1');
                         $("#btfirst").hide(250);
                         $("#btnext").hide(250);
                         $("#btlast").hide(250);
@@ -238,7 +239,7 @@ $('html, body').animate({
                     }else{
                         $('.demande'+data.demande).fadeOut(350, function(){
                             $("#requests").fadeOut(350, function(){
-                                $("#requests").fadeIn(500);
+                                $("#requests").fadeIn(250);
                             });
                         const toast = swal.mixin({
                           toast: true,
@@ -283,7 +284,9 @@ $('html, body').animate({
                 var i=1;
                     if( data.nbdemandes == 0)
                     {
-                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Vous N'avez Aucune Demande D'Amis</h2>");
+                        $("#loadingImage").fadeIn(350, function() {
+                            $("#requests").html("<h2 class='h4 fw--700 widget--title'>Vous N'avez Aucune Demande D'Amis</h2>");
+                        });
                         $("#RequestsPageNum").val('1');
                         $("#btfirst").hide(250);
                         $("#btnext").hide(250);
@@ -293,7 +296,7 @@ $('html, body').animate({
                         $("#nbdemandeBadge").text(data.nbdemandes);
                     }else{
                         $("#loadingImage").fadeIn(350);
-                            $('#requests').empty();
+                            $('#requests').html('');
                             setTimeout(function () {
                             $.each(data.demandesAmis,function(key, value){
                                     getUserAjax(value.emetteur_id,value.id);
@@ -342,7 +345,7 @@ $('html, body').animate({
         },
         complete: function()
         {
-            $("#loadingImage").fadeOut(50);
+            $("#loadingImage").fadeOut(350);
             $('html, body').animate({
               scrollTop: $("#navTop").offset().top
             }, 500)

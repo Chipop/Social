@@ -23,9 +23,9 @@
                             <!-- Filter Nav End -->
 
                             <!-- Member Items Start -->
-                        {% if nbMembers != 0 %}
                             <div class="member--items">
                                 <div id="requests" class="row">
+                        {% if nbMembers != 0 %}
                             {% for member in members %}
                                     <div class="col-sm-3 member{{ member.id }}">
                                         <!-- Member Item Start -->
@@ -93,13 +93,14 @@
                                             </div>
                                         </div>
                                     </div>
-                            {% endfor %}
+                                {% endfor %}
+                             {% else %}
+                                <h2 class="h4 fw--700 widget--title">Aucun Membre n'a été rejoindre le groupe.</h2>
+                            {% endif %}
                                 </div>
                             </div>
                                         <!-- Member Item End -->
-                            {% else %}
-                                <h2 class="h4 fw--700 widget--title">Aucun Member n'a été rejoindre le groupe.</h2>
-                            {% endif %}
+
                                 <div class="row text-center">
                                                             <img id="loadingImage" style="display: none; width: 100%; object-fit: contain;" class="img-rounded"  src="{% static 'SocialMedia/loading.gif' %}" />
                                 </div>
@@ -237,7 +238,8 @@
             if( data.statut ) {
                     if( data.nbMembers == 0)
                     {
-                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Aucun Member n'a été rejoindre le groupe.</h2>");$("#RequestsPageNum").val('1');
+                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Aucun Membre n'a été rejoindre le groupe.</h2>");
+                        $("#RequestsPageNum").val('1');
                         $("#btfirst").hide(250);
                         $("#btnext").hide(250);
                         $("#btlast").hide(250);
@@ -257,9 +259,10 @@
                         })
                     }else{
                         $('.member'+data.profil).fadeOut(250, function(){
-                            $("#requests").fadeOut(250, function(){
-                                $("#requests").fadeIn(500);
-                            });
+                            /*$("#requests").fadeOut(250, function(){
+                                $("#requests").fadeIn(250);
+                            });*/
+                            console.log(data);
                             const toast = swal.mixin({
                               toast: true,
                               position: 'top-end',
@@ -306,7 +309,9 @@
                 var i=1;
                     if( data.nbMembers == 0)
                     {
-                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Aucun Member n'a été rejoindre le groupe.</h2>");
+                        $("#loadingImage").fadeIn(350, function(){
+                           $("#requests").html("<h2 class='h4 fw--700 widget--title'>Aucun Membre n'a été rejoindre le groupe.</h2>");
+                        });
                         $("#RequestsPageNum").val('1');
                         $("#btfirst").hide(250);
                         $("#btnext").hide(250);
@@ -317,7 +322,7 @@
                         $("#numMem").text(data.nbMembers+' Membres.');
                     }else{
                         $("#loadingImage").fadeIn(350);
-                            $('#requests').empty();
+                            $('#requests').html('');
                             setTimeout(function () {
                             $.each(data.membersGroupe,function(key, value){
                                     getUserAjax(value.id);
@@ -368,7 +373,7 @@
         },
         complete: function()
         {
-            $("#loadingImage").fadeOut(50);
+            $("#loadingImage").fadeOut(350);
             $('html, body').animate({
               scrollTop: $("#navTop").offset().top
             }, 500)

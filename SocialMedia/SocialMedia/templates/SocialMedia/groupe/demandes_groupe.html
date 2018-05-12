@@ -23,9 +23,9 @@
                             <!-- Filter Nav End -->
 
                             <!-- Member Items Start -->
-                        {% if nbdemandes != 0 %}
                             <div class="member--items">
                                 <div id="requests" class="row">
+                        {% if nbdemandes != 0 %}
                             {% for demande in demandesGroupe %}
                                     <div class="col-sm-3 demande{{ demande.id }}">
                                         <!-- Member Item Start -->
@@ -73,12 +73,12 @@
                                         </div>
                                     </div>
                             {% endfor %}
+                        {% else %}
+                                <h2 class="h4 fw--700 widget--title">le groupe n'a aucune demande de jointure.</h2>
+                        {% endif %}
                                 </div>
                             </div>
                                         <!-- Member Item End -->
-                            {% else %}
-                                <h2 class="h4 fw--700 widget--title">le groupe n'a aucune demande de jointure.</h2>
-                            {% endif %}
                                  <div class="row text-center">
                                                             <img id="loadingImage" style="display: none; width: 100%; object-fit: contain;" class="img-rounded"  src="{% static 'SocialMedia/loading.gif' %}" />
                                 </div>
@@ -118,6 +118,9 @@
 	$('.profil_links_menu li').removeClass('active');
     $('.profil_links_menu li:eq(2)').addClass('active');
 
+$('html, body').animate({
+        scrollTop: $("#navTop").offset().top
+    }, 500);
 
     function printRequests(emetteurId, demandeId, results)
     {
@@ -223,9 +226,9 @@
                           title: data.message,
                         })
                     }else{
-                        $('.demande'+data.demande).fadeOut(350, function(){
-                            $("#requests").fadeOut(350, function(){
-                                $("#requests").fadeIn(500);
+                        $('.demande'+data.demande).fadeOut(250, function(){
+                            $("#requests").fadeOut(250, function(){
+                                $("#requests").fadeIn(250);
                             });
                             const toast = swal.mixin({
                               toast: true,
@@ -273,7 +276,7 @@
                 var i=1;
                     if( data.nbdemandes == 0)
                     {
-                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>le groupe n'a aucune demande de jointure.\n</h2>");
+                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>le groupe n'a aucune demande de jointure.</h2>");
                         $("#RequestsPageNum").val('1');
                         $("#btfirst").hide(250);
                         $("#btnext").hide(250);
@@ -335,7 +338,7 @@
         },
         complete: function()
         {
-            $("#loadingImage").fadeOut(50);
+            $("#loadingImage").fadeOut(350);
             $('html, body').animate({
               scrollTop: $("#navTop").offset().top
             }, 500)
