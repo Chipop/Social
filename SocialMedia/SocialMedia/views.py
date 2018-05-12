@@ -18,12 +18,14 @@ from django.urls import reverse
 from django.utils.timezone import now
 from django.contrib.auth.tokens import default_token_generator
 from .models import *
+from django.core import serializers
 
 
 # Haytham
 
 def home(request):
     return render(request, 'SocialMedia/acceuil.html')
+
 
 def profil(request):
     context = dict()
@@ -34,22 +36,32 @@ def profil(request):
             p.is_first = False
             p.save()
         context['userInterfaceForm'] = UserInterfaceInfos()
-        context['poste_actuel'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values('poste').values('nom_poste').last()
-        context['poste_actuel_renseigne'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values('nom_poste').last()
-        context['ecole'] = Formation.objects.filter(profil=request.user.profil,ecole__isnull=False).values('ecole__nom').last()
-        context['ecole_renseignee'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=True).values('nom_ecole').last()
+        context['poste_actuel'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values(
+            'poste').values('nom_poste').last()
+        context['poste_actuel_renseigne'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values(
+            'nom_poste').last()
+        context['ecole'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=False).values(
+            'ecole__nom').last()
+        context['ecole_renseignee'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=True).values(
+            'nom_ecole').last()
         context['profiles'] = Profil.objects.all().order_by('-id')[:20]
         context['photoform'] = PhotoForm()
         context['experiences'] = Experience.objects.filter(profil=request.user.profil)
         context['formations'] = Formation.objects.filter(profil=request.user.profil)
         context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=request.user.profil)
         context['nbdemandes'] = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
+<<<<<<< HEAD
         context['nbGroupes'] = len([groupe for groupe in Groupe.objects.all() if request.user.profil == groupe.creator or request.user.profil in groupe.adherents.all() or request.user.profil in groupe.admins.all() or request.user.profil in groupe.moderators.all()])
 
+=======
+        context['FormAjouterLangue'] = FormAjouterLangue()
+        context['langues'] = LangueProfil.objects.filter(profil=request.user.profil)
+>>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
         return render(request, 'SocialMedia/myprofil/myprofil.html', context)
     else:
         messages.error(request, "Veuiller vous connecter!")
         return redirect('main_app:log_in')
+
 
 def changephotoprofil(request):
     if request.user.is_authenticated:
@@ -60,16 +72,17 @@ def changephotoprofil(request):
                 p = request.user.profil
                 p.photo_profil = photo
                 p.save()
-                context={'status':'success', 'url':photo.image.url}
+                context = {'status': 'success', 'url': photo.image.url}
                 return JsonResponse(context)
             else:
-                context = {'status': 'fail', 'photo':'Veuiller Salectionner Une Image'}
+                context = {'status': 'fail', 'photo': 'Veuiller Salectionner Une Image'}
                 return JsonResponse(context)
         else:
             return redirect("SocialMedia:myprofil")
     else:
         messages.error(request, "Veuiller Se Connecter!")
         return redirect("SocialMedia:login")
+
 
 def changephotocouverture(request):
     if request.user.is_authenticated:
@@ -80,16 +93,17 @@ def changephotocouverture(request):
                 p = request.user.profil
                 p.photo_couverture = photo
                 p.save()
-                context={'status':'success', 'url':photo.image.url}
+                context = {'status': 'success', 'url': photo.image.url}
                 return JsonResponse(context)
             else:
-                context = {'status': 'fail', 'photo':'Veuiller Salectionner Une Image'}
+                context = {'status': 'fail', 'photo': 'Veuiller Salectionner Une Image'}
                 return JsonResponse(context)
         else:
             return redirect("SocialMedia:myprofil")
     else:
         messages.error(request, "Veuiller Se Connecter!")
         return redirect("SocialMedia:login")
+
 
 def ajaxUser(request):
     if request.user.is_authenticated:
@@ -99,15 +113,16 @@ def ajaxUser(request):
             last_login = p.user.last_login. strftime("%m %b %y %I:%M")
         else:
             last_login = "Non connecté"
-        context={'statut':True,
-                 'username':p.user.username,
-                 'last_login': last_login,
-                 'photo_profil': p.photo_profil.image.url
-                }
+        context = {'statut': True,
+                   'username': p.user.username,
+                   'last_login': last_login,
+                   'photo_profil': p.photo_profil.image.url
+                   }
         return JsonResponse(context, safe=False)
     else:
         messages.error(request, "Veuiller Se Connecter!")
         return redirect("SocialMedia:login")
+
 
 def log_in(request):
     if request.user.is_authenticated:
@@ -123,7 +138,8 @@ def log_in(request):
                 login(request, user)
                 return redirect('SocialMedia:login')
             else:
-                messages.warning(request, "Compte Non Activé, Veuiller L'activer par l'email envoyé vers votre adresse electronique")
+                messages.warning(request,
+                                 "Compte Non Activé, Veuiller L'activer par l'email envoyé vers votre adresse electronique")
                 return redirect('main_app:login')
         else:
             messages.warning(request, "Username Ou Mot De Passe Incorrect")
@@ -131,9 +147,11 @@ def log_in(request):
     else:
         return redirect('main_app:login')
 
+
 def groupesProfil(request):
     if request.user.is_authenticated:
         context = dict()
+<<<<<<< HEAD
         if request.method == "GET" and 'is_ajax_request' in request.GET:
             groupes = list()
             for groupe in Groupe.objects.all():
@@ -217,9 +235,34 @@ def groupesProfil(request):
                 context['msg'] = "Vous n'êtes pas membre d'aucun groupe"
                 return render(request, 'SocialMedia/myprofil/groupesMyProfil.html', context)
             return render(request, 'SocialMedia/myprofil/groupesMyProfil.html', context)
+=======
+        p = Profil.objects.get(user=request.user)
+        context['is_first'] = p.is_first_socialmedia
+        if context['is_first']:
+            p.is_first = False
+            p.save()
+        context['userInterfaceForm'] = UserInterfaceInfos()
+        context['poste_actuel'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values(
+            'poste').values(
+            'nom_poste').last()
+        context['poste_actuel_renseigne'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values(
+            'nom_poste').last()
+        context['ecole'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=False).values(
+            'ecole__nom').last()
+        context['ecole_renseignee'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=True).values(
+            'nom_ecole').last()
+        context['profiles'] = Profil.objects.all().order_by('-id')[:20]
+        context['photoform'] = PhotoForm()
+        context['experiences'] = Experience.objects.filter(profil=request.user.profil)
+        context['formations'] = Formation.objects.filter(profil=request.user.profil)
+        context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=request.user.profil)
+        context['nbdemandes'] = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
+        return render(request, 'SocialMedia/myprofil/groupesMyProfil.html', context)
+>>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
     else:
         messages.error(request, "Veuiller Se Connecter!")
         return redirect('main_app:log_in')
+
 
 def log_out(request):
     if request.user.is_authenticated:
@@ -229,9 +272,34 @@ def log_out(request):
         messages.error(request, "Veuiller Se Connecter!")
         return redirect('main_app:log_in')
 
+<<<<<<< HEAD
+=======
+
+"""
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('SocialMedia:myprofil')
+    if request.method == "POST":
+        userf = userform(request.POST)
+        if userf.is_valid():
+            userf.save()
+            user = authenticate(username=userf.cleaned_data['username'], password=userf.cleaned_data['password1'])
+            if user is not None:
+                login(request, user)
+                return redirect('SocialMedia:finishregistration')
+        else:
+            return redirect('SocialMedia:signup')
+    else:
+        return redirect('main_app:signup')
+        #formuser = userform()
+        #return render(request, 'main_app/authentification/signup.html', {'formuser':formuser})
+"""
+>>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
+
 
 def supprimerDemande(request):
     pass
+
 
 def demandesProfil(request):
     if request.user.is_authenticated:
@@ -242,13 +310,13 @@ def demandesProfil(request):
             demande.statut = formDemande.cleaned_data['statut']
             demande.save()
             demandesAmis = list(DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).values())
-            context={'statut': demande.statut,
-                     'ami':demande.emetteur.user.username,
-                     'demande':demande.id,
-                     'nbdemandes':len(demandesAmis),
-                     'demandesAmis': demandesAmis,
-                     }
-            return JsonResponse(context,safe=False)
+            context = {'statut': demande.statut,
+                       'ami': demande.emetteur.user.username,
+                       'demande': demande.id,
+                       'nbdemandes': len(demandesAmis),
+                       'demandesAmis': demandesAmis,
+                       }
+            return JsonResponse(context, safe=False)
         else:
             demandesAmis = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).order_by('id')
             paginator = Paginator(demandesAmis, 12)  # Show 12 Profiles per page
@@ -257,16 +325,29 @@ def demandesProfil(request):
             context['nbdemandes'] = demandesAmis.count()
             context['demandesAmis'] = paginator.get_page(page)
             context['photoform'] = PhotoForm()
+<<<<<<< HEAD
             context['poste_actuel'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values('poste').values('nom_poste').last()
             context['poste_actuel_renseigne'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values('nom_poste').last()
             context['ecole'] = Formation.objects.filter(profil=request.user.profil,ecole__isnull=False).values('ecole__nom').last()
             context['ecole_renseignee'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=True).values('nom_ecole').last()
             context['nbGroupes'] = len([groupe for groupe in Groupe.objects.all() if
                                         request.user.profil == groupe.creator or request.user.profil in groupe.adherents.all() or request.user.profil in groupe.admins.all() or request.user.profil in groupe.moderators.all()])
+=======
+            context['poste_actuel'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values(
+                'poste').values('nom_poste').last()
+            context['poste_actuel_renseigne'] = Experience.objects.filter(profil=request.user.profil,
+                                                                          actuel=True).values('nom_poste').last()
+            context['ecole'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=False).values(
+                'ecole__nom').last()
+            context['ecole_renseignee'] = Formation.objects.filter(profil=request.user.profil,
+                                                                   ecole__isnull=True).values('nom_ecole').last()
+
+>>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
             return render(request, 'SocialMedia/myprofil/demandesMyProfil.html', context)
     else:
         messages.error(request, "Veuiller vous connecter!")
         return redirect('main_app:log_in')
+
 
 def demandeViaAjax(request):
     demandesAmis = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).order_by('id').values()
@@ -284,33 +365,34 @@ def demandeViaAjax(request):
         if int(page) > paginator.num_pages:
             isNumPagesExcessed = True
             page = paginator.num_pages
-            previous_page_number = page-1
+            previous_page_number = page - 1
             next_page_number = page
         elif int(page) < 1:
             page = 1
             previous_page_number = 1
             next_page_number = 2
         else:
-            previous_page_number = int(page)-1
-            next_page_number = int(page)+1
-    context={
-             'statut':True,
-             'has_previous': paginator.get_page(page).has_previous(),
-             'has_next': paginator.get_page(page).has_next(),
-             'previous_page_number': previous_page_number,
-             'next_page_number': next_page_number,
-             'num_pages': paginator.num_pages,
-             'current_page': page,
-             'demandesAmis': demAmis,
-             'nbdemandes': demandesAmis.count(),
-             'NumPagesExcessed': isNumPagesExcessed,
-             }
-    return JsonResponse(context,safe=False)
+            previous_page_number = int(page) - 1
+            next_page_number = int(page) + 1
+    context = {
+        'statut': True,
+        'has_previous': paginator.get_page(page).has_previous(),
+        'has_next': paginator.get_page(page).has_next(),
+        'previous_page_number': previous_page_number,
+        'next_page_number': next_page_number,
+        'num_pages': paginator.num_pages,
+        'current_page': page,
+        'demandesAmis': demAmis,
+        'nbdemandes': demandesAmis.count(),
+        'NumPagesExcessed': isNumPagesExcessed,
+    }
+    return JsonResponse(context, safe=False)
+
 
 def mediaProfil(request):
     if request.user.is_authenticated:
         if request.method == "POST":
-            return render(request, "SocialMedia/myprofil/mediaProfil.html",)
+            return render(request, "SocialMedia/myprofil/mediaProfil.html", )
         else:
             profiles = Profil.objects.all().order_by('-id')[:20]
             photoform = PhotoForm()
@@ -318,29 +400,37 @@ def mediaProfil(request):
             for album in albums:
                 for file in album.reseausocialfile_set.all():
                     print(file.date_telechargement)
-            return render(request, 'SocialMedia/myprofil/mediaProfil.html',{'profiles': profiles, 'photoform': photoform, 'is_first': request.user.profil.is_first_socialmedia,'nbdemandes': DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()})
+            return render(request, 'SocialMedia/myprofil/mediaProfil.html',
+                          {'profiles': profiles, 'photoform': photoform,
+                           'is_first': request.user.profil.is_first_socialmedia,
+                           'nbdemandes': DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()})
     else:
         messages.error(request, "Veuiller vous connecter!")
         return redirect('main_app:log_in')
 
+
 def suprimerAmi(request):
     pass
+
 
 def findfriends(request):
     if request.user.is_authenticated:
         p = Profil.objects.get(user=request.user)
         friends_and_requests = DemandeAmi.objects.exclude(emetteur=request.user, )
         profiles = Profil.objects.all()
-        return render(request, 'SocialMedia/myprofil/demandesMyProfil.html', {'profiles':profiles})
+        return render(request, 'SocialMedia/myprofil/demandesMyProfil.html', {'profiles': profiles})
     else:
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
 
+
 def chat(request):
     pass
 
+
 def rechercherAmis(request):
     pass
+
 
 class uploads(View):
     def get(self, request):
@@ -356,6 +446,7 @@ class uploads(View):
             data = {'is_valid': False}
         return JsonResponse(data)
 
+
 def editInterface(request):
     if request.user.is_authenticated:
         form = UserInterfaceInfos(request.POST or None)
@@ -364,8 +455,10 @@ def editInterface(request):
                 return
         else:
             form.username = request.user.username
-            form.poste_actuel = Experience.objects.filter(profil=request.user.profil).values('poste').values('nom_poste').last()
-            form.poste_actuel_renseigne = Experience.objects.filter(profil=request.user.profil).values('nom_poste').last()
+            form.poste_actuel = Experience.objects.filter(profil=request.user.profil).values('poste').values(
+                'nom_poste').last()
+            form.poste_actuel_renseigne = Experience.objects.filter(profil=request.user.profil).values(
+                'nom_poste').last()
             form.ecole = Formation.objects.filter(profil=request.user.profil).values('ecole').last()
             form.ecole_renseigne = Formation.objects.filter(profil=request.user.profil).values('nom_ecole').last()
             entreprise_actuelle = request.user.profil.entreprise
@@ -374,10 +467,11 @@ def editInterface(request):
             entreprise_pays = request.user.profil.entreprise.ville
             profil_ville = request.user.profil.ville
             profil_pays = request.user.profil.pays
-            return render(request, 'SocialMedia/myprofil/forms/base_forms.html', {'formUserInterface':form})
+            return render(request, 'SocialMedia/myprofil/forms/base_forms.html', {'formUserInterface': form})
     else:
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
+
 
 def editAbout(request):
     if request.user.is_authenticated:
@@ -398,11 +492,13 @@ def editAbout(request):
             return HttpResponse("Edited")
         else:
             entreprises = Entreprise.objects.all()
-            form = UserAboutEdit(initial={'entreprise':request.user.profil.entreprise})
-            return render(request, 'SocialMedia/myprofil/forms/editAboutForm.html', {'editForm':form, 'nom': 'A Propos de', 'entreprises':entreprises})
+            form = UserAboutEdit(initial={'entreprise': request.user.profil.entreprise})
+            return render(request, 'SocialMedia/myprofil/forms/editAboutForm.html',
+                          {'editForm': form, 'nom': 'A Propos de', 'entreprises': entreprises})
     else:
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
+
 
 def editExperience(request, pk):
     if request.user.is_authenticated:
@@ -424,15 +520,17 @@ def editExperience(request, pk):
             entreprise = Experience.objects.get(id=pk).entreprise
             postes = Poste.objects.all()
             entreprises = Entreprise.objects.all()
-            form = UserExperienceEdit(initial={'poste':poste,
-                                               'entreprise':entreprise,
-                                               'dateDebut':exp.date_debut,
-                                               'dateFin':exp.date_fin,
-                                               'description':exp.description})
-            return render(request, 'SocialMedia/myprofil/forms/editExperience.html', {'editForm':form, 'exp':exp.id, 'nom': 'Experience De '})
+            form = UserExperienceEdit(initial={'poste': poste,
+                                               'entreprise': entreprise,
+                                               'dateDebut': exp.date_debut,
+                                               'dateFin': exp.date_fin,
+                                               'description': exp.description})
+            return render(request, 'SocialMedia/myprofil/forms/editExperience.html',
+                          {'editForm': form, 'exp': exp.id, 'nom': 'Experience De '})
     else:
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
+
 
 def editFormation(request, pk):
     if request.user.is_authenticated:
@@ -456,22 +554,24 @@ def editFormation(request, pk):
             ecole = Formation.objects.get(id=pk).ecole
             entreprise = Experience.objects.get(id=pk).entreprise
             ecoles = Ecole.objects.all()
-            form = UserFormationEdit(initial={'titre_formation':formation.titre_formation,
-                                              'ecole':ecole,
-                                              'nom_formation':formation.nom_formation,
-                                              'domaine':formation.domaine,
-                                              'resultat_obtenu':formation.resultat_obtenu,
-                                              'activite_et_associations':formation.activite_et_associations,
-                                              'anneeDebut':formation.annee_debut,
-                                              'anneeFin':formation.annee_fin,
-                                              'description':formation.description,})
-            return render(request, 'SocialMedia/myprofil/forms/editFormation.html', {'editForm':form, 'nom': 'A Propos de', 'formation':formation.id, 'postes':ecoles})
+            form = UserFormationEdit(initial={'titre_formation': formation.titre_formation,
+                                              'ecole': ecole,
+                                              'nom_formation': formation.nom_formation,
+                                              'domaine': formation.domaine,
+                                              'resultat_obtenu': formation.resultat_obtenu,
+                                              'activite_et_associations': formation.activite_et_associations,
+                                              'anneeDebut': formation.annee_debut,
+                                              'anneeFin': formation.annee_fin,
+                                              'description': formation.description, })
+            return render(request, 'SocialMedia/myprofil/forms/editFormation.html',
+                          {'editForm': form, 'nom': 'A Propos de', 'formation': formation.id, 'postes': ecoles})
     else:
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
 
-#EndHaytham
-#Chipop
+
+# EndHaytham
+# Chipop
 
 def search(request):
     keywords = request.GET.get('keywords')
@@ -494,6 +594,7 @@ def search(request):
     return render(request, 'SocialMedia/search/search_all.html',
                   {'keywords': keywords, 'profils': profils, 'groupes': groupes, 'offres': offres})
 
+
 def search_members(request):
     keywords = request.GET.get('keywords')
     if keywords is None or keywords == "":
@@ -510,6 +611,7 @@ def search_members(request):
 
     return render(request, 'SocialMedia/search/search_members.html', {'profils': profils, 'keywords': keywords})
 
+
 def search_groupes(request):
     keywords = request.GET.get('keywords')
     if keywords is None or keywords == "":
@@ -524,6 +626,7 @@ def search_groupes(request):
     groupes = paginator.get_page(page)
 
     return render(request, 'SocialMedia/search/search_groupes.html', {'groupes': groupes, 'keywords': keywords})
+
 
 def search_offres(request):
     keywords = request.GET.get('keywords')
@@ -553,32 +656,47 @@ def search_offres(request):
 
     return render(request, 'SocialMedia/search/search_offres.html', {'offres': offres, 'keywords': keywords})
 
-#EndChipop
 
-#Haytham
+# EndChipop
+
+# Haytham
 def getProfil(request, pk):
     context = dict()
     try:
         if request.user.profil == Profil.objects.get(id=pk):
             return redirect('SocialMedia:myprofil')
         profil = Profil.objects.get(id=pk)
-        if DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil), Q(recepteur=profil) | Q(recepteur=request.user.profil), statut=3).exists():
+        if DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil),
+                                     Q(recepteur=profil) | Q(recepteur=request.user.profil), statut=3).exists():
             messages.warning(request, "Le profil recherché est bloqué!")
             return redirect('SocialMedia:myprofil')
         context['profil'] = profil
-        context['poste_actuel'] = Experience.objects.filter(profil=profil, actuel=True).values('poste').values('nom_poste').last()
-        context['poste_actuel_renseigne'] = Experience.objects.filter(profil=profil, actuel=True).values('nom_poste').last()
+        context['poste_actuel'] = Experience.objects.filter(profil=profil, actuel=True).values('poste').values(
+            'nom_poste').last()
+        context['poste_actuel_renseigne'] = Experience.objects.filter(profil=profil, actuel=True).values(
+            'nom_poste').last()
         context['ecole'] = Formation.objects.filter(profil=profil, ecole__isnull=False).values('ecole__nom').last()
-        context['ecole_renseignee'] = Formation.objects.filter(profil=profil, ecole__isnull=True).values('nom_ecole').last()
+        context['ecole_renseignee'] = Formation.objects.filter(profil=profil, ecole__isnull=True).values(
+            'nom_ecole').last()
         context['profiles'] = Profil.objects.all().order_by('-id')[:20]
         context['experiences'] = Experience.objects.filter(profil=profil)
         context['formations'] = Formation.objects.filter(profil=profil)
         context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=profil)
         context['is_followed'] = Suivie.objects.filter(followed_profil=profil, follower=request.user.profil).exists()
+<<<<<<< HEAD
         context['is_friend'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil), Q(recepteur=request.user.profil) | Q(recepteur=profil), statut=1).exists()
         context['is_request_received'] = DemandeAmi.objects.filter(emetteur=profil, recepteur=request.user.profil, statut=0).exists()
         context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil, statut=0).exists()
         context['nbGroupes'] = len([groupe for groupe in Groupe.objects.all() if profil == groupe.creator or profil in groupe.adherents.all() or profil in groupe.admins.all() or profil in groupe.moderators.all()])
+=======
+        context['is_friend'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil),
+                                                         Q(recepteur=request.user.profil) | Q(recepteur=profil),
+                                                         statut=1).exists()
+        context['is_request_received'] = DemandeAmi.objects.filter(emetteur=profil, recepteur=request.user.profil,
+                                                                   statut=0).exists()
+        context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
+                                                               statut=0).exists()
+>>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
         return render(request, 'SocialMedia/profil/profil.html', context)
     except Profil.DoesNotExist:
         raise Http404
@@ -610,13 +728,15 @@ def followProfil(request, pk):
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
 
+
 def FriendsRequests(request, pk):
     if request.user.is_authenticated:
         context = dict()
         rep = int(request.POST.get('rep'))
         try:
             profil = Profil.objects.get(id=pk)
-            demande = DemandeAmi.objects.get(Q(emetteur=request.user.profil) | Q(emetteur=profil), Q(recepteur=request.user.profil) | Q(recepteur=profil))
+            demande = DemandeAmi.objects.get(Q(emetteur=request.user.profil) | Q(emetteur=profil),
+                                             Q(recepteur=request.user.profil) | Q(recepteur=profil))
             context['statut'] = True
             if rep == -1:
                 context['message'] = "La demande de {} à été annulée".format(profil.user.username)
@@ -676,21 +796,25 @@ def FriendsRequests(request, pk):
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
 
+
 def getRequestsUpdates(request, pk):
     if request.user.is_authenticated:
         context = dict()
         profil = Profil.objects.get(id=pk)
         context['statut'] = True
         context['is_blocked'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil),
-                                                             Q(recepteur=request.user.profil) | Q(recepteur=profil),
-                                                             statut=3).exists()
+                                                          Q(recepteur=request.user.profil) | Q(recepteur=profil),
+                                                          statut=3).exists()
         context['is_followed'] = Suivie.objects.filter(followed_profil=profil, follower=request.user.profil).exists()
         context['is_friend'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil),
-                                                             Q(recepteur=request.user.profil) | Q(recepteur=profil),
-                                                             statut=1).exists()
-        context['is_request_received'] = DemandeAmi.objects.filter(emetteur=profil, recepteur=request.user.profil,statut=0).exists()
-        context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,statut=0).exists()
+                                                         Q(recepteur=request.user.profil) | Q(recepteur=profil),
+                                                         statut=1).exists()
+        context['is_request_received'] = DemandeAmi.objects.filter(emetteur=profil, recepteur=request.user.profil,
+                                                                   statut=0).exists()
+        context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
+                                                               statut=0).exists()
         return JsonResponse(context, safe=False)
+
 
 def getProfilGroupes(request, pk):
     context = dict()
@@ -779,6 +903,7 @@ def getProfilGroupes(request, pk):
                                                                        statut=0).exists()
             context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
                                                                    statut=0).exists()
+<<<<<<< HEAD
             page = request.GET.get('page')
             paginator = Paginator(profilGroupes, 12)
             context['profilGroupes'] = paginator.get_page(page)
@@ -994,3 +1119,91 @@ def joinGroupe(request, pk):
         return redirect('main_app:log_in')
 """
 #EndHaytham
+=======
+        context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
+                                                               statut=0).exists()
+        context['groupes'] = Groupe.objects.filter(
+            id__in=DemandeGroupe.objects.filter(emetteur=profil, reponse=True).values('groupe_recepteur'))
+        return render(request, 'SocialMedia/profil/groupesProfil.html', context)
+    except Profil.DoesNotExist:
+        messages.error(request, "Le Profil Que Vous cherchez n'existe pas!")
+        return redirect('SocialMedia:myprofil')
+    except DemandeGroupe.DoesNotExist:
+        context['msg'] = "Le profil ne s'appartient à aucun groupe"
+        return render(request, 'SocialMedia/profil/groupesProfil.html', context)
+
+
+# EndHaytham
+
+def test(request):
+    return render(request, 'SocialMedia/test.html')
+
+
+def ajouterLangue(request):
+    data = request.POST.get('data', None)
+
+    formAjouterLangue = FormAjouterLangue(request.POST)
+
+    if formAjouterLangue.is_valid():
+        langue_profil = formAjouterLangue.save(commit=False)
+        langue_profil.profil = request.user.profil
+        langue_profil.save()
+
+        langues = LangueProfil.objects.filter(profil=request.user.profil)
+        # return JsonResponse({'messagee': 'La langue a été ajoutée avec succès','langues':serializers.serialize('langues', langues) }, safe=False)
+        return render(request, 'SocialMedia/myprofil/informations/liste_langues.html', {'langues': langues})
+    else:
+        return JsonResponse({'messagee': 'Invalid'}, safe=False)
+
+    return JsonResponse({'messagee': 'HELLO'}, safe=False)
+
+
+def getModifierLangue(request):
+    id_langue = request.GET.get('id_langue', None)
+
+    print(id_langue)
+
+    if id_langue is None:
+        return JsonResponse({'message_erreur': "Une erreur s'est produite "}, safe=False)
+
+    langue_profil = LangueProfil.objects.get(id=id_langue)
+    formModifierLangue = FormAjouterLangue(instance=langue_profil)
+
+    return render(request, 'SocialMedia/myprofil/modals/modal_modifier_langue.html',
+                  {'formModifierLangue': formModifierLangue,'id_langue':id_langue})
+
+
+def modifierLangue(request):
+    data = request.POST.get('data', None)
+
+    langue__profil = LangueProfil.objects.get(id=request.POST.get("id_langue"))
+
+    formAjouterLangue = FormAjouterLangue( request.POST,instance = langue__profil)
+    print(formAjouterLangue)
+
+    if formAjouterLangue.is_valid():
+        langue_profil = formAjouterLangue.save(commit=False)
+        langue_profil.profil = request.user.profil
+        langue_profil.save()
+
+        langues = LangueProfil.objects.filter(profil=request.user.profil)
+        # return JsonResponse({'messagee': 'La langue a été ajoutée avec succès','langues':serializers.serialize('langues', langues) }, safe=False)
+        return render(request, 'SocialMedia/myprofil/informations/liste_langues.html', {'langues': langues})
+    else:
+        return JsonResponse({'messagee': 'Invalid'}, safe=False)
+
+    return JsonResponse({'messagee': 'HELLO'}, safe=False)
+
+
+def supprimerLangue(request):
+
+    id_langue = request.GET.get('id_langue',None)
+    if id_langue is None:
+        return Http404()
+
+    LangueProfil.objects.get(id=id_langue).delete()
+
+    langues = LangueProfil.objects.filter(profil=request.user.profil)
+    # return JsonResponse({'messagee': 'La langue a été ajoutée avec succès','langues':serializers.serialize('langues', langues) }, safe=False)
+    return render(request, 'SocialMedia/myprofil/informations/liste_langues.html', {'langues': langues})
+>>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5

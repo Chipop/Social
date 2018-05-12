@@ -21,4 +21,9 @@ admin.site.register(Langue)
 admin.site.register(OffreEmploi)
 admin.site.register(Organisme)
 admin.site.register(Poste)
+<<<<<<< HEAD
 admin.site.register(Like)
+=======
+admin.site.register(NiveauLangue)
+admin.site.register(LangueProfil)
+>>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
