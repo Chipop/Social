@@ -192,7 +192,7 @@
                         <div class="col-md-3 col-xs-6 col-xxs-12">
                             <!-- Box Item Start -->
                             <div class="box--item text-center">
-                                <a href="{% url 'SocialMedia:groupe' groupe.id %}" class="img" data-overlay="0.1">
+                                <a href="{{ groupe.get_absolute_url  }}" class="img" data-overlay="0.1">
                                     <img src="{{ groupe.photo_profil.image.url }}" alt="" style="height: 100px;">
                                 </a>
 

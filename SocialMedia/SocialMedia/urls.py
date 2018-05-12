@@ -58,4 +58,8 @@ urlpatterns = [
     path('groupe/<int:pk>/demandes/', views.demandesGroupe, name="demandesGroupe"),
 
     path('groupe/<int:pk>/ajax-demandes-groupe/', views.demandesGroupeViaAjax, name="demandesGroupeViaAjax"),
+
+    path('groupe/<int:pk>/membres/', views.membresGroupe, name="membresGroupe"),
+
+    path('groupe/<int:pk>/ajax-members-groupe', views.membersGroupeViaAjax, name="membresGroupeViaAjax"),
 ]

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import os.path
+from django.urls import reverse
 
 
 
@@ -30,6 +31,9 @@ class Groupe(models.Model):
 
     def __str__(self):
         return "Groupe: " + self.nom + "\b\bCree Par: " + self.creator.user.username
+
+    def get_absolute_url(self):
+        return reverse('SocialMedia:groupe', args=[str(self.id)])
 
 
 class DemandeGroupe(models.Model):

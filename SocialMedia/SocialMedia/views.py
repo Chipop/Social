@@ -94,7 +94,7 @@ def ajaxUser(request):
         pid = request.GET.get('pid')
         p = Profil.objects.get(id=pid)
         if p.user.last_login is not None:
-            last_login = p.user.last_login.strftime("%b. %m, %Y, %I:%M %p")
+            last_login = p.user.last_login. strftime("%m %b %y %I:%M")
         else:
             last_login = "Non connecté"
         context={'statut':True,
@@ -206,7 +206,7 @@ def demandesProfil(request):
             return JsonResponse(context,safe=False)
         else:
             demandesAmis = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).order_by('id')
-            paginator = Paginator(demandesAmis, 3)  # Show 3 Profiles per page
+            paginator = Paginator(demandesAmis, 12)  # Show 12 Profiles per page
             page = request.GET.get('page')
             context['formDemande'] = formDemande
             context['nbdemandes'] = demandesAmis.count()
@@ -224,7 +224,7 @@ def demandesProfil(request):
 
 def demandeViaAjax(request):
     demandesAmis = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).order_by('id').values()
-    paginator = Paginator(demandesAmis, 3)  # Show 3 Profiles per page
+    paginator = Paginator(demandesAmis, 12)  # Show 3 Profiles per page
     page = request.GET.get('page')
     demAmis = list(paginator.get_page(page))
     isNumPagesExcessed = False
@@ -693,6 +693,7 @@ def groupe(request, pk):
         groupe = Groupe.objects.get(id=pk)
         context['groupe'] = groupe
         context['nbdemandes'] = groupe.demandegroupe_set.filter(reponse=False).count()
+        context['nbMembers'] = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user).count()
         return render(request, 'SocialMedia/groupe/groupe.html', context)
     except Groupe.DoesNotExist:
         raise Http404
@@ -701,41 +702,41 @@ def demandesGroupe(request, pk):
     if request.user.is_authenticated:
         context = dict()
         groupe = Groupe.objects.get(id=pk)
-        formDemande = demandeGroupeForm(request.POST or None)
-        if request.method == "POST" and formDemande.is_valid() and request.user.profil in (groupe.admins.all() or groupe.moderators.all()):
-            demande = DemandeGroupe.objects.get(id=formDemande.cleaned_data['demande'])
-            if formDemande.cleaned_data['reponse'] == 1:
-                demande.reponse = formDemande.cleaned_data['reponse']
-                demande.save()
-                groupe.adherents.add(demande.emetteur)
-                groupe.save()
-                context['reponse'] = demande.reponse
-                context['message'] = 'demande de {} à été acceptée'.format(demande.emetteur.user.username)
-            else:
-                context['message'] = 'demande de {} à été refusée'.format(demande.emetteur.user.username)
-                context['reponse'] = 0
-                demande.delete()
-            context['nbdemandes'] = groupe.demandegroupe_set.filter(reponse=False).count()
-            demandesGroupe = list(DemandeGroupe.objects.filter(groupe_recepteur=groupe, reponse=False).values())
-            context['statut'] = True,
-            context['nbdemandes'] = len(demandesGroupe)
-            context['demande'] = demande.id
-            context['demandesGroupe'] =  demandesGroupe
-            return JsonResponse(context,safe=False)
-        elif request.method == "GET":
-            demandesGroupe = groupe.demandegroupe_set.filter(reponse=False).order_by('id')
-            paginator = Paginator(demandesGroupe, 3)  # Show 3 Profiles per page
-            page = request.GET.get('page')
-            context['formDemande'] = formDemande
-            context['nbdemandes'] = demandesGroupe.count()
-            context['demandesGroupe'] = paginator.get_page(page)
-            context['photoform'] = PhotoForm()
-            context['groupe'] = groupe
-            context['nbdemandes'] = groupe.demandegroupe_set.filter(reponse=False).count()
-            return render(request, 'SocialMedia/groupe/demandes_groupe.html', context)
+        if request.user.profil in groupe.admins.all() or request.user.profil in groupe.moderators.all():
+            formDemande = demandeGroupeForm(request.POST or None)
+            print(formDemande)
+            if request.method == "POST" and formDemande.is_valid():
+                demande = DemandeGroupe.objects.get(id=formDemande.cleaned_data['demande'])
+                context['demande'] = demande.id
+                if formDemande.cleaned_data['reponse'] == 1:
+                    demande.reponse = formDemande.cleaned_data['reponse']
+                    demande.save()
+                    groupe.adherents.add(demande.emetteur)
+                    groupe.save()
+                    context['reponse'] = demande.reponse
+                    context['message'] = 'demande de {} à été acceptée'.format(demande.emetteur.user.username)
+                elif formDemande.cleaned_data['reponse'] == 0:
+                    context['message'] = 'demande de {} à été refusée'.format(demande.emetteur.user.username)
+                    context['reponse'] = 0
+                    demande.delete()
+                context['nbdemandes'] = groupe.demandegroupe_set.filter(reponse=False).count()
+                context['statut'] = True,
+                return JsonResponse(context,safe=False)
+            elif request.method == "GET":
+                demandesGroupe = groupe.demandegroupe_set.filter(reponse=False).order_by('id')
+                paginator = Paginator(demandesGroupe, 12)  # Show 12 Profiles per page
+                page = request.GET.get('page')
+                context['formDemande'] = formDemande
+                context['nbdemandes'] = demandesGroupe.count()
+                context['demandesGroupe'] = paginator.get_page(page)
+                context['photoform'] = PhotoForm()
+                context['groupe'] = groupe
+                context['nbMembers'] = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user).count()
+                context['nbdemandes'] = groupe.demandegroupe_set.filter(reponse=False).count()
+                return render(request, 'SocialMedia/groupe/demandes_groupe.html', context)
         else:
             messages.error(request, "Vous n'avez pas le droit de valider cette action, s'il s'agit d'une erreur veuiller nous contacter.")
-            return redirect('SocialMedia:myprofil')
+            return redirect(groupe.get_absolute_url())
     else:
         messages.error(request, "Veuiller vous connecter")
         return redirect('main_app:log_in')
@@ -743,7 +744,7 @@ def demandesGroupe(request, pk):
 def demandesGroupeViaAjax(request, pk):
     groupe = Groupe.objects.get(id=pk)
     demandesGroupe = DemandeGroupe.objects.filter(groupe_recepteur=groupe, reponse=False).order_by('id').values()
-    paginator = Paginator(demandesGroupe, 3)  # Show 3 Profiles per page
+    paginator = Paginator(demandesGroupe, 12)  # Show 12 Profiles per page
     page = request.GET.get('page')
     demGroupe = list(paginator.get_page(page))
     isNumPagesExcessed = False
@@ -777,6 +778,115 @@ def demandesGroupeViaAjax(request, pk):
         'demandesGroupe': demGroupe,
         'nbdemandes': demandesGroupe.count(),
         'NumPagesExcessed': isNumPagesExcessed,
+        'nbMembres': (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().count()
     }
     return JsonResponse(context, safe=False)
+
+def membresGroupe(request, pk):
+    if request.user.is_authenticated:
+        context = dict()
+        groupe = Groupe.objects.get(id=pk)
+        if request.user.profil in groupe.admins.all():
+            formDemande = membresAdminForm(request.POST or None)
+            if request.method == "POST" and formDemande.is_valid():
+                profil = get_object_or_404(Profil, id=formDemande.cleaned_data['profil'])
+                if formDemande.cleaned_data['action'] == 3:
+                    groupe.admins.add(profil)
+                    groupe.moderators.remove(profil)
+                    groupe.moderators.remove(profil)
+                    groupe.save()
+                    context['message'] = '{} est devenu Administrateur.'.format(profil.user.username)
+                elif formDemande.cleaned_data['action'] == 2:
+                    groupe.moderators.add(profil)
+                    groupe.admins.remove(profil)
+                    groupe.adherents.remove(profil)
+                    groupe.save()
+                    context['message'] = '{} est devenu Moderateur.'.format(profil.user.username)
+                elif formDemande.cleaned_data['action'] == 1:
+                    groupe.admins.remove(profil)
+                    groupe.moderators.remove(profil)
+                    groupe.adherents.add(profil)
+                    groupe.save()
+                    context['message'] = '{} est devenu Adherent.'.format(profil.user.username)
+                elif formDemande.cleaned_data['action'] == 0:
+                    groupe.admins.remove(profil)
+                    groupe.moderators.remove(profil)
+                    groupe.adherents.remove(profil)
+                    groupe.save()
+                    context['message'] = '{} à été Banné.'.format(profil.user.username)
+                else:
+                    context['statut'] = False
+                    return JsonResponse(context,safe=False)
+                groupeMembers = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user)
+                context['statut'] = True
+                context['nbMembers'] = len(groupeMembers)
+                print(context)
+                return JsonResponse(context,safe=False)
+            elif request.method == "GET":
+                groupeMembers = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user)
+                paginator = Paginator(groupeMembers, 12)  # Show 12 Profiles per page
+                page = request.GET.get('page')
+                context['formDemande'] = formDemande
+                context['nbMembers'] = groupeMembers.count()
+                context['members'] = paginator.get_page(page)
+                context['photoform'] = PhotoForm()
+                context['groupe'] = groupe
+                context['nbdemandes'] = groupe.demandegroupe_set.filter(reponse=False).count()
+                return render(request, 'SocialMedia/groupe/membres_groupe.html', context)
+        else:
+            messages.error(request, "Vous n'avez pas le droit d'acces")
+            return redirect(groupe.get_absolute_url())
+    else:
+        messages.error(request, "Veuiller vous connecter")
+        return redirect('main_app:log_in')
+
+def membersGroupeViaAjax(request, pk):
+    groupe = Groupe.objects.get(id=pk)
+    users_ID = list()
+    groupeMembers = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user).values()
+    paginator = Paginator(groupeMembers, 12)  # Show 12 Profiles per page
+    page = request.GET.get('page')
+    memGroupe = paginator.get_page(page)
+    isNumPagesExcessed = False
+    previous_page_number = 1
+    next_page_number = 1
+    if page is None:
+        page = 1
+        previous_page_number = 1
+        next_page_number = 2
+    else:
+        if int(page) > paginator.num_pages:
+            isNumPagesExcessed = True
+            page = paginator.num_pages
+            previous_page_number = page - 1
+            next_page_number = page
+        elif int(page) < 1:
+            page = 1
+            previous_page_number = 1
+            next_page_number = 2
+        else:
+            previous_page_number = int(page) - 1
+            next_page_number = int(page) + 1
+    context = {
+        'statut': True,
+        'has_previous': paginator.get_page(page).has_previous(),
+        'has_next': paginator.get_page(page).has_next(),
+        'previous_page_number': previous_page_number,
+        'next_page_number': next_page_number,
+        'num_pages': paginator.num_pages,
+        'current_page': page,
+        'membersGroupe': list(memGroupe),
+        'nbMembers': groupeMembers.count(),
+        'NumPagesExcessed': isNumPagesExcessed,
+        'nbMembres': (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(id=request.user.profil.id).count()
+    }
+    return JsonResponse(context, safe=False)
+
+def joinGroupe(request, pk):
+    if request.user.is_authenticated:
+        if
+    else:
+        messages.error(request, "Veuiller vous connecter")
+        return redirect('main_app:log_in')
+
 #EndHaytham

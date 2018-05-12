@@ -1,5 +1,6 @@
 {% extends "SocialMedia/base_socialmedia.html" %}
 {% load staticfiles %}
+{% load i18n %}
 {% load widget_tweaks %}
 {% block title %}{{ user.username }}{% endblock %}
 {% block content %}
@@ -176,7 +177,7 @@
 
                                     <h2 class="h3 fw--600">{{ groupe.nom }}</h2>
 
-                                    <h3 class="h6">{{ groupe.admins.all.count|add:groupe.moderators.all.count|add:groupe.adherents.all.count }} Membres.</h3>
+                                    <h3 id="NbMembres" class="h6">{{ groupe.admins.all.count|add:groupe.moderators.all.count|add:groupe.adherents.all.count }} Membres.</h3>
                                 </div>
 
                                 <div class="cover--user-desc fw--400 fs--18 fstyle--i text-darkest"
@@ -193,6 +194,7 @@
                                             {{ user.profil.ville }}, {{ user.profil.pays }}
                                             <i class="fa fa-globe" aria-hidden="true"></i>{% endif %}
                                     </p>
+                                    <div id="navTop"></div>
                                 </div>
                             </div>
                         </div>
@@ -201,6 +203,7 @@
                     </div>
 
                     <!-- Main Content Start -->
+
                     <div class="row main--content pt--40" data-trigger="stickyScroll"
                          style=";width:95%;margin-left:auto;margin-right:auto;">
                         <div class="main--content-inner drop--shadow">
@@ -208,13 +211,15 @@
                             <div class="content--nav pb--30">
                                 <ul class="nav ff--primary fs--14 fw--500 bg-lighter profil_links_menu">
                                     <li><a href="">Activity</a></li>
-                                    <li class="active"><a href="{% url 'SocialMedia:myprofil' %}">Statuts</a></li>
-                                    {% if user.profil in groupe.admins.all %}
-                                    <li><a href="{% url 'SocialMedia:demandesGroupe' groupe.id %}">Demandes <span id="nbdemandeBadge"
-                                                                                                  class="badge">{{ nbdemandes }}</span></a>
+                                    <li class="active"><a href="{% url 'SocialMedia:groupe' groupe.id %}">Statuts</a></li>
+                                    {% if user.profil in groupe.admins.all or user.profil in groupe.moderators.all %}
+                                    <li><a href="{% url 'SocialMedia:demandesGroupe' groupe.id %}">Demandes <span id="nbdemandeBadge" class="badge">{{ nbdemandes }}</span></a>
                                     </li>
                                     {% endif %}
-                                    <li><a href="{% url 'SocialMedia:groupes' %}">Membres</a></li>
+                                    {% if user.profil in groupe.admins.all %}
+                                    <li><a href="{% url 'SocialMedia:membresGroupe' groupe.id %}">Membres <span id="nbMembersBadge"
+                                                                                                  class="badge">{{ nbMembers }}</span></a></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                             <!-- Content Nav End -->

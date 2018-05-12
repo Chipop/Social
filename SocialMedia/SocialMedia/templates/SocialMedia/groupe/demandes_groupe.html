@@ -6,7 +6,7 @@
                         <!-- Filter Nav Start -->
                             <div class="filter--nav pb--60 clearfix">
                                 <div class="filter--link float--left">
-                                    <h2 class="h4"><a href="members.html" class="btn-link">{{ groupe.admins.all.count|add:groupe.moderators.all.count|add:groupe.adherents.all.count|add:1 }} Membres.</a></h2>
+                                    <h2 class="h4"><a href="#navTop" id="nbDemandes" class="btn-link">{{ nbdemandes }} Demandes.</a></h2>
                                 </div>
                                 <div class="filter--options float--right">
                                     <label>
@@ -27,7 +27,7 @@
                             <div class="member--items">
                                 <div id="requests" class="row">
                             {% for demande in demandesGroupe %}
-                                    <div class="col-sm-4 demande{{ demande.id }}">
+                                    <div class="col-sm-3 demande{{ demande.id }}">
                                         <!-- Member Item Start -->
                                         <div class="member--item online">
                                             <div class="img img-circle">
@@ -36,20 +36,20 @@
                                                 </a>
                                             </div>
 
-                                            <div class="name">
+                                            <div class="name" style="white-space: nowrap;">
                                                 <h3 class="h6 fs--12">
                                                     <a href="{% url 'SocialMedia:getProfil' demande.emetteur.id %}" class="btn-link">{{ demande.emetteur }}</a>
                                                 </h3>
                                             </div>
 
-                                            <div class="activity">
-                                                <p><i class="fa mr--8 fa-clock-o"></i>{{ demande.emetteur.user.last_login|safe|date:'M. d, Y, g:i A' }}{{ demande.emetteur.user.last_login|default_if_none:"Non Connecté" }}</p>
+                                            <div class="activity" style="white-space: nowrap;">
+                                                <p><i class="fa mr--8 fa-clock-o"></i>{{ demande.emetteur.user.last_login|safe|date:'M. d, y, g:i A' }}{{ demande.emetteur.user.last_login|default_if_none:"Non Connecté" }}</p>
                                             </div>
 
                                             <div class="actions" style="white-space: nowrap;">
                                                 <ul class="nav">
                                                     <li>
-                                                        <a href="#" title="Accepter" class="btn-lin" data-toggle="tooltip" data-placement="bottom">
+                                                        <a href="#" title="Approuver" class="btn-lin" data-toggle="tooltip" data-placement="bottom">
                                                             <form id="acceptDemande" data-id="Demande acceptée" action="{% url 'SocialMedia:demandesGroupe' groupe.id %}" method="POST">
                                                                 {% csrf_token %}
                                                                     {% render_field formDemande.demande value=demande.id %}
@@ -79,8 +79,8 @@
                             {% else %}
                                 <h2 class="h4 fw--700 widget--title">le groupe n'a aucune demande de jointure.</h2>
                             {% endif %}
-                                <div class="row text-center">
-                                <img id="loadingImage hidden" class="img-rounded hidden" height="150" width="150" src="{% static 'SocialMedia/Loading_icon.gif' %}" />
+                                 <div class="row text-center">
+                                                            <img id="loadingImage" style="display: none; width: 100%; object-fit: contain;" class="img-rounded"  src="{% static 'SocialMedia/loading.gif' %}" />
                                 </div>
 
                             <!-- Page Count Start -->
@@ -125,19 +125,19 @@
             demandefield = '{% render_field formDemande.demande value=999999 %}'.replace(999999, demandeId);
             actionURL = "{% url 'SocialMedia:demandesGroupe' 999999 %}".replace(999999, {{ groupe.id }});
             csrf = "{% csrf_token %}".replace(/'/g, '"');
-            NewData = '<div class="col-sm-4 demande'+demandeId+'" >' +
+            NewData = '<div class="col-sm-3 demande'+demandeId+'" >' +
             '<div class="member--item online">' +
 
                 '<div class="img img-circle">' +
                 '<a href="'+profilURL+'" class="btn-link"><img src="'+results.photo_profil+'" style="max-height: 55px;height: 100px;" alt=""></a>' +
                 '</div>' +
 
-            '<div class="name">' +
+            '<div class="name"  style="white-space: nowrap;">' +
             '<h3 class="h6 fs--12">' +
             '<a href="'+profilURL+'" class="btn-link">'+results.username+'</a></h3>' +
             '</div>' +
 
-                '<div class="activity"><p><i class="fa mr--8 fa-clock-o"></i>'+results.last_login+'</p></div>' +
+                '<div class="activity" style="white-space: nowrap;"><p><i class="fa mr--8 fa-clock-o"></i>'+results.last_login+'</p></div>' +
 
                     '<div class="actions" style="white-space: nowrap;">' +
                         '<ul class="nav"><li><a href="#" title="Accepter" class="btn-lin" data-toggle="tooltip" data-placement="bottom">' +
@@ -146,10 +146,9 @@
                         '<button type="submit" class="btn-link" ><i class="fa fa-check-circle-o" aria-hidden="true"></i></button>' +
                         '</form></a></li>' +
                         '<li><a href="#" title="Refuser" class="btn-link" data-toggle="tooltip" data-placement="bottom">' +
-                        '<form id="acceptDemande" data-id="Demande refusée" action='+actionURL+' method="POST">'+csrf+demandefield+
+                        '<form id="refuseDemande" data-id="Demande refusée" action='+actionURL+' method="POST">'+csrf+demandefield+
                         '{% render_field formDemande.reponse value=0 %}'+
                         '<button type="submit" class="btn-link" ><i class="fa fa-remove" aria-hidden="true"></i></button></form></a></li>' +
-                        '<li><a href="#" title="Bloquer" class="btn-link" data-toggle="tooltip" data-placement="bottom">' +
                         '</ul></div></div></div>';
            /* setTimeout(function(){
                     $("#requests").text(NewData);
@@ -189,11 +188,10 @@
         });
     }
 
-	$('body').on( "submit","#acceptDemande, #refuseDemande, #bloqueDemande", function(event) {
+	$('body').on( "submit","#acceptDemande, #refuseDemande", function(event) {
 	event.preventDefault();
     var form_data = new FormData($(this)[0]);
     message = $(this).data('id');
-    //console.log(message);
     $.ajax({
         url: '{% url "SocialMedia:demandesGroupe" groupe.id %}',
         type: $(this).attr('method'),
@@ -202,17 +200,18 @@
         data : form_data,
         success: function(data) {
             var i=1;
-            swal(data.reponse)
             if( data.statut ) {
                     if( data.nbdemandes == 0)
                     {
-                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Aucune demande pour joindre le groupe n'a été envoyée</h2>");$("#RequestsPageNum").val('1');
+
+                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>le groupe n'a aucune demande de jointure.</h2>");$("#RequestsPageNum").val('1');
                         $("#btfirst").hide(250);
                         $("#btnext").hide(250);
                         $("#btlast").hide(250);
                         $("#btnext").hide(250);
                         $("#btprevious").hide(250);
                         $("#nbdemandeBadge").text(data.nbdemandes);
+                            $("#nbDemandes").text(data.nbdemandes+' Demandes.');
                         const toast = swal.mixin({
                           toast: true,
                           position: 'top-end',
@@ -224,15 +223,16 @@
                           title: data.message,
                         })
                     }else{
-                        $('.demande'+data.demande).fadeOut(100, function(){
-                            $("#requests").empty();
+                        $('.demande'+data.demande).fadeOut(350, function(){
+                            $("#requests").fadeOut(350, function(){
+                                $("#requests").fadeIn(500);
+                            });
                             const toast = swal.mixin({
-                          toast: true,
-                          position: 'top-end',
-                          showConfirmButton: false,
-                          timer: 3000
+                              toast: true,
+                              position: 'top-end',
+                              showConfirmButton: false,
+                              timer: 3000
                         });
-
                         toast({
                           type: 'success',
                           title: data.message,
@@ -250,6 +250,10 @@
                     })
                 }
         },
+        complete: function()
+        {
+
+        },
         error: function() { },
         stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
             swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
@@ -257,9 +261,6 @@
     });
 
 });
-
-
-
 
     function getGroupeRequests(page)
     {
@@ -272,7 +273,7 @@
                 var i=1;
                     if( data.nbdemandes == 0)
                     {
-                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Aucune demande pour joindre le groupe n'a été envoyée</h2>");
+                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>le groupe n'a aucune demande de jointure.\n</h2>");
                         $("#RequestsPageNum").val('1');
                         $("#btfirst").hide(250);
                         $("#btnext").hide(250);
@@ -280,13 +281,18 @@
                         $("#btnext").hide(250);
                         $("#btprevious").hide(250);
                         $("#nbdemandeBadge").text(data.nbdemandes);
+                            $("#nbDemandes").text(data.nbdemandes+' Demandes.');
                     }else{
-                        $("#loadingImage").removeClass('hidden');
+                        $("#loadingImage").fadeIn(350);
                             $('#requests').empty();
+                            setTimeout(function () {
                             $.each(data.demandesGroupe,function(key, value){
-                                    getUserAjax(value.emetteur_id,value.id);
+                                    getUserAjax(value.emetteur_id, value.id);
+                                    $("#NbMembres").text(data.nbMembres+' Membres.');
                             });
+                            },250);
                             $("#nbdemandeBadge").text(data.nbdemandes);
+                            $("#nbDemandes").text(data.nbdemandes+' Demandes.');
                             $("#btprevious").attr('page', data.previous_page_number);
                             $("#btnext").attr('page', data.next_page_number);
                             $("#btlast").attr('page', data.num_pages);
@@ -326,6 +332,13 @@
                       text: 'Veuiller actualiser la page puis ressayer',
                     })
                 }
+        },
+        complete: function()
+        {
+            $("#loadingImage").fadeOut(50);
+            $('html, body').animate({
+              scrollTop: $("#navTop").offset().top
+            }, 500)
         },
         error: function() { },
         stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */

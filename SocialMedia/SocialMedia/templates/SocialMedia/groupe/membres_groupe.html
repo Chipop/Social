@@ -1,10 +1,13 @@
-{% extends "SocialMedia/myprofil/base_myprofil.html" %}
+{% extends "SocialMedia/groupe/base_groupe.html" %}
 {% load staticfiles %}
 {% load widget_tweaks %}
-{% block title %}{{ user.username }} - Demandes{% endblock %}
-{% block contentProfil %}
+{% block title %}{{ groupe.nom }} - Membres{% endblock %}
+{% block contentGroupe %}
                         <!-- Filter Nav Start -->
                             <div class="filter--nav pb--50 clearfix">
+                                <div class="filter--link float--left">
+                                    <h2 class="h4"><a id="numMem" href="#navTop" class="btn-link">{{ nbMembers }} Membres.</a></h2>
+                                </div>
                                 <div class="filter--options float--right">
                                     <label>
                                         <span class="fs--14 ff--primary fw--500 text-darker">Show By :</span>
@@ -20,58 +23,69 @@
                             <!-- Filter Nav End -->
 
                             <!-- Member Items Start -->
-                        {% if nbdemandes != 0 %}
+                        {% if nbMembers != 0 %}
                             <div class="member--items">
                                 <div id="requests" class="row">
-                            {% for demande in demandesAmis %}
-                                    <div class="col-sm-3 demande{{ demande.id }}">
+                            {% for member in members %}
+                                    <div class="col-sm-3 member{{ member.id }}">
                                         <!-- Member Item Start -->
                                         <div class="member--item online">
                                             <div class="img img-circle">
-                                                <a href="{% url 'SocialMedia:getProfil' demande.emetteur_id %}" class="btn-link">
-                                                    <img src="{{ demande.emetteur.photo_profil.image.url|default:'/media/SocialMedia/default.jpg' }}" style="max-height: 55px;height: 100px;" alt="">
+                                                <a href="{% url 'SocialMedia:getProfil' member.id %}" class="btn-link">
+                                                    <img src="{{ member.photo_profil.image.url|default:'/media/SocialMedia/default.jpg' }}" style="max-height: 55px;height: 100px;" alt="">
                                                 </a>
                                             </div>
 
                                             <div class="name" style="white-space: nowrap;">
                                                 <h3 class="h6 fs--12">
-                                                    <a href="{% url 'SocialMedia:getProfil' demande.emetteur.id %}" class="btn-link">{{ demande.emetteur }}</a>
+                                                    <a href="{% url 'SocialMedia:getProfil' member.id %}" class="btn-link">{{ member }}</a>
                                                 </h3>
                                             </div>
 
                                             <div class="activity" style="white-space: nowrap;">
-                                                <p><i class="fa mr--8 fa-clock-o"></i>{{ demande.emetteur.user.last_login|safe|date:'M. d, y, g:i A' }}{{ demande.emetteur.user.last_login|default_if_none:"Non Connecté" }}</p>
+                                                <p><i class="fa mr--8 fa-clock-o"></i>{{ member.user.last_login|safe|date:'M. d, y, g:i A' }}{{ member.user.last_login|default_if_none:"Non Connecté" }}</p>
                                             </div>
 
                                             <div class="actions" style="white-space: nowrap;">
                                                 <ul class="nav">
                                                     <li>
-                                                        <a href="#" title="Accepter" class="btn-lin" data-toggle="tooltip" data-placement="bottom">
-                                                            <form id="acceptDemande" data-id="Demande acceptée" action="{% url 'SocialMedia:demandes' %}" method="POST">
+                                                        <a style="padding: 0;" href="#" title="Mettre Porfil Admin" class="btn-lin" data-toggle="tooltip" data-placement="bottom">
+                                                            <form id="makeAdmin" data-id="make admin" action="{% url 'SocialMedia:membresGroupe' groupe.id %}" method="POST">
                                                                 {% csrf_token %}
-                                                                    {% render_field formDemande.demande value=demande.id %}
-                                                                    {% render_field formDemande.statut value=1 %}
-                                                                <button type="submit" class="btn-link" ><i class="fa fa-check-circle-o" aria-hidden="true"></i></button>
+                                                                    {% render_field formDemande.profil value=member.id %}
+                                                                    {% render_field formDemande.action value=3 %}
+                                                                <button type="submit" class="btn-link" ><i class="fa fa-user-circle-o" aria-hidden="true"></i></button>
+                                                            </form>
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a  style="padding: 0;" href="#" title="Mettre Profil Moderateur" class="btn-link" data-toggle="tooltip" data-placement="bottom">
+                                                            <form id="makeModerator" data-id="make Moderator" action="{% url 'SocialMedia:membresGroupe' groupe.id %}" method="POST">
+                                                                {% csrf_token %}
+                                                                    {% render_field formDemande.profil value=member.id %}
+                                                                    {% render_field formDemande.action value=2 %}
+                                                                    <button type="submit" class="btn-link" ><i class="fa fa-user" aria-hidden="true"></i></button>
                                                             </form>
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" title="Refuser" class="btn-link" data-toggle="tooltip" data-placement="bottom">
-                                                            <form id="refuseDemande" data-id="Demande refusée" action="{% url 'SocialMedia:demandes' %}" method="POST">
+                                                        <a  style="padding: 0;" href="#" title="Mettre Porfil Adherent" class="btn-link" data-toggle="tooltip" data-placement="bottom">
+                                                            <form id="makeAdherent" data-id="make Adherent" action="{% url 'SocialMedia:membresGroupe' groupe.id %}" method="POST">
                                                                 {% csrf_token %}
-                                                                    {% render_field formDemande.demande value=demande.id %}
-                                                                    {% render_field formDemande.statut value=2 %}
-                                                                    <button type="submit" class="btn-link" ><i class="fa fa-remove" aria-hidden="true"></i></button>
+                                                                    {% render_field formDemande.profil value=member.id %}
+                                                                    {% render_field formDemande.action value=1 %}
+                                                                    <button type="submit" class="btn-link" ><i class="fa fa-user-o" aria-hidden="true"></i></button>
                                                             </form>
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" title="Bloquer" class="btn-link" data-toggle="tooltip" data-placement="bottom">
-                                                            <form id="bloqueDemande" data-id="Utilisateur bloquée" action="{% url 'SocialMedia:demandes' %}" method="POST">
+                                                        <a  style="padding: 0;" href="#" title="Supprimer Porfil" class="btn-link" data-toggle="tooltip" data-placement="bottom">
+                                                            <form id="deleteMember" data-id="delete Member" action="{% url 'SocialMedia:membresGroupe' groupe.id %}" method="POST">
                                                                 {% csrf_token %}
-                                                                    {% render_field formDemande.demande value=demande.id %}
-                                                                    {% render_field formDemande.statut value=3 %}
-                                                                    <button type="submit" class="btn-link" ><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                                                    {% render_field formDemande.profil value=member.id %}
+                                                                    {% render_field formDemande.action value=0 %}
+                                                                    <button type="submit" class="btn-link" ><i class="fa fa-user-times" aria-hidden="true"></i></button>
                                                             </form>
                                                         </a>
                                                     </li>
@@ -84,7 +98,7 @@
                             </div>
                                         <!-- Member Item End -->
                             {% else %}
-                                <h2 class="h4 fw--700 widget--title">Vous N'avez Aucune Demande D'Amis</h2>
+                                <h2 class="h4 fw--700 widget--title">Aucun Member n'a été rejoindre le groupe.</h2>
                             {% endif %}
                                 <div class="row text-center">
                                                             <img id="loadingImage" style="display: none; width: 100%; object-fit: contain;" class="img-rounded"  src="{% static 'SocialMedia/loading.gif' %}" />
@@ -94,22 +108,22 @@
                             <div class="page--count pt--30">
                                 <label class="ff--primary fs--14 fw--500 text-darker">
                                     <span>Viewing</span>
-                                    {% if demandesAmis.has_previous %}
+                                    {% if members.has_previous %}
                                         <button id="btfirst" href="?page=1" class="btn-link"><i class="fa fa-caret-left"></i><i class="fa fa-caret-left"></i></button>
-                                        <button id="btprevious" page="{{ demandesAmis.previous_page_number }}" class="btn-link"><i class="fa fa-caret-left"></i></button>
+                                        <button id="btprevious" page="{{ members.previous_page_number }}" class="btn-link"><i class="fa fa-caret-left"></i></button>
                                     {% else %}
                                         <button id="btfirst" href="1" class="btn-link"><i class="fa fa-caret-left"></i><i class="fa fa-caret-left"></i></button>
                                         <button id="btprevious" page="1" class="btn-link"><i class="fa fa-caret-left"></i></button>
                                     {% endif %}
-                                        <input id="RequestsPageNum" type="number" name="page-count" value="{{ demandesAmis.number }}" class="form-control form-sm">
+                                        <input id="RequestsPageNum" type="number" name="page-count" value="{{ members.number }}" class="form-control form-sm">
                                     {% if demandesAmis.has_next %}
-                                        <button id="btnext" page="{{ demandesAmis.next_page_number }}" class="btn-link"><i class="fa fa-caret-right"></i></button>
-                                        <button id="btlast" page="{{ demandesAmis.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i><i class="fa fa-caret-right"></i></button>
+                                        <button id="btnext" page="{{ members.next_page_number }}" class="btn-link"><i class="fa fa-caret-right"></i></button>
+                                        <button id="btlast" page="{{ members.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i><i class="fa fa-caret-right"></i></button>
                                     {% else %}
-                                        <button id="btnext" page="{{ demandesAmis.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i></button>
-                                        <button id="btlast" page="{{ demandesAmis.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i><i class="fa fa-caret-right"></i></button>
+                                        <button id="btnext" page="{{ members.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i></button>
+                                        <button id="btlast" page="{{ members.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i><i class="fa fa-caret-right"></i></button>
                                     {% endif %}
-                                        <span id="numPages">{{ demandesAmis.paginator.num_pages }}</span>
+                                        <span id="numPages">{{ members.paginator.num_pages }}</span>
 
                                 </label>
                             </div>
@@ -123,55 +137,61 @@
 <script>
 
 	$('.profil_links_menu li').removeClass('active');
-    $('.profil_links_menu li:eq(2)').addClass('active');
-$('html, body').animate({
+    $('.profil_links_menu li:eq(3)').addClass('active');
+    setTimeout(function () {
+    $('html, body').animate({
         scrollTop: $("#navTop").offset().top
     }, 500);
     }, 250);
 
-    function printRequests(emetteurId, demandeId, results)
+        function printRequests(memberId, results)
     {
-            profilURL = "{% url 'SocialMedia:getProfil' 999999 %}".replace(999999, emetteurId);
-            demandefield = '{% render_field formDemande.demande value=999999 %}'.replace(999999, demandeId);
+            profilURL = "{% url 'SocialMedia:getProfil' 999999 %}".replace(999999, memberId);
+            profilfield = '{% render_field formDemande.profil value=999999 %}'.replace(999999, memberId);
+            actionURL = "{% url 'SocialMedia:membresGroupe' 999999 %}".replace(999999, {{ groupe.id }});
             csrf = "{% csrf_token %}".replace(/'/g, '"');
-            NewData = '<div class="col-sm-4 demande'+demandeId+'" >' +
+            NewData = '<div class="col-sm-3 member'+memberId+'" >' +
             '<div class="member--item online">' +
 
                 '<div class="img img-circle">' +
                 '<a href="'+profilURL+'" class="btn-link"><img src="'+results.photo_profil+'" style="max-height: 55px;height: 100px;" alt=""></a>' +
                 '</div>' +
 
-            '<div class="name"  style="white-space: nowrap;">' +
+            '<div class="name" style="white-space: nowrap;">' +
             '<h3 class="h6 fs--12">' +
-            '<a href="'+profilURL+'" class="btn-link" >'+results.username+'</a></h3>' +
+            '<a href="'+profilURL+'" class="btn-link">'+results.username+'</a></h3>' +
             '</div>' +
 
-                '<div class="activity"  style="white-space: nowrap;"><p><i class="fa mr--8 fa-clock-o"></i>'+results.last_login+'</p></div>' +
+                '<div class="activity" style="white-space: nowrap;"><p><i class="fa mr--8 fa-clock-o"></i>'+results.last_login+'</p></div>' +
 
-                    '<div class="actions" style="white-space: nowrap;">' +
-                        '<ul class="nav"><li><a href="#" title="Accepter" class="btn-lin" data-toggle="tooltip" data-placement="bottom">' +
-                        '<form id="acceptDemande" data-id="Demande accepté" action="{% url 'SocialMedia:demandes' %}" method="POST">'+csrf+demandefield+
-                        '{% render_field formDemande.statut value=1 %}'+
-                        '<button type="submit" class="btn-link" ><i class="fa fa-check-circle-o" aria-hidden="true"></i></button>' +
+                    '<div class="actions" >' +
+                        '<ul class="nav"><li><a style="padding: 0;" href="#" title="Mettre Porfil Admin" class="btn-lin" data-toggle="tooltip" data-placement="bottom">' +
+                        '<form id="makeAdmin" data-id="make Admin" action="'+actionURL+'" method="POST">'+csrf+profilfield+
+                        '{% render_field formDemande.action value=3 %}'+
+                        '<button type="submit" class="btn-link" ><i class="fa fa-user-circle-o" aria-hidden="true"></i></button>' +
                         '</form></a></li>' +
-                        '<li><a href="#" title="Refuser" class="btn-link" data-toggle="tooltip" data-placement="bottom">' +
-                        '<form id="refuseDemande" data-id="Demande refusée" action="{% url 'SocialMedia:demandes' %}" method="POST">'+csrf+demandefield+
-                        '{% render_field formDemande.statut value=2 %}'+
-                        '<button type="submit" class="btn-link" ><i class="fa fa-remove" aria-hidden="true"></i></button></form></a></li>' +
-                        '<li><a href="#" title="Bloquer" class="btn-link" data-toggle="tooltip" data-placement="bottom">' +
-                        '<form id="bloqueDemande" data-id="Utilisateur bloqué" action="{% url 'SocialMedia:demandes' %}" method="POST">'+csrf+demandefield+
-                        '{% render_field formDemande.statut value=3 %}'+
-                        '<button type="submit" class="btn-link" ><i class="fa fa-ban" aria-hidden="true"></i></button>' +
-                        '</form></a></li></ul></div></div></div>';
+                        '<li><a style="padding: 0;" href="#" title="Mettre Porfil Moderateur" class="btn-link" data-toggle="tooltip" data-placement="bottom">' +
+                        '<form id="makeModerator" data-id="make Moderator" action='+actionURL+' method="POST">'+csrf+profilfield+
+                        '{% render_field formDemande.action value=2 %}'+
+                        '<button type="submit" class="btn-link" ><i class="fa fa-user" aria-hidden="true"></i></button></form></a></li>' +
+                        '<li><a style="padding: 0;" href="#" title="Mettre Porfil Adherent" class="btn-link" data-toggle="tooltip" data-placement="bottom">' +
+                        '<form id="makeAdherent" data-id="make Adherent" action='+actionURL+' method="POST">'+csrf+profilfield+
+                        '{% render_field formDemande.action value=1 %}'+
+                        '<button type="submit" class="btn-link" ><i class="fa fa-user-o" aria-hidden="true"></i></button></form></a></li>' +
+                        '<li><a style="padding: 0;" href="#" title="Supprimer Profil" class="btn-link" data-toggle="tooltip" data-placement="bottom">' +
+                        '<form id="deleteMember" data-id="delete Member" action='+actionURL+' method="POST">'+csrf+profilfield+
+                        '{% render_field formDemande.action value=0 %}'+
+                        '<button type="submit" class="btn-link" ><i class="fa fa-user-times" aria-hidden="true"></i></button></form></a></li>' +
+                        '</ul></div></div></div>';
            /* setTimeout(function(){
                     $("#requests").text(NewData);
                 }, 1000);*/
            $("#requests").append(NewData);
-           console.log(demandeId);
-            console.log(NewData);
+           //console.log(demandeId);
+           //console.log(NewData);
     }
 
-    function getUserAjax(emetteur_id,id)
+    function getUserAjax(emetteur_id)
     {
         $.ajax({
             url: '{% url "SocialMedia:AjaxUser" %}',
@@ -182,7 +202,7 @@ $('html, body').animate({
             dataType: 'json',
             success: function(data) {
                 if( data.statut ) {
-                        printRequests(emetteur_id,id, data);
+                        printRequests(emetteur_id, data);
                 }else
                     {
                         swal({
@@ -201,13 +221,13 @@ $('html, body').animate({
         });
     }
 
-	$('body').on( "submit","#acceptDemande, #refuseDemande, #bloqueDemande", function(event) {
+	$('body').on( "submit","#makeAdmin, #makeModerator, #makeAdherent, #deleteMember", function(event) {
 	event.preventDefault();
     var form_data = new FormData($(this)[0]);
     message = $(this).data('id');
-    console.log(message);
+    //console.log(message);
     $.ajax({
-        url: '{% url "SocialMedia:demandes" %}',
+        url: '{% url "SocialMedia:membresGroupe" groupe.id %}',
         type: $(this).attr('method'),
         processData: false,
         contentType: false,
@@ -215,44 +235,43 @@ $('html, body').animate({
         success: function(data) {
             var i=1;
             if( data.statut ) {
-                    if( data.nbdemandes == 0)
+                    if( data.nbMembers == 0)
                     {
-                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Vous N'avez Aucune Demande D'Amis</h2>");$("#RequestsPageNum").val('1');
+                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Aucun Member n'a été rejoindre le groupe.</h2>");$("#RequestsPageNum").val('1');
                         $("#btfirst").hide(250);
                         $("#btnext").hide(250);
                         $("#btlast").hide(250);
                         $("#btnext").hide(250);
                         $("#btprevious").hide(250);
-                        $("#nbdemandeBadge").text(data.nbdemandes);
+                        $("#nbMembersBadge").text(data.nbMembers);
+                        $("#numMem").text(data.nbMembers+' Membres.');
                         const toast = swal.mixin({
                           toast: true,
                           position: 'top-end',
                           showConfirmButton: false,
                           timer: 3000
                         });
-                        console.log($(this).data('id'));
                         toast({
                           type: 'success',
-                          title: message,
+                          title: data.message,
                         })
                     }else{
-                        $('.demande'+data.demande).fadeOut(350, function(){
-                            $("#requests").fadeOut(350, function(){
+                        $('.member'+data.profil).fadeOut(250, function(){
+                            $("#requests").fadeOut(250, function(){
                                 $("#requests").fadeIn(500);
                             });
-                        const toast = swal.mixin({
-                          toast: true,
-                          position: 'top-end',
-                          showConfirmButton: false,
-                          timer: 3000
+                            const toast = swal.mixin({
+                              toast: true,
+                              position: 'top-end',
+                              showConfirmButton: false,
+                              timer: 3000
                         });
-
                         toast({
                           type: 'success',
-                          title: message,
+                          title: data.message,
                         });
-                            getUserRequets($("#RequestsPageNum").val());
-                            $("#nbdemandeBadge").text(data.nbdemandes);
+                            getGroupeMembers($("#RequestsPageNum").val());
+                            $("#nbMembersBadge").text(data.nbMembers);
                         });
                     }
             }else
@@ -264,6 +283,10 @@ $('html, body').animate({
                     })
                 }
         },
+        complete: function()
+        {
+
+        },
         error: function() { },
         stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
             swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
@@ -272,34 +295,37 @@ $('html, body').animate({
 
 });
 
-    function getUserRequets(page)
+    function getGroupeMembers(page)
     {
         $.ajax({
-        url: '{% url "SocialMedia:demandeViaAjax" %}',
+        url: '{% url "SocialMedia:membresGroupeViaAjax" groupe.id %}',
         data : {'page':page},
         dataType: 'json',
         success: function(data) {
             if( data.statut ) {
                 var i=1;
-                    if( data.nbdemandes == 0)
+                    if( data.nbMembers == 0)
                     {
-                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Vous N'avez Aucune Demande D'Amis</h2>");
+                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Aucun Member n'a été rejoindre le groupe.</h2>");
                         $("#RequestsPageNum").val('1');
                         $("#btfirst").hide(250);
                         $("#btnext").hide(250);
                         $("#btlast").hide(250);
                         $("#btnext").hide(250);
                         $("#btprevious").hide(250);
-                        $("#nbdemandeBadge").text(data.nbdemandes);
+                        $("#nbMembersBadge").text(data.nbMembers);
+                        $("#numMem").text(data.nbMembers+' Membres.');
                     }else{
                         $("#loadingImage").fadeIn(350);
                             $('#requests').empty();
                             setTimeout(function () {
-                            $.each(data.demandesAmis,function(key, value){
-                                    getUserAjax(value.emetteur_id,value.id);
+                            $.each(data.membersGroupe,function(key, value){
+                                    getUserAjax(value.id);
+                                    $("#NbMembres, #numMem").text(data.nbMembres+' Membres.');
                             });
                             },250);
-                            $("#nbdemandeBadge").text(data.nbdemandes);
+                            $("#nbMembersBadge").text(data.nbMembers);
+                            $("#numMem").text(data.nbMembers+' Membres.');
                             $("#btprevious").attr('page', data.previous_page_number);
                             $("#btnext").attr('page', data.next_page_number);
                             $("#btlast").attr('page', data.num_pages);
@@ -357,13 +383,13 @@ $('html, body').animate({
     $("body").on('click', '#btfirst, #btprevious, #btnext, #btlast', function(event){
         event.preventDefault();
         pagenum=$(this).attr('page');
-        getUserRequets(pagenum);
+        getGroupeMembers(pagenum);
     });
 
     $('#RequestsPageNum').on('keypress', function(e) {
         if(e.which == 13) {
          pageNum = $(this).val();
-         getUserRequets(pageNum);
+         getGroupeMembers(pageNum);
         }
     });
 
