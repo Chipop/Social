@@ -839,7 +839,7 @@ def groupe(request, pk):
             context['nbdemandes'] = groupe.demandegroupe_set.filter(reponse=False).count()
             context['is_request_sent'] = groupe.demandegroupe_set.filter(emetteur=request.user.profil, groupe_recepteur=groupe, reponse=False).exists()
             context['nbMembers'] = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user).count()
-            return render(request, 'SocialMedia/groupe/groupe.html', context)
+            return render(request, 'SocialMedia/groupe/groupe1.html', context)
         except Groupe.DoesNotExist or Profil.DoesNotExist:
             raise Http404
     else:

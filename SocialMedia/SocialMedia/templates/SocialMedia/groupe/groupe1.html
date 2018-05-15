@@ -2,7 +2,11 @@
 {% load staticfiles %}
 {% load widget_tweaks %}
 {% block title %}{{ groupe.nom }}{% endblock %}
-
+{% block stylesheets %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'SocialMedia/css/mur/style1.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'SocialMedia/css/mur/style2.css' %}" type="text/css" />
+{% endblock %}
 {% block contentGroupe %}
                             <!-- Activity List Start -->
 
@@ -19,49 +23,21 @@
         </form>
       </div>
   </div>
+
                             <div class="activity--list">
+
                                 <!-- Activity Items Start -->
                                 {% if statuts %}
 
                                 <ul class="activity--items nav  infinite-container">
 
                                         {% for statut in statuts %}
-                                        {% include "SocialMedia/groupe/statuts/statuts_groupe.html" %}
+                                        {% include "SocialMedia/groupe/statuts/statuts_groupe1.html" %}
 
 
                                             <div class="row text-center">
                                                 <img id="loadingImage" style="display: none; width: 20%;height: 4%; object-fit: contain;" class="img-rounded"  src="{% static 'SocialMedia/img/loadingComment.gif' %}" />
                                             </div>
-                                            <div style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);padding-bottom: 6px;background-color: #e7e7e7;    padding-bottom: 4px;">
-                                            <hr style="margin-top: 5px; margin-bottom: 5px;">
-                                            <div class="row ml--15">
-                                                <div class="col-md-4">
-                                                    <h2 class="h6 fw--400 fs--12">Likes: <code class="h6 fw--600 text-darkest">{{ statut.likes.all.count }}</code></h2>
-                                                </div>
-                                                <div class="col-md-4" >
-                                                    <h2 class="h6 fw--400 fs--12">Comments: <code class="h6 fw--600 text-darkest">{{ statut.commentaire_set.all.count }}</code></h2>
-                                                </div>
-                                            </div>
-                                            <hr width="70%" style="margin-bottom: 5px; margin-top: 5px;">
-                                            <div class="row ml--15">
-                                                <div class="col-md-3">
-                                                <button style="font-size:13px;padding: 0px 8px;" class="bttn-pill bttn-md bttn-danger {% if user.profil in statut.likes.all %} hidden{% endif %}">
-                                                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Like
-                                                </button>
-
-                                                <button style="font-size: 13px;padding: 0px 8px;" class="bttn-pill bttn-md bttn-danger {% if user.profil not in statut.likes.all %} hidden{% endif %}">
-                                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i> Unlike
-                                                </button>
-                                                </div>
-                                                <div class="col-md-3">
-                                                <button style="font-size: 13px;padding: 0px 8px;" class="bttn-jelly bttn-md bttn-royal">
-                                                    <i class="fa fa-comment" aria-hidden="true"></i> Comment
-                                                </button>
-                                                </div>
-                                            </div>
-
-                                            </div>
-                                            <hr style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);;height:1px;border:none;color:#1ea1f2;margin-top: 8px;background-color:#1ea1f2">
 
                                         {% endfor %}
                                 {% else %}Le Groupe n'a aucun poste.{% endif %}
@@ -89,6 +65,7 @@
 {% block scripts %}
 
     {{ block.super }}
+
     <script>
     var infinite = new Waypoint.Infinite({
       element: $('.infinite-container')[0],
