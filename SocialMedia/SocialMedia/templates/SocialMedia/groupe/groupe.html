@@ -5,231 +5,138 @@
 
 {% block contentGroupe %}
                             <!-- Activity List Start -->
+
+  <div class="row" style="    max-width:  100%;    margin-left: auto;    margin-right: auto;">
+      <div class="well well-sm well-social-post">
+        <form>
+          {% render_field statutForm.contenu_statut style="transition: all 2s;" class="form-control" id="statutTextArea" placeholder="What is in your mind?" %}
+          <ul class='list-inline post-actions' style="    font-size: 18px;      padding-top: 10px;">
+              <li><a href="#"><i class="fa fa-camera" aria-hidden="true"></i></a></li>
+            <li><a href="#"><i class="fa fa-video-camera" aria-hidden="true"></i></a></li>
+            <li><a href="#" ><i class="fa fa-file" aria-hidden="true"></i></a></li>
+            <li class='pull-right'><button class="bttn-fill bttn-md bttn-royal" style="font-size: 15px;padding: 4px 25px;">Post</button></li>
+          </ul>
+        </form>
+      </div>
+  </div>
                             <div class="activity--list">
                                 <!-- Activity Items Start -->
-                                <ul class="activity--items nav">
-                                    <li>
-                                        <!-- Activity Item Start -->
-                                        <div class="activity--item">
-                                            <div class="activity--avatar">
-                                                <a href="member-activity-personal.html">
-                                                    <img src="img/activity-img/avatar-01.jpg" alt="">
-                                                </a>
+                                {% if statuts %}
+
+                                <ul class="activity--items nav  infinite-container">
+
+                                        {% for statut in statuts %}
+                                        {% include "SocialMedia/groupe/statuts/statuts_groupe.html" %}
+
+
+                                            <div class="row text-center">
+                                                <img id="loadingImage" style="display: none; width: 40%;height: 5%; object-fit: contain;" class="img-rounded"  src="{% static 'SocialMedia/loading.gif' %}" />
                                             </div>
-
-                                            <div class="activity--info fs--14">
-                                                <div class="activity--header">
-                                                    <p><a href="member-activity-personal.html">Eileen K. Ruiz</a> joined the group <a href="group-home.html">Food Recipes</a></p>
+                                            <div style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);padding-bottom: 6px;background-color: #e7e7e7;    padding-bottom: 4px;">
+                                            <hr style="margin-top: 5px; margin-bottom: 5px;">
+                                            <div class="row ml--15">
+                                                <div class="col-md-4">
+                                                    <h2 class="h6 fw--400 fs--12">Likes: <code class="h6 fw--600 text-darkest">{{ statut.likes.all.count }}</code></h2>
                                                 </div>
-
-                                                <div class="activity--meta fs--12">
-                                                    <p><i class="fa mr--8 fa-clock-o"></i>2 days ago</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Activity Item End -->
-                                    </li>
-                                    <li>
-                                        <!-- Activity Item Start -->
-                                        <div class="activity--item">
-                                            <div class="activity--avatar">
-                                                <a href="member-activity-personal.html">
-                                                    <img src="img/activity-img/avatar-02.jpg" alt="">
-                                                </a>
-                                            </div>
-
-                                            <div class="activity--info fs--14">
-                                                <div class="activity--header">
-                                                    <p><a href="member-activity-personal.html">Samuel C. Azevedo</a> posted an update in the group <a href="group-home.html">Food Recipes</a></p>
-                                                </div>
-
-                                                <div class="activity--meta fs--12">
-                                                    <p><i class="fa mr--8 fa-clock-o"></i>1 month ago</p>
-                                                </div>
-
-                                                <div class="activity--content">
-                                                    <p>It was very tasty.</p>
+                                                <div class="col-md-4" >
+                                                    <h2 class="h6 fw--400 fs--12">Comments: <code class="h6 fw--600 text-darkest">{{ statut.commentaire_set.all.count }}</code></h2>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- Activity Item End -->
-                                    </li>
-                                    <li>
-                                        <!-- Activity Item Start -->
-                                        <div class="activity--item">
-                                            <div class="activity--avatar">
-                                                <a href="member-activity-personal.html">
-                                                    <img src="img/activity-img/avatar-03.jpg" alt="">
-                                                </a>
-                                            </div>
+                                            <hr width="70%" style="margin-bottom: 5px; margin-top: 5px;">
+                                            <div class="row ml--15">
+                                                <div class="col-md-3">
+                                                <button style="font-size:13px;padding: 0px 8px;" class="bttn-pill bttn-md bttn-danger {% if user.profil in statut.likes.all %} hidden{% endif %}">
+                                                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Like
+                                                </button>
 
-                                            <div class="activity--info fs--14">
-                                                <div class="activity--header">
-                                                    <p><a href="member-activity-personal.html">Denise R. Sherman</a> shared her new experience about recipes in the group <a href="group-home.html">Food Recipes</a></p>
+                                                <button style="font-size: 13px;padding: 0px 8px;" class="bttn-pill bttn-md bttn-danger {% if user.profil not in statut.likes.all %} hidden{% endif %}">
+                                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i> Unlike
+                                                </button>
                                                 </div>
-
-                                                <div class="activity--meta fs--12">
-                                                    <p><i class="fa mr--8 fa-clock-o"></i>2 months ago</p>
-                                                </div>
-
-                                                <div class="activity--content">
-                                                    <p>Here's what one recipe reviewer had to say: "I made this recipe for the first time for my Italian mom, and she loved it! It was full of flavor. I would definitely make this again. I know it was good because my mom asked me for the recipe."</p>
+                                                <div class="col-md-3">
+                                                <button style="font-size: 13px;padding: 0px 8px;" class="bttn-jelly bttn-md bttn-royal">
+                                                    <i class="fa fa-comment" aria-hidden="true"></i> Comment
+                                                </button>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- Activity Item End -->
-                                    </li>
-                                    <li>
-                                        <!-- Activity Item Start -->
-                                        <div class="activity--item">
-                                            <div class="activity--avatar">
-                                                <a href="member-activity-personal.html">
-                                                    <img src="img/activity-img/avatar-04.jpg" alt="">
-                                                </a>
+
                                             </div>
+                                            <hr style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);;height:1px;border:none;color:#1ea1f2;margin-top: 8px;background-color:#1ea1f2">
 
-                                            <div class="activity--info fs--14">
-                                                <div class="activity--header">
-                                                    <p><a href="member-activity-personal.html">Leticia J. Espinosa</a> posted an update in the group <a href="group-home.html">Food Recipes</a></p>
-                                                </div>
-
-                                                <div class="activity--meta fs--12">
-                                                    <p><i class="fa mr--8 fa-clock-o"></i>2 months ago</p>
-                                                </div>
-
-                                                <div class="activity--content">
-                                                    <p>This is one of Ina's all-time favorite recipes. It looks fancy, but it really is easy. Use crisp, tart apples like Granny Smith for the best flavor.</p>
-                                                </div>
-
-                                                <div class="activity--comments fs--12">
-                                                    <ul class="acomment--items nav">
-                                                        <li>
-                                                            <div class="acomment--item clearfix">
-                                                                <div class="acomment--avatar">
-                                                                    <a href="member-activity-personal.html">
-                                                                        <img src="img/activity-img/avatar-05.jpg" alt="">
-                                                                    </a>
-                                                                </div>
-
-                                                                <div class="acomment--info">
-                                                                    <div class="acomment--header">
-                                                                        <p><a href="member-activity-personal.html">Lee E. Jones</a> Replied</p>
-                                                                    </div>
-
-                                                                    <div class="acomment--meta">
-                                                                        <p><i class="fa mr--8 fa-clock-o"></i>2 months ago</p>
-                                                                    </div>
-
-                                                                    <div class="acomment--content">
-                                                                        <p>Yes I’m agree with you. I was also made it. it’’s really very easy and tasty recipe.</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Activity Item End -->
-                                    </li>
-                                    <li>
-                                        <!-- Activity Item Start -->
-                                        <div class="activity--item">
-                                            <div class="activity--avatar">
-                                                <a href="member-activity-personal.html">
-                                                    <img src="img/activity-img/avatar-06.jpg" alt="">
-                                                </a>
-                                            </div>
-
-                                            <div class="activity--info fs--14">
-                                                <div class="activity--header">
-                                                    <p><a href="member-activity-personal.html">Bonnie P. Rock</a> shared a link in the group <a href="group-home.html">Food Recipes</a></p>
-                                                </div>
-
-                                                <div class="activity--meta fs--12">
-                                                    <p><i class="fa mr--8 fa-clock-o"></i>2 months ago</p>
-                                                </div>
-
-                                                <div class="activity--content">
-                                                    <p>With more than 4,300 reviews and a five-star rating, Alton's classic turkey is the go-to foolproof recipe every cook can use.</p>
-
-                                                    <p><a href="#" class="btn-link">https://www.google.com/demofoodcorner</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Activity Item End -->
-                                    </li>
-                                    <li>
-                                        <!-- Activity Item Start -->
-                                        <div class="activity--item">
-                                            <div class="activity--avatar">
-                                                <a href="member-activity-personal.html">
-                                                    <img src="img/activity-img/avatar-07.jpg" alt="">
-                                                </a>
-                                            </div>
-
-                                            <div class="activity--info fs--14">
-                                                <div class="activity--header">
-                                                    <p><a href="member-activity-personal.html">Anita J. Lilley</a> posted an update in the group <a href="group-home.html">Food Recipes</a></p>
-                                                </div>
-
-                                                <div class="activity--meta fs--12">
-                                                    <p><i class="fa mr--8 fa-clock-o"></i>2 months ago</p>
-                                                </div>
-
-                                                <div class="activity--content">
-                                                    <p>here are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration</p>
-
-                                                    <div class="gallery--embed" data-trigger="gallery_popup">
-                                                        <ul class="nav AdjustRow">
-                                                            <li>
-                                                                <a href="img/activity-img/gallery-embed-01.jpg">
-                                                                    <img src="img/activity-img/gallery-embed-01.jpg" alt="">
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="img/activity-img/gallery-embed-02.jpg">
-                                                                    <img src="img/activity-img/gallery-embed-02.jpg" alt="">
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="img/activity-img/gallery-embed-03.jpg">
-                                                                    <img src="img/activity-img/gallery-embed-03.jpg" alt="">
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="img/activity-img/gallery-embed-04.jpg" data-overlay="0.5">
-                                                                    <img src="img/activity-img/gallery-embed-04.jpg" alt="">
-                                                                    <span>24+ More</span>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Activity Item End -->
-                                    </li>
+                                        {% endfor %}
+                                {% else %}Le Groupe n'a aucun poste.{% endif %}
                                 </ul>
-                                <!-- Activity Items End -->
+                                            <div class="row text-center">
+                                                <img id="loadingImageMoreComments" style="display: none; width: 40%;height: 5%; object-fit: contain;" class="img-rounded"  src="{% static 'SocialMedia/loading.gif' %}" />
+                                            </div>
                             </div>
                             <!-- Activity List End -->
 
+
                         <!-- Load More Button Start -->
-                        <div class="load-more--btn pt--30 text-center">
-                            <a href="#" class="btn btn-animate">
-                                <span>See More Activities<i class="fa ml--10 fa-caret-right"></i></span>
-                            </a>
-                        </div>
+                            {% if statuts.has_next %}
+                            <div class="load-more--btn pt--30 text-center hidden">
+                                <a href="?page={{ statuts.next_page_number }}" class="btn btn-animate infinite-more-link">
+                                    <span>See More Activities<i class="fa ml--10 fa-caret-right"></i></span>
+                                </a>
+                            </div>
+                            {% endif %}
                         <!-- Load More Button End -->
 
 {% endblock %}
 
 
-
 {% block scripts %}
 
     {{ block.super }}
+    <script>
+    var infinite = new Waypoint.Infinite({
+      element: $('.infinite-container')[0],
+      onBeforePageLoad: function () {
+        $('#loadingImageMoreComments').fadeIn(250);
+      },
+      onAfterPageLoad: function ($items) {
+        $('#loadingImageMoreComments').fadeOut(250);
+      }
+    });
+
+    function getMoreComments(bt)
+    {
+
+        statutid = bt.getAttribute('data-statutid');
+        nextp = bt.getAttribute('data-page');
+        commentsURL = "{% url 'SocialMedia:getMoreComments' 999999 %}".replace(999999, {{ groupe.id }});
+        $.ajax({
+                    url: commentsURL,
+                    type: 'GET',
+                    data: {'page':nextp, 'statutid':statutid},
+                    beforeSend: function (xhr, settings) {
+                        $("#loadingImage").fadeIn(350);
+                    },
+                    success: function (data) {
+                         bt.remove();
+                        setTimeout(function(){
+                        $(".commentaires"+statutid).append(data);
+                        },250);
+                    },
+                    error: function () {
+                    },
+                    complete:function(){
+                        $("#loadingImage").fadeOut(150);
+                    },
+                    stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
+                        $("#squarespaceModal").modal("hide");
+                        swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
+                    }
+                });
+    }
+
+    $('#statutTextArea').focus(function(){
+    $(this).attr('rows',8);
+      }).blur(function(){
+        $(this).attr('rows',1);
+      });
+  </script>
 
 {% endblock %}
 

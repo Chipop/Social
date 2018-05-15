@@ -1,0 +1,32 @@
+{% load staticfiles %}
+<div class="infinite-item">
+<li>
+    <!-- Activity Item Start -->
+    <div class="activity--item infinite-item">
+        <div class="activity--avatar">
+            <a href="{% url 'SocialMedia:getProfil' statut.publisher.id %}">
+                <img style="margin: 3px 3px;border-radius: 50%;height: 90%;width: 90%;" src="{{ statut.publisher.photo_profil.image.url }}" alt="">
+            </a>
+        </div>
+
+        <div class="activity--info fs--14">
+            <div class="activity--header">
+                <p><a href="{% url 'SocialMedia:getProfil' statut.publisher.id %}">{{ statut.publisher.user.username }}</a> a publié un statut.</p>
+            </div>
+
+            <div class="activity--meta fs--12">
+                <p><i class="fa mr--8 fa-clock-o"></i>{{ statut.date_statut }}</p>
+            </div>
+
+            <div class="activity--content">
+                <p>{{ statut.contenu_statut }}.</p>
+            </div>
+
+        <div class="commentaires{{ statut.id }}">
+                {% include "SocialMedia/groupe/comments/commentaires_groupe.html" %}
+        </div>
+        </div>
+    </div>
+    <!-- Activity Item End -->
+</li>
+</div>

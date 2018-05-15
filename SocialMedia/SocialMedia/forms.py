@@ -4,6 +4,7 @@ from main_app.models import *
 from django.contrib.auth.models import User
 
 
+
 class PhotoForm(forms.ModelForm):
     image = forms.ImageField(required=False)
 
@@ -82,5 +83,10 @@ class FormAjouterLangue(forms.ModelForm):
     class Meta:
         model = LangueProfil
         fields = '__all__'
+
+class StatutsForm(forms.Form):
+    contenu_statut = forms.CharField(widget=forms.Textarea(attrs={'rows':'1'}))
+
+
 
 

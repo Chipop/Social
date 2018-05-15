@@ -1712,7 +1712,7 @@ label > span {
 }
 
 .activity--items > li + li {
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 .activity--items > li + li .activity--avatar {
@@ -1755,8 +1755,8 @@ label > span {
 }
 
 .acomment--item {
-    margin-top: 22px;
-    padding-top: 30px;
+    margin-top: 2px;
+    padding-top: 2px;
     border-top: 1px solid #e5e5e5;
 }
 
@@ -3089,7 +3089,6 @@ body.isScrolling #backToTop {
 }
 
 .content--nav .nav {
-    padding: 10px 0;
     border-bottom: 1px solid #1da1f2;
 }
 

@@ -7,8 +7,8 @@
 
     {% block modals %}
         <!-- line modal for cover -->
-        <div id="#formcover">
-            <div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+        <div id="#formcovergroupe">
+            <div class="modal fade" id="squarespaceModalcover" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -20,13 +20,13 @@
                         <div class="modal-body">
 
                             <!-- content goes here -->
-                            <form method="post" onsubmit="return " id="photoform" enctype="multipart/form-data">
+                            <form method="post" onsubmit="return " id="photoformgroupe" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <div class="input-group">
                               <span class="input-group-btn">
                                   <span class="btn btn-default btn-file" style="font-weight: bold;font-size: 22px;">
-                                      Choisir Une Image…{% render_field photoform.image accept='image/*' class="form-control" style="cursor: pointer" id="imgInp" %}
+                                      Choisir Une Image De Couverture…{% render_field photoform.image accept='image/*' class="form-control" style="cursor: pointer" id="imgInp" %}
                                   </span>
                               </span>
                                         <input type="text" class="form-control" readonly>
@@ -65,8 +65,8 @@
             </div>
         </div>
         <!-- line modal for cover -->
-        <div id="#formprofil">
-            <div class="modal fade" id="squarespaceModalprofil" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+        <div id="#formprofilgroupe">
+            <div class="modal fade" id="squarespaceModalprofilgroupe" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -78,14 +78,14 @@
                         <div class="modal-body">
 
                             <!-- content goes here -->
-                            <form method="post" onsubmit="return " id="photoprofilform" enctype="multipart/form-data">
+                            <form method="post" onsubmit="return " id="photoprofilformgroupe" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <div class="input-group">
                               <span class="input-group-btn">
                                   <span class="btn btn-default btn-file1"
                                         style="font-weight: bold;font-size: 22px;cursor: pointer;">
-                                      Choisir Votre Image De Profil…{% render_field photoform.image class="form-control" accept='image/*' id="imgInp1" %}
+                                      Choisir Une Image Du Groupe…{% render_field photoform.image class="form-control" accept='image/*' id="imgInp1" %}
                                   </span>
                               </span>
                                         <input type="text" class="form-control" readonly>
@@ -133,15 +133,15 @@
     <!-- Page Wrapper Start -->
     <section class="page--wrapper pb--20">
         <div class="container-fluid">
-            <div class="row  pt--40" style="padding: 40px 10%; ">
+            <div class="row  pt--40" style="padding: 20px 10%;">
 
                 <div class="col-md-8 pb--60">
 
                     <div class="row main--content"
-                         style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);width:95%;margin-left:auto;margin-right:auto;">
+                         style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);">
                     {% if user.profil in groupe.admins.all %}
                         <button id="btcoverchange" class="btchangepic" data-toggle="modal"
-                                data-target="#squarespaceModal"><i class="fa fa-picture-o" aria-hidden="true"></i>
+                                data-target="#squarespaceModalcover"><i class="fa fa-camera" aria-hidden="true"></i>
                         </button>
                     {% endif %}
                         <!-- Cover Header Start -->
@@ -163,8 +163,8 @@
                                             <div class="text">
                                                 <a href="javascript:return false" title="Photo Profil" class="btn-link"
                                                    data-toggle="tooltip" data-placement="bottom">
-                                                    <i id="btprofilchange" class="btchangepic profilpic fa fa-picture-o"
-                                                       data-toggle="modal" data-target="#squarespaceModalprofil"
+                                                    <i id="btprofilchange" class="btchangepic profilpic fa fa-camera"
+                                                       data-toggle="modal" data-target="#squarespaceModalprofilgroupe"
                                                        aria-hidden="true"></i>
                                                 </a>
                                             </div>
@@ -177,7 +177,7 @@
 
                                     <h2 class="h3 fw--600">{{ groupe.nom }}</h2>
 
-                                    <h3 id="NbMembres" class="h6">{{ nbMembres }} Membres.</h3>
+                                    <h3 id="NbMembres" class="h6">{{ nbMembres|default:'Aucun' }} Membres.</h3>
                                 </div>
 
                                 <div class="cover--user-desc fw--400 fs--18 fstyle--i text-darkest"
@@ -186,27 +186,34 @@
                                     <p style="margin: 0;">
                                         {{ groupe.description }}.
                                     </p>
-                                {% if groupe.statut == "publique" and user.profil not in groupe.admins.all and user.profil not in groupe.moderators.all and user.profil not in groupe.adherents.all %}
-                                        <form>
-                                            <button class="bttn-material-flat bttn-md bttn-primary h6 fw--500"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Joindre {{ groupe.nom }}</button>
+                                        <form type="1" class="{%  if is_request_sent or  user.profil in groupe.admins.all or user.profil in groupe.moderators.all or user.profil in groupe.adherents.all and not is_request_sent %}hidden{% endif %}" id="joinGroupe" method="POST">
+                                        {% csrf_token %}
+                                            <input type="hidden" name="userRequestGroupe" value="1" />
+                                            <button class="bttn-fill bttn-md bttn-primary h2 fw--400"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Joindre {{ groupe.nom }}</button>
                                         </form>
-                                {% else %}
-                                        <form>
-                                            <button class="bttn-material-flat bttn-md bttn-primary h6 fw--500"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Quitter {{ groupe.nom }}</button>
+
+                                        <form id="exitGroupe" type="0" class="{% if user.profil not in groupe.admins.all and user.profil not in groupe.moderators.all and user.profil not in groupe.adherents.all %}hidden{% endif %}" data-message="Êtes-vous sur de quitter le groupe?" method="POST">
+                                        {% csrf_token %}
+                                            <input type="hidden" name="userRequestGroupe" value="0" />
+                                            <button class="bttn-fill bttn-md bttn-primary h2 fw--400"><i class="fa fa-times-circle-o" aria-hidden="true"></i> Quitter {{ groupe.nom }}</button>
                                         </form>
-                                {% endif %}
-                                    <div id="navTop"></div>
+
+                                        <form id="cancelRequest" type="-1" class="{% if not is_request_sent or user.profil in groupe.admins.all or user.profil in groupe.moderators.all or user.profil in groupe.adherents.all %}hidden{% endif %}" data-message="Êtes-vous sur d'annuler la demmande le groupe?" method="POST">
+                                        {% csrf_token %}
+                                            <input type="hidden" name="userRequestGroupe" value="-1" />
+                                            <button class="bttn-fill bttn-md bttn-primary h2 fw--400"><i class="fa fa-times-circle-o" aria-hidden="true"></i> Annuler la demande</button>
+                                        </form>
                                 </div>
                             </div>
                         </div>
                         <!-- Cover Header End -->
 
                     </div>
+                                    <div id="navTop"></div>
 
                     <!-- Main Content Start -->
 
-                    <div class="row main--content pt--40" data-trigger="stickyScroll"
-                         style=";width:95%;margin-left:auto;margin-right:auto;">
+                    <div class="row main--content pt--40" data-trigger="stickyScroll">
                         <div class="main--content-inner drop--shadow">
                             <!-- Content Nav Start -->
                             <div class="content--nav pb--30">
@@ -217,17 +224,20 @@
                                     <li><a href="{% url 'SocialMedia:demandesGroupe' groupe.id %}">Demandes <span id="nbdemandeBadge" class="badge">{{ nbdemandes }}</span></a>
                                     </li>
                                     {% endif %}
-                                    {% if user.profil in groupe.admins.all %}
                                     <li><a href="{% url 'SocialMedia:membresGroupe' groupe.id %}">Membres <span id="nbMembersBadge"
                                                                                                   class="badge">{{ nbMembers }}</span></a></li>
-                                    {% endif %}
                                 </ul>
                             </div>
                             <!-- Content Nav End -->
-                            {% block contentGroupe %}
 
-
-                            {% endblock %}
+                                {% if user.profil in groupe.admins.all or user.profil in groupe.moderators.all or user.profil in groupe.adherents.all %}
+                                        {% block contentGroupe %}
+                                        {% endblock %}
+                                {% else %}
+                                    <div style="width: 100%; height: 100%;background-color: #0b0b0b;">
+                                        <div class="alert alert-info" style="padding: 28px;font-size: 22px;text-align:  center;word-spacing:  5px;letter-spacing: 3px;text-transform: uppercase;" role="alert"><i class="fa fa-info-circle" aria-hidden="true"></i> <b>{{ groupe.nom }}</b> est un groupe privé!</div>
+                                    </div>
+                                {% endif %}
                         </div>
                     </div>
                     <!-- Main Content End -->
@@ -240,94 +250,53 @@
                     <div class="col-md-4 main--sidebar pb--60" data-trigger="stickyScroll">
                         <!-- Widget Start -->
                         <div class="widget">
-                            <h2 class="h4 fw--700 widget--title">Find A Buddy</h2>
+                            <h2 class="h4 fw--700 widget--title">Informations Du Groupe</h2>
 
                             <!-- Buddy Finder Widget Start -->
                             <div class="buddy-finder--widget">
                                 <form action="#">
                                     <div class="row">
-                                        <div class="col-xs-6 col-xxs-12">
-                                            <div class="form-group">
-                                                <label>
-                                                    <span class="text-darker ff--primary fw--500">I Am</span>
-
-                                                    <select name="gender" class="form-control form-sm"
-                                                            data-trigger="selectmenu">
-                                                        <option value="male">Male</option>
-                                                        <option value="female">Female</option>
-                                                        <option value="other">Other</option>
-                                                    </select>
-                                                </label>
-                                            </div>
+                                        <div class="col-xs-12 col-xxs-12 h6">
+                                            Date de creation
                                         </div>
 
-                                        <div class="col-xs-6 col-xxs-12">
-                                            <div class="form-group">
-                                                <label>
-                                                    <span class="text-darker ff--primary fw--500">Looking For</span>
-
-                                                    <select name="lookingfor" class="form-control form-sm"
-                                                            data-trigger="selectmenu">
-                                                        <option value="female">Female</option>
-                                                        <option value="male">Male</option>
-                                                        <option value="other">Other</option>
-                                                    </select>
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xs-6 col-xxs-12">
-                                            <div class="form-group">
-                                                <label>
-                                                    <span class="text-darker ff--primary fw--500">Age</span>
-
-                                                    <select name="age" class="form-control form-sm"
-                                                            data-trigger="selectmenu">
-                                                        <option value="18to25">18 to 25</option>
-                                                        <option value="25to30">25 to 30</option>
-                                                        <option value="30to35">30 to 35</option>
-                                                        <option value="35to40">35 to 40</option>
-                                                        <option value="40plus">40+</option>
-                                                    </select>
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xs-6 col-xxs-12">
-                                            <div class="form-group">
-                                                <label>
-                                                    <span class="text-darker ff--primary fw--500">City</span>
-
-                                                    <select name="city" class="form-control form-sm"
-                                                            data-trigger="selectmenu">
-                                                        <option value="newyork">New York</option>
-                                                        <option value="California">California</option>
-                                                        <option value="Atlanta">Atlanta</option>
-                                                    </select>
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xs-12">
-                                            <div class="form-group">
-                                                <label>
-                                                    <span class="text-darker ff--primary fw--500">Filter Country</span>
-
-                                                    <select name="city" class="form-control form-sm"
-                                                            data-trigger="selectmenu">
-                                                        <option value="unitedstates">United States</option>
-                                                        <option value="australia">Australia</option>
-                                                        <option value="turkey">Turkey</option>
-                                                        <option value="vietnam">Vietnam</option>
-                                                    </select>
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xs-12">
-                                            <button type="submit" class="btn btn-primary">Search</button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-xxs-12" style="padding-left:20px;">
+                                            {{ groupe.date_creation|date:"Y/m/d" }}
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-xxs-12 h6">
+                                            Statut Du Groupe
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-xxs-12 " style="padding-left:20px;">
+                                            {{ groupe.statut_groupe }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-xxs-12 h6">
+                                            Createur
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-xxs-12" style="padding-left:20px;">
+                                            {{ groupe.creator.user.username }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-xxs-12 h6">
+                                            email
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-xxs-12" style="padding-left:20px;">
+                                            {{ user.email }}
+                                        </div>
+                                    </div>
+
                                 </form>
                             </div>
                             <!-- Buddy Finder Widget End -->
@@ -336,83 +305,49 @@
 
                         <!-- Widget Start -->
                         <div class="widget">
-                            <h2 class="h4 fw--700 widget--title">Notice</h2>
+                            <h2 class="h4 fw--700 widget--title">Réseaux sociaux</h2>
 
                             <!-- Text Widget Start -->
-                            <div class="text--widget">
-                                <p>There are many variations of passages of Lorem Ipsum available, but the majority have
-                                    suffered alteration in some look even slightly believable.</p>
+                            <div class="row">
+                                <div class="col-xs-1 col-xxs-1">
+
+                                    <a href="{{ user.profil.facebook }}" target="_blank" class="btn-link"><i
+                                            style="font-size:20px;color:#3b5999" class="fa fa-facebook-square"
+                                            aria-hidden="true"></i></a>
+                                </div>
+                                <div class="col-xs-1 col-xxs-1">
+
+                                    <a href="{{ user.profil.youtube }}" target="_blank" class="btn-link"><i
+                                            style="font-size:20px;color:#cd201f" class="fa fa-youtube-square"
+                                            aria-hidden="true"></i></a>
+                                </div>
+                                <div class="col-xs-1 col-xxs-1">
+
+
+                                    <a href="{{ user.profil.instagram }}" target="_blank" class="btn-link"><i
+                                            style="font-size:20px;color:#e4405f" class="fa fa-instagram"
+                                            aria-hidden="true"></i></a>
+                                </div>
+                                <div class="col-xs-1 col-xxs-1">
+
+                                    <a href="{{ user.profil.linkedin }}" target="_blank" class="btn-link"><i
+                                            style="font-size:20px;color:#0077B5" class="fa fa-linkedin-square"
+                                            aria-hidden="true"></i></a>
+                                </div>
+
+                                <div class="col-xs-1 col-xxs-1">
+
+                                    <a href="{{ user.profil.twitter }}" target="_blank" class="btn-link"><i
+                                            style="font-size:20px;color:#0077B5" class="fa fa-twitter-square"
+                                            aria-hidden="true"></i></a>
+                                </div>
+
+
                             </div>
                             <!-- Text Widget End -->
                         </div>
                         <!-- Widget End -->
 
-                        <!-- Widget Start -->
-                        <div class="widget">
-                            <h2 class="h4 fw--700 widget--title">Forums</h2>
-
-                            <!-- Links Widget Start -->
-                            <div class="links--widget">
-                                <ul class="nav">
-                                    <li><a href="sub-forums.html">User Interface Design<span>(12)</span></a></li>
-                                    <li><a href="sub-forums.html">Front-End Engineering<span>(07)</span></a></li>
-                                    <li><a href="sub-forums.html">Web Development<span>(37)</span></a></li>
-                                    <li><a href="sub-forums.html">Social Media Marketing<span>(13)</span></a></li>
-                                    <li><a href="sub-forums.html">Content Marketing<span>(28)</span></a></li>
-                                </ul>
-                            </div>
-                            <!-- Links Widget End -->
-                        </div>
-                        <!-- Widget End -->
-
-                        <!-- Widget Start -->
-                        <div class="widget">
-                            <h2 class="h4 fw--700 widget--title">Archives</h2>
-
-                            <!-- Nav Widget Start -->
-                            <div class="nav--widget">
-                                <ul class="nav">
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-calendar-o"></i>
-                                            <span class="text">Jan - July 2017</span>
-                                            <span class="count">(86)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-calendar-o"></i>
-                                            <span class="text">Jan - Dce 2016</span>
-                                            <span class="count">(328)</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-calendar-o"></i>
-                                            <span class="text">Jan - Dec 2015</span>
-                                            <span class="count">(427)</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Nav Widget End -->
-                        </div>
-                        <!-- Widget End -->
-
-                        <!-- Widget Start -->
-                        <div class="widget">
-                            <h2 class="h4 fw--700 widget--title">Advertisements</h2>
-
-                            <!-- Ad Widget Start -->
-                            <div class="ad--widget">
-                                <a href="#">
-                                    <img src="{% static 'SocialMedia/img/widgets-img/ad.jpg' %}" alt=""
-                                         class="center-block">
-                                </a>
-                            </div>
-                            <!-- Ad Widget End -->
-                        </div>
-                        <!-- Widget End -->
                     </div>
                     <!-- Main Sidebar End -->
 
@@ -447,21 +382,21 @@
             {% endfor %}
         {% endif %}
 
-        $("#photoform").on("submit", function (event) {
-            console.log($('#photoprofilform .input-group').find(':text').val());
-            if ($('#photoform .input-group').find(':text').val().length == 0) {
+        $("#photoformgroupe").on("submit", function (event) {
+            console.log($('#photoprofilformgroupe .input-group').find(':text').val());
+            if ($('#photoformgroupe .input-group').find(':text').val().length == 0) {
                 swal({
                     type: 'error',
-                    title: 'Aucune Photo Selectionnée',
-                    text: 'Veuillez Selectionner Une Photo',
+                    title: 'Aucune image selectionnée',
+                    text: 'Veuillez selectionner une image.',
                     type: 'error'
                 });
                 return false;
-            } else if ($('#photoform .input-group').find(':text').val().length > 100) {
+            } else if ($('#photoformgroupe .input-group').find(':text').val().length > 100) {
                 swal({
                     type: 'error',
-                    title: 'Nombre De Caractere Depasse la limite',
-                    text: 'Veuillez Changer Le Nom de la photo Ou Selectionner Une Autre'
+                    title: 'Le nombre de caractère est trop grand',
+                    text: 'Veuillez changer le nom de la photo ou en choisir une autre.'
                 });
                 return false;
             }
@@ -486,40 +421,40 @@
                     }, false);
                     return xhr;
                 },
-                url: '{% url "SocialMedia:changephotocouverture" %}',
+                url: '{% url "SocialMedia:changephotocouverturegroupe" groupe.id %}',
                 type: $(this).attr('method'),
                 processData: false,
                 contentType: false,
                 data: form_data,
                 success: function (data) {
-                    $("#squarespaceModal").modal("hide");
-                    swal("Photo De Couverture A Ete Changée Avec Succé", "{{ user.username }}", "success");
+                    $("#squarespaceModalcover").modal("hide");
+                    swal("L'image de couverture a été changée avec succès.", "{{ groupe.nom }}", "success");
                     $("#coverpic").css("background-image", "url(" + data.url + ")");
                     document.getElementById("coverpic").style.backgroundImage = "url(" + data.url + ")";
                 },
                 error: function () {
                 },
                 stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
-                    $("#squarespaceModal").modal("hide");
-                    swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
+                    $("#squarespaceModalcover").modal("hide");
+                    swal("Il nous semble que vous avez des problèmes de connexion.", "Erreur fatale", "error");
                 }
             });
 
         });
 
-        $("#photoprofilform").on("submit", function (event) {
-            if ($('#photoprofilform .input-group').find(':text').val().length == 0) {
+        $("#photoprofilformgroupe").on("submit", function (event) {
+            if ($('#photoprofilformgroupe .input-group').find(':text').val().length == 0) {
                 swal({
                     type: 'error',
-                    title: 'Aucune Photo Selectionnée',
-                    text: 'Veuillez Selectionner Une Photo'
+                    title: 'Aucune image selectionnée',
+                    text: 'Veuillez selectionner une image.'
                 });
                 return false;
-            } else if ($('#photoprofilform .input-group').find(':text').val().length > 100) {
+            } else if ($('#photoprofilformgroupe .input-group').find(':text').val().length > 100) {
                 swal({
                     type: 'error',
-                    title: 'Nombre De Caractere Depasse la limite',
-                    text: 'Veuillez Changer Le Nom de la photo Ou Selectionner Une Autre'
+                    title: 'Le nombre de caractère est trop grand',
+                    text: 'Veuillez changer le nom de la photo ou en choisir une autre.'
                 });
                 return false;
             }
@@ -544,26 +479,185 @@
                     }, false);
                     return xhr;
                 },
-                url: '{% url "SocialMedia:changephotoprofil" %}',
+                url: '{% url "SocialMedia:changephotoprofilgroupe" groupe.id %}',
                 type: $(this).attr('method'),
                 processData: false,
                 contentType: false,
                 data: form_data,
                 success: function (data) {
-                    $("#squarespaceModalprofil").modal("hide");
-                    swal("Photo De Profil A Ete Changée Avec Succé", "{{ user.username }}", "success");
+                    $("#squarespaceModalprofilgroupe").modal("hide");
+                    swal("Photo du Profil groupe a été changée avec auccé", "{{ groupe.nom }}", "success");
                     $("#profilpic").attr("src", data.url);
                     document.getElementById("profilpic").src = data.url;
                 },
                 error: function () {
                 },
                 stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
-                    $("#squarespaceModalprofil").modal("hide");
-                    swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
+                    $("#squarespaceModalprofilgroupe").modal("hide");
+                    swal("Il semble que vous ayez des problèmes de connexion.", "Erreur fatale", "error");
                 }
             });
 
         });
+
+        $("#joinGroupe, #exitGroupe, #cancelRequest").on("submit", function(e){
+            e.preventDefault();
+            if( $(this).attr('type') == 1 ){
+                var form_data = new FormData($(this)[0]);
+                $.ajax({
+                    url: '{% url "SocialMedia:joinGroupeViaAjax" groupe.id %}',
+                    type: $(this).attr('method'),
+                    processData: false,
+                    contentType: false,
+                    data: form_data,
+                    success: function (data) {
+                        if( data.statut )
+                        {
+                            $("#cancelRequest").removeClass('hidden');
+                            $("#joinGroupe").addClass('hidden');
+                            const toast = swal.mixin({
+                              toast: true,
+                              position: 'top-end',
+                              showConfirmButton: false,
+                              timer: 3000
+                            });
+                            toast({
+                              type: 'success',
+                              title: data.msg,
+                            });
+                        }else
+                            {
+                                const toast = swal.mixin({
+                              toast: true,
+                              position: 'top-end',
+                              showConfirmButton: false,
+                              timer: 3000
+                            });
+
+                            toast({
+                              type: 'error',
+                              title: data.msg,
+                            })
+                            }
+                    },
+                    error: function () {
+                    },
+                    stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
+                        $("#squarespaceModal").modal("hide");
+                        swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
+                    }
+                });
+            }else if( $(this).attr('type') == 0 ){
+                var form_data = new FormData($(this)[0]);
+                swal({
+                  title: 'Attention',
+                  text: "Êtes-vous sur de quitter le groupe {{ groupe.nom }}",
+                  type: 'info',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Oui',
+                  cancelButtonText: 'non'
+                }).then((result) => {
+                  if (result.value) {
+                    $.ajax({
+                    url: '{% url "SocialMedia:joinGroupeViaAjax" groupe.id %}',
+                    type: $(this).attr('method'),
+                    processData: false,
+                    contentType: false,
+                    data: form_data,
+                    success: function (data) {
+                        if( data.statut )
+                        {
+                            $("#joinGroupe").removeClass('hidden');
+                            $("#exitGroupe").addClass('hidden');
+                            const toast = swal.mixin({
+                              toast: true,
+                              position: 'top-end',
+                              showConfirmButton: false,
+                              timer: 3000
+                            });
+
+                            toast({
+                              type: 'success',
+                              title: data.msg,
+                            });
+                            $(location).attr('href', "{% url 'SocialMedia:groupe' groupe.id %}");
+                        }else
+                            {
+                                const toast = swal.mixin({
+                              toast: true,
+                              position: 'top-end',
+                              showConfirmButton: false,
+                              timer: 3000
+                            });
+
+                            toast({
+                              type: 'error',
+                              title: data.msg,
+                            })
+                            }
+                    },
+                    error: function () {
+                    },
+                    stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
+                        $("#squarespaceModal").modal("hide");
+                        swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
+                    }
+                });
+                  }
+            });
+
+            }else if( $(this).attr('type') == -1 ){
+                var form_data = new FormData($(this)[0]);
+                $.ajax({
+                    url: '{% url "SocialMedia:joinGroupeViaAjax" groupe.id %}',
+                    type: $(this).attr('method'),
+                    processData: false,
+                    contentType: false,
+                    data: form_data,
+                    success: function (data) {
+                        if( data.statut )
+                        {
+                               $("#joinGroupe").removeClass('hidden');
+                               $("#cancelRequest").addClass('hidden');
+                            const toast = swal.mixin({
+                              toast: true,
+                              position: 'top-end',
+                              showConfirmButton: false,
+                              timer: 3000
+                            });
+
+                            toast({
+                              type: 'success',
+                              title: data.msg,
+                            })
+                        }else
+                            {
+                                const toast = swal.mixin({
+                              toast: true,
+                              position: 'top-end',
+                              showConfirmButton: false,
+                              timer: 3000
+                            });
+
+                            toast({
+                              type: 'error',
+                              title: data.msg,
+                            })
+                            }
+                    },
+                    error: function () {
+                    },
+                    stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
+                        $("#squarespaceModal").modal("hide");
+                        swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
+                    }
+                });
+            }
+        });
+
+
 
     </script>
 

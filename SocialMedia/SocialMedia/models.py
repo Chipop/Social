@@ -57,28 +57,28 @@ class Statut(models.Model):
     contenu_statut = models.CharField(max_length=6000)
     is_group_statut = models.BooleanField(default=False)
     is_profil_statut = models.BooleanField(default=False)
-    publisher = models.OneToOneField('main_app.Profil', on_delete=models.CASCADE, related_name="pub")
-    mur_profil = models.OneToOneField('main_app.Profil', on_delete=models.CASCADE, null=True, blank=True,
+    publisher = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE, related_name="pub")
+    mur_profil = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE, null=True, blank=True,
                                       related_name="statut_mur_profil")
-    mur_groupe = models.OneToOneField(Groupe, on_delete=models.CASCADE, null=True, blank=True)
-<<<<<<< HEAD
-    likes = models.ManyToManyField(Like)
+    mur_groupe = models.ForeignKey(Groupe, on_delete=models.CASCADE, null=True, blank=True)
+
+    likes = models.ManyToManyField('main_app.Profil', blank=True, null=True)
 
     def __str__(self):
         return self.publisher.user.username+" a publié un statut"
-=======
-    liked_by = models.ManyToManyField('main_app.Profil', related_name="statut_liked_by")
->>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
+
+    #liked_by = models.ManyToManyField('main_app.Profil', related_name="statut_liked_by")
+
 
 
 class Commentaire(models.Model):
     comment = models.CharField(null=False, blank=False, max_length=6000)
     date_commentaire = models.DateField()
-    statut = models.OneToOneField(Statut, on_delete=models.CASCADE)
-    user = models.OneToOneField('main_app.Profil', on_delete=models.CASCADE, related_name="commented_user")
+    statut = models.ForeignKey(Statut, on_delete=models.CASCADE)
+    user = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE, related_name="commented_user")
     have_image = models.BooleanField(default=False)
-    image = models.OneToOneField('main_app.Image', on_delete=models.CASCADE)
-    likes = models.ManyToManyField(Like)
+    image = models.ForeignKey('main_app.Image', on_delete=models.CASCADE, null=True, blank=True)
+    likes = models.ManyToManyField('main_app.Profil', null=True, blank=True)
 
 
 class DemandeAmi(models.Model):

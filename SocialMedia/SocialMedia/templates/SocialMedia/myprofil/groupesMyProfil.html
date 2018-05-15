@@ -4,18 +4,9 @@
 {% block title %}{{ user.username }} - Demandes{% endblock %}
 {% block contentProfil %}
                          <!-- Filter Nav Start -->
-                            <div class="filter--nav pb--30 clearfix">
-                                <div class="filter--options float--right">
-                                    <label>
-                                        <span class="fs--14 ff--primary fw--500 text-darker">Show By :</span>
-
-                                        <select name="membersfilter" class="form-control form-sm" data-trigger="selectmenu">
-                                            <option value="last-active" selected>Last Active</option>
-                                            <option value="most-members">Most Members</option>
-                                            <option value="newly-created">Newly Created</option>
-                                            <option value="alphabetical">Alphabetical</option>
-                                        </select>
-                                    </label>
+                            <div class="filter--nav pb--60 clearfix">
+                                <div class="filter--link">
+                                    <h2 class="h4 fw--400"><a href="#navTop" id="numMem" class="btn-link">Vous êtes souscrit en <span class="badge fs--18 fw--600"> {{ nbGroupes }}</span> groupes.</a></h2>
                                 </div>
                             </div>
                             <!-- Filter Nav End -->
@@ -160,11 +151,6 @@ $('html, body').animate({
                             $("#groupes").html("<h2 class='h4 fw--700 widget--title'>"+data.msg+"</h2>");
                         });
                         $("#RequestsPageNum").val('1');
-                        $("#btfirst").hide(250);
-                        $("#btnext").hide(250);
-                        $("#btlast").hide(250);
-                        $("#btnext").hide(250);
-                        $("#btprevious").hide(250);
                         $("#nbGroupesBadge").text(data.nbGroupes);
                         //$("#nbDemandes").text(data.nbdemandes+' Demandes.');
                     }else{
@@ -183,26 +169,6 @@ $('html, body').animate({
                             $("#btlast").attr('page', data.num_pages);
                             $("#RequestsPageNum").val(data.current_page);
                             $("#numPages").text(data.num_pages);
-                            if( !data.has_next )
-                            {
-                                $("#btnext").hide(250);
-                                $("#btlast").hide(250);
-                            }else
-                            {
-                                $("#btnext").show(250);
-                                $("#btlast").show(250);
-                            }
-
-                            if( !data.has_previous )
-                            {
-                                $("#btprevious").hide(250);
-                                $("#btfirst").hide(250);
-                            }else
-                            {
-                                $("#btprevious").show(250);
-                                $("#btfirst").show(250);
-                            }
-
                             if( data.NumPagesExcessed )
                             {
                                 $("#RequestsPageNum").text(data.num_pages);

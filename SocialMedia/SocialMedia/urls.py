@@ -10,8 +10,6 @@ urlpatterns = [
     path('profil/', views.profil, name='myprofil'),
     path('ajaxuser/', views.ajaxUser, name="AjaxUser"),
     path('profil/demandes/', views.demandesProfil, name="demandes"),
-    #path('chat', views.chat, name="chat"),
-    path('uploads', views.uploads.as_view(), name="uploads"),
     path('changephotocouverture', views.changephotocouverture, name="changephotocouverture"),
 
     path('changephotoprofil', views.changephotoprofil, name="changephotoprofil"),
@@ -39,10 +37,10 @@ urlpatterns = [
     path('search/', views.search, name="search"),
 
     path('test',views.test,name="test"),
-    path('myprofil/ajouterLangue/', views.ajouterLangue, name="ajouterLangue"),
-    path('myprofil/modifierLangue/', views.modifierLangue, name="modifierLangue"),
-    path('myprofil/supprimerLangue/', views.supprimerLangue, name="supprimerLangue"),
-    path('myprofil/getModifierLangue/', views.getModifierLangue, name="getModifierLangue"),
+    path('profil/ajouterLangue/', views.ajouterLangue, name="ajouterLangue"),
+    path('profil/modifierLangue/', views.modifierLangue, name="modifierLangue"),
+    path('profil/supprimerLangue/', views.supprimerLangue, name="supprimerLangue"),
+    path('profil/getModifierLangue/', views.getModifierLangue, name="getModifierLangue"),
 
     ##Haytham
 
@@ -65,4 +63,19 @@ urlpatterns = [
     path('groupe/<int:pk>/membres/', views.membresGroupe, name="membresGroupe"),
 
     path('groupe/<int:pk>/ajax-members-groupe', views.membersGroupeViaAjax, name="membresGroupeViaAjax"),
+
+    path('groupe/<int:pk>/joinGroupeViaAjax', views.joinGroupeViaAjax, name="joinGroupeViaAjax"),
+
+    path('groupe/<int:pk>/more-comments', views.getMoreComments, name="getMoreComments"),
+
+    path('groupe/<int:pk>/change-photo-couverture-groupe', views.changephotocouverturegroupe, name="changephotocouverturegroupe"),
+
+    path('groupe/<int:pk>/change-photo-profil-groupe', views.changephotoprofilgroupe, name="changephotoprofilgroupe"),
+
+
+
+
+
+
+
 ]

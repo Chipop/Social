@@ -4,6 +4,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect, QueryDict, 
 from django.template.response import TemplateResponse
 from .models import *
 from .forms import *
+from django.views.generic import ListView
 from django.contrib import messages
 from django.views import View
 from django.http import JsonResponse
@@ -50,13 +51,9 @@ def profil(request):
         context['formations'] = Formation.objects.filter(profil=request.user.profil)
         context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=request.user.profil)
         context['nbdemandes'] = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
-<<<<<<< HEAD
         context['nbGroupes'] = len([groupe for groupe in Groupe.objects.all() if request.user.profil == groupe.creator or request.user.profil in groupe.adherents.all() or request.user.profil in groupe.admins.all() or request.user.profil in groupe.moderators.all()])
-
-=======
         context['FormAjouterLangue'] = FormAjouterLangue()
         context['langues'] = LangueProfil.objects.filter(profil=request.user.profil)
->>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
         return render(request, 'SocialMedia/myprofil/myprofil.html', context)
     else:
         messages.error(request, "Veuiller vous connecter!")
@@ -151,7 +148,6 @@ def log_in(request):
 def groupesProfil(request):
     if request.user.is_authenticated:
         context = dict()
-<<<<<<< HEAD
         if request.method == "GET" and 'is_ajax_request' in request.GET:
             groupes = list()
             for groupe in Groupe.objects.all():
@@ -235,7 +231,6 @@ def groupesProfil(request):
                 context['msg'] = "Vous n'êtes pas membre d'aucun groupe"
                 return render(request, 'SocialMedia/myprofil/groupesMyProfil.html', context)
             return render(request, 'SocialMedia/myprofil/groupesMyProfil.html', context)
-=======
         p = Profil.objects.get(user=request.user)
         context['is_first'] = p.is_first_socialmedia
         if context['is_first']:
@@ -258,7 +253,6 @@ def groupesProfil(request):
         context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=request.user.profil)
         context['nbdemandes'] = DemandeAmi.objects.filter(recepteur=request.user.profil, statut=0).count()
         return render(request, 'SocialMedia/myprofil/groupesMyProfil.html', context)
->>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
     else:
         messages.error(request, "Veuiller Se Connecter!")
         return redirect('main_app:log_in')
@@ -271,34 +265,6 @@ def log_out(request):
     else:
         messages.error(request, "Veuiller Se Connecter!")
         return redirect('main_app:log_in')
-
-<<<<<<< HEAD
-=======
-
-"""
-def register(request):
-    if request.user.is_authenticated:
-        return redirect('SocialMedia:myprofil')
-    if request.method == "POST":
-        userf = userform(request.POST)
-        if userf.is_valid():
-            userf.save()
-            user = authenticate(username=userf.cleaned_data['username'], password=userf.cleaned_data['password1'])
-            if user is not None:
-                login(request, user)
-                return redirect('SocialMedia:finishregistration')
-        else:
-            return redirect('SocialMedia:signup')
-    else:
-        return redirect('main_app:signup')
-        #formuser = userform()
-        #return render(request, 'main_app/authentification/signup.html', {'formuser':formuser})
-"""
->>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
-
-
-def supprimerDemande(request):
-    pass
 
 
 def demandesProfil(request):
@@ -325,14 +291,12 @@ def demandesProfil(request):
             context['nbdemandes'] = demandesAmis.count()
             context['demandesAmis'] = paginator.get_page(page)
             context['photoform'] = PhotoForm()
-<<<<<<< HEAD
             context['poste_actuel'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values('poste').values('nom_poste').last()
             context['poste_actuel_renseigne'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values('nom_poste').last()
             context['ecole'] = Formation.objects.filter(profil=request.user.profil,ecole__isnull=False).values('ecole__nom').last()
             context['ecole_renseignee'] = Formation.objects.filter(profil=request.user.profil, ecole__isnull=True).values('nom_ecole').last()
             context['nbGroupes'] = len([groupe for groupe in Groupe.objects.all() if
                                         request.user.profil == groupe.creator or request.user.profil in groupe.adherents.all() or request.user.profil in groupe.admins.all() or request.user.profil in groupe.moderators.all()])
-=======
             context['poste_actuel'] = Experience.objects.filter(profil=request.user.profil, actuel=True).values(
                 'poste').values('nom_poste').last()
             context['poste_actuel_renseigne'] = Experience.objects.filter(profil=request.user.profil,
@@ -341,8 +305,6 @@ def demandesProfil(request):
                 'ecole__nom').last()
             context['ecole_renseignee'] = Formation.objects.filter(profil=request.user.profil,
                                                                    ecole__isnull=True).values('nom_ecole').last()
-
->>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
             return render(request, 'SocialMedia/myprofil/demandesMyProfil.html', context)
     else:
         messages.error(request, "Veuiller vous connecter!")
@@ -408,45 +370,6 @@ def mediaProfil(request):
         messages.error(request, "Veuiller vous connecter!")
         return redirect('main_app:log_in')
 
-
-def suprimerAmi(request):
-    pass
-
-
-def findfriends(request):
-    if request.user.is_authenticated:
-        p = Profil.objects.get(user=request.user)
-        friends_and_requests = DemandeAmi.objects.exclude(emetteur=request.user, )
-        profiles = Profil.objects.all()
-        return render(request, 'SocialMedia/myprofil/demandesMyProfil.html', {'profiles': profiles})
-    else:
-        messages.error(request, "Veuiller vous connecter!")
-        return redirect('SocialMedia:login')
-
-
-def chat(request):
-    pass
-
-
-def rechercherAmis(request):
-    pass
-
-
-class uploads(View):
-    def get(self, request):
-        photos_list = Image.objects.all()
-        return render(self.request, 'SocialMedia/FileUploadTest.html', {'photos': photos_list})
-
-    def post(self, request):
-        form = PhotoForm(self.request.POST, self.request.FILES)
-        if form.is_valid():
-            photo = form.save()
-            data = {'is_valid': True, 'name': photo.file.name, 'url': photo.image.url}
-        else:
-            data = {'is_valid': False}
-        return JsonResponse(data)
-
-
 def editInterface(request):
     if request.user.is_authenticated:
         form = UserInterfaceInfos(request.POST or None)
@@ -471,7 +394,6 @@ def editInterface(request):
     else:
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
-
 
 def editAbout(request):
     if request.user.is_authenticated:
@@ -498,7 +420,6 @@ def editAbout(request):
     else:
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
-
 
 def editExperience(request, pk):
     if request.user.is_authenticated:
@@ -530,7 +451,6 @@ def editExperience(request, pk):
     else:
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
-
 
 def editFormation(request, pk):
     if request.user.is_authenticated:
@@ -569,7 +489,6 @@ def editFormation(request, pk):
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
 
-
 # EndHaytham
 # Chipop
 
@@ -594,7 +513,6 @@ def search(request):
     return render(request, 'SocialMedia/search/search_all.html',
                   {'keywords': keywords, 'profils': profils, 'groupes': groupes, 'offres': offres})
 
-
 def search_members(request):
     keywords = request.GET.get('keywords')
     if keywords is None or keywords == "":
@@ -611,7 +529,6 @@ def search_members(request):
 
     return render(request, 'SocialMedia/search/search_members.html', {'profils': profils, 'keywords': keywords})
 
-
 def search_groupes(request):
     keywords = request.GET.get('keywords')
     if keywords is None or keywords == "":
@@ -626,7 +543,6 @@ def search_groupes(request):
     groupes = paginator.get_page(page)
 
     return render(request, 'SocialMedia/search/search_groupes.html', {'groupes': groupes, 'keywords': keywords})
-
 
 def search_offres(request):
     keywords = request.GET.get('keywords')
@@ -656,7 +572,6 @@ def search_offres(request):
 
     return render(request, 'SocialMedia/search/search_offres.html', {'offres': offres, 'keywords': keywords})
 
-
 # EndChipop
 
 # Haytham
@@ -683,12 +598,10 @@ def getProfil(request, pk):
         context['formations'] = Formation.objects.filter(profil=profil)
         context['actionsBenevoles'] = ActionBenevole.objects.filter(profil=profil)
         context['is_followed'] = Suivie.objects.filter(followed_profil=profil, follower=request.user.profil).exists()
-<<<<<<< HEAD
         context['is_friend'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil), Q(recepteur=request.user.profil) | Q(recepteur=profil), statut=1).exists()
         context['is_request_received'] = DemandeAmi.objects.filter(emetteur=profil, recepteur=request.user.profil, statut=0).exists()
         context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil, statut=0).exists()
         context['nbGroupes'] = len([groupe for groupe in Groupe.objects.all() if profil == groupe.creator or profil in groupe.adherents.all() or profil in groupe.admins.all() or profil in groupe.moderators.all()])
-=======
         context['is_friend'] = DemandeAmi.objects.filter(Q(emetteur=request.user.profil) | Q(emetteur=profil),
                                                          Q(recepteur=request.user.profil) | Q(recepteur=profil),
                                                          statut=1).exists()
@@ -696,11 +609,9 @@ def getProfil(request, pk):
                                                                    statut=0).exists()
         context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
                                                                statut=0).exists()
->>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
         return render(request, 'SocialMedia/profil/profil.html', context)
     except Profil.DoesNotExist:
         raise Http404
-
 
 def followProfil(request, pk):
     if request.user.is_authenticated:
@@ -709,7 +620,7 @@ def followProfil(request, pk):
             s = Suivie.objects.get(followed_profil=Profil.objects.get(id=pk), follower=request.user.profil)
             s.delete()
             context['statut'] = True
-            context['message'] = "Profile devenu non suivi"
+            context['message'] = "Profile devient non suivi"
             context['follow'] = False
             return JsonResponse(context, safe=False)
         except Suivie.DoesNotExist:
@@ -727,7 +638,6 @@ def followProfil(request, pk):
     else:
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
-
 
 def FriendsRequests(request, pk):
     if request.user.is_authenticated:
@@ -796,7 +706,6 @@ def FriendsRequests(request, pk):
         messages.error(request, "Veuiller vous connecter!")
         return redirect('SocialMedia:login')
 
-
 def getRequestsUpdates(request, pk):
     if request.user.is_authenticated:
         context = dict()
@@ -814,7 +723,6 @@ def getRequestsUpdates(request, pk):
         context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
                                                                statut=0).exists()
         return JsonResponse(context, safe=False)
-
 
 def getProfilGroupes(request, pk):
     context = dict()
@@ -903,7 +811,6 @@ def getProfilGroupes(request, pk):
                                                                        statut=0).exists()
             context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
                                                                    statut=0).exists()
-<<<<<<< HEAD
             page = request.GET.get('page')
             paginator = Paginator(profilGroupes, 12)
             context['profilGroupes'] = paginator.get_page(page)
@@ -917,15 +824,27 @@ def getProfilGroupes(request, pk):
         return redirect('SocialMedia:myprofil')
 
 def groupe(request, pk):
-    context = dict()
-    try:
-        groupe = Groupe.objects.get(id=pk)
-        context['groupe'] = groupe
-        context['nbdemandes'] = groupe.demandegroupe_set.filter(reponse=False).count()
-        context['nbMembers'] = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user).count()
-        return render(request, 'SocialMedia/groupe/groupe.html', context)
-    except Groupe.DoesNotExist:
-        raise Http404
+    if request.user.is_authenticated:
+        context = dict()
+        try:
+            groupe = Groupe.objects.get(id=pk)
+            page = request.GET.get('page', 1)
+            statuts = Statut.objects.filter(mur_groupe=groupe, is_group_statut=True)
+            paginator = Paginator(statuts, 2)
+            context['statuts'] = paginator.get_page(page)
+            context['now'] = now()
+            context['groupe'] = groupe
+            context['statutForm'] = StatutsForm()
+            context['photoform'] = PhotoForm()
+            context['nbdemandes'] = groupe.demandegroupe_set.filter(reponse=False).count()
+            context['is_request_sent'] = groupe.demandegroupe_set.filter(emetteur=request.user.profil, groupe_recepteur=groupe, reponse=False).exists()
+            context['nbMembers'] = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user).count()
+            return render(request, 'SocialMedia/groupe/groupe.html', context)
+        except Groupe.DoesNotExist or Profil.DoesNotExist:
+            raise Http404
+    else:
+        messages.error(request, "Veuiller vous connecter")
+        return redirect('main_app:log_in')
 
 def demandesGroupe(request, pk):
     if request.user.is_authenticated:
@@ -933,7 +852,6 @@ def demandesGroupe(request, pk):
         groupe = Groupe.objects.get(id=pk)
         if request.user.profil in groupe.admins.all() or request.user.profil in groupe.moderators.all():
             formDemande = demandeGroupeForm(request.POST or None)
-            print(formDemande)
             if request.method == "POST" and formDemande.is_valid():
                 demande = DemandeGroupe.objects.get(id=formDemande.cleaned_data['demande'])
                 context['demande'] = demande.id
@@ -943,7 +861,7 @@ def demandesGroupe(request, pk):
                     groupe.adherents.add(demande.emetteur)
                     groupe.save()
                     context['reponse'] = demande.reponse
-                    context['message'] = 'demande de {} à été acceptée'.format(demande.emetteur.user.username)
+                    context['message'] = 'demande de {} à été approuvée'.format(demande.emetteur.user.username)
                 elif formDemande.cleaned_data['reponse'] == 0:
                     context['message'] = 'demande de {} à été refusée'.format(demande.emetteur.user.username)
                     context['reponse'] = 0
@@ -962,6 +880,7 @@ def demandesGroupe(request, pk):
                 context['groupe'] = groupe
                 context['nbMembers'] = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user).count()
                 context['nbdemandes'] = groupe.demandegroupe_set.filter(reponse=False).count()
+                context['is_request_sent'] = groupe.demandegroupe_set.filter(emetteur=request.user.profil, groupe_recepteur=groupe, reponse=False).exists()
                 return render(request, 'SocialMedia/groupe/demandes_groupe.html', context)
         else:
             messages.error(request, "Vous n'avez pas le droit de valider cette action, s'il s'agit d'une erreur veuiller nous contacter.")
@@ -1015,56 +934,53 @@ def membresGroupe(request, pk):
     if request.user.is_authenticated:
         context = dict()
         groupe = Groupe.objects.get(id=pk)
-        if request.user.profil in groupe.admins.all():
-            formDemande = membresAdminForm(request.POST or None)
-            if request.method == "POST" and formDemande.is_valid():
-                profil = get_object_or_404(Profil, id=formDemande.cleaned_data['profil'])
-                if formDemande.cleaned_data['action'] == 3:
-                    groupe.admins.add(profil)
-                    groupe.moderators.remove(profil)
-                    groupe.moderators.remove(profil)
-                    groupe.save()
-                    context['message'] = '{} est devenu Administrateur.'.format(profil.user.username)
-                elif formDemande.cleaned_data['action'] == 2:
-                    groupe.moderators.add(profil)
-                    groupe.admins.remove(profil)
-                    groupe.adherents.remove(profil)
-                    groupe.save()
-                    context['message'] = '{} est devenu Moderateur.'.format(profil.user.username)
-                elif formDemande.cleaned_data['action'] == 1:
-                    groupe.admins.remove(profil)
-                    groupe.moderators.remove(profil)
-                    groupe.adherents.add(profil)
-                    groupe.save()
-                    context['message'] = '{} est devenu Adherent.'.format(profil.user.username)
-                elif formDemande.cleaned_data['action'] == 0:
-                    groupe.admins.remove(profil)
-                    groupe.moderators.remove(profil)
-                    groupe.adherents.remove(profil)
-                    groupe.save()
-                    context['message'] = '{} à été Banné.'.format(profil.user.username)
-                else:
-                    context['statut'] = False
-                    return JsonResponse(context,safe=False)
-                groupeMembers = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user)
-                context['statut'] = True
-                context['nbMembers'] = groupeMembers.count()
-                context['profil'] = profil.id
+        formDemande = membresAdminForm(request.POST or None)
+        if request.method == "POST" and formDemande.is_valid():
+            profil = get_object_or_404(Profil, id=formDemande.cleaned_data['profil'])
+            if formDemande.cleaned_data['action'] == 3:
+                groupe.admins.add(profil)
+                groupe.moderators.remove(profil)
+                groupe.adherents.remove(profil)
+                groupe.save()
+                context['message'] = '{} devient Administrateur.'.format(profil.user.username)
+            elif formDemande.cleaned_data['action'] == 2:
+                groupe.moderators.add(profil)
+                groupe.admins.remove(profil)
+                groupe.adherents.remove(profil)
+                groupe.save()
+                context['message'] = '{} devient Moderateur.'.format(profil.user.username)
+            elif formDemande.cleaned_data['action'] == 1:
+                groupe.admins.remove(profil)
+                groupe.moderators.remove(profil)
+                groupe.adherents.add(profil)
+                groupe.save()
+                context['message'] = '{} devenu Adherent.'.format(profil.user.username)
+            elif formDemande.cleaned_data['action'] == 0:
+                groupe.admins.remove(profil)
+                groupe.moderators.remove(profil)
+                groupe.adherents.remove(profil)
+                groupe.save()
+                context['message'] = '{} à été Banné.'.format(profil.user.username)
+            else:
+                context['statut'] = False
                 return JsonResponse(context,safe=False)
-            elif request.method == "GET":
-                groupeMembers = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user)
-                paginator = Paginator(groupeMembers, 12)  # Show 12 Profiles per page
-                page = request.GET.get('page')
-                context['formDemande'] = formDemande
-                context['nbMembers'] = groupeMembers.count()
-                context['members'] = paginator.get_page(page)
-                context['photoform'] = PhotoForm()
-                context['groupe'] = groupe
-                context['nbdemandes'] = groupe.demandegroupe_set.filter(reponse=False).count()
-                return render(request, 'SocialMedia/groupe/membres_groupe.html', context)
-        else:
-            messages.error(request, "Vous n'avez pas le droit d'acces")
-            return redirect(groupe.get_absolute_url())
+            groupeMembers = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user)
+            context['statut'] = True
+            context['nbMembers'] = groupeMembers.count()
+            context['profil'] = profil.id
+            return JsonResponse(context,safe=False)
+        elif request.method == "GET":
+            groupeMembers = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user)
+            paginator = Paginator(groupeMembers, 12)  # Show 12 Profiles per page
+            page = request.GET.get('page')
+            context['formDemande'] = formDemande
+            context['nbMembers'] = groupeMembers.count()
+            context['members'] = paginator.get_page(page)
+            context['photoform'] = PhotoForm()
+            context['groupe'] = groupe
+            context['nbdemandes'] = groupe.demandegroupe_set.filter(reponse=False).count()
+            context['is_request_sent'] = groupe.demandegroupe_set.filter(emetteur=request.user.profil, groupe_recepteur=groupe, reponse=False).exists()
+            return render(request, 'SocialMedia/groupe/membres_groupe.html', context)
     else:
         messages.error(request, "Veuiller vous connecter")
         return redirect('main_app:log_in')
@@ -1072,7 +988,15 @@ def membresGroupe(request, pk):
 def membersGroupeViaAjax(request, pk):
     groupe = Groupe.objects.get(id=pk)
     users_ID = list()
-    groupeMembers = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user).values()
+    groupeMembers = dict()
+    if "admins" in request.GET:
+        groupeMembers = groupe.admins.all().distinct().exclude(user=request.user).values()
+    elif "moderators" in request.GET:
+        groupeMembers = groupe.moderators.all().distinct().exclude(user=request.user).values()
+    elif "adherents" in request.GET:
+        groupeMembers = groupe.adherents.all().distinct().exclude(user=request.user).values()
+    else:
+        groupeMembers = (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(user=request.user).values()
     paginator = Paginator(groupeMembers, 12)  # Show 12 Profiles per page
     page = request.GET.get('page')
     memGroupe = paginator.get_page(page)
@@ -1107,37 +1031,118 @@ def membersGroupeViaAjax(request, pk):
         'membersGroupe': list(memGroupe),
         'nbMembers': groupeMembers.count(),
         'NumPagesExcessed': isNumPagesExcessed,
-        'nbMembres': (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(id=request.user.profil.id).count()
+        'nbMembres': (groupe.admins.all() | groupe.moderators.all() | groupe.adherents.all()).distinct().exclude(id=request.user.profil.id).count(),
+        'is_admin' : groupe.admins.filter(user=request.user).exists()
     }
     return JsonResponse(context, safe=False)
-"""
-def joinGroupe(request, pk):
+
+def joinGroupeViaAjax(request, pk):
     if request.user.is_authenticated:
-        if
+        context = dict()
+        if request.method == "POST":
+            try:
+                print(request.POST.get('userRequestGroupe'))
+                if request.POST.get('userRequestGroupe') == "1":
+                    print('send request')
+                    if DemandeGroupe.objects.filter(emetteur=Profil.objects.get(user=request.user), groupe_recepteur=Groupe.objects.get(id=pk), reponse=False).exists():
+                        DemandeGroupe.objects.filter(emetteur=Profil.objects.get(user=request.user),
+                                                     groupe_recepteur=Groupe.objects.get(id=pk), reponse=False).delete()
+                    DemandeGroupe.objects.create(emetteur=Profil.objects.get(user=request.user), groupe_recepteur=Groupe.objects.get(id=pk), reponse=False)
+                    context['statut'] = True
+                    context['msg'] = "Demande envoyée avec succé"
+                    return JsonResponse(context, safe=False)
+                elif request.POST.get('userRequestGroupe') == "0":
+                    print('cancel membership request')
+                    groupe = Groupe.objects.get(id=pk)
+                    groupe.admins.remove(request.user.profil)
+                    groupe.moderators.remove(request.user.profil)
+                    groupe.adherents.remove(request.user.profil)
+                    groupe.save()
+                    DemandeGroupe.objects.filter(emetteur=request.user.profil, groupe_recepteur=groupe).delete()
+                    context['statut'] = True
+                    context['msg'] = "Vous n'êtes plus memebre de ce groupe"
+                    return JsonResponse(context, safe=False)
+                elif request.POST.get('userRequestGroupe') == "-1":
+                    print('cancel request')
+                    DemandeGroupe.objects.get(emetteur=request.user.profil, groupe_recepteur=Groupe.objects.get(id=pk)).delete()
+                    context['statut'] = True
+                    context['msg'] = "Demande annulée"
+                    return JsonResponse(context, safe=False)
+            except Exception as e:
+                context['statut'] = False
+                context['msg'] = str(e)
+                return JsonResponse(context, safe=False)
+        else:
+            context['statut'] = False
+            return JsonResponse(context, safe=False)
     else:
         messages.error(request, "Veuiller vous connecter")
         return redirect('main_app:log_in')
-"""
-#EndHaytham
-=======
-        context['is_request_sent'] = DemandeAmi.objects.filter(emetteur=request.user.profil, recepteur=profil,
-                                                               statut=0).exists()
-        context['groupes'] = Groupe.objects.filter(
-            id__in=DemandeGroupe.objects.filter(emetteur=profil, reponse=True).values('groupe_recepteur'))
-        return render(request, 'SocialMedia/profil/groupesProfil.html', context)
-    except Profil.DoesNotExist:
-        messages.error(request, "Le Profil Que Vous cherchez n'existe pas!")
-        return redirect('SocialMedia:myprofil')
-    except DemandeGroupe.DoesNotExist:
-        context['msg'] = "Le profil ne s'appartient à aucun groupe"
-        return render(request, 'SocialMedia/profil/groupesProfil.html', context)
+
+def getMoreComments(request, pk):
+    context = dict()
+    statutid = int(request.GET.get('statutid'))
+    page = int(request.GET.get('page'))
+    groupe = Groupe.objects.get(id=pk)
+    statut = Statut.objects.get(mur_groupe=groupe,id=statutid)
+    comments = statut.commentaire_set.all()
+    paginator = Paginator(comments, 2)
+    try:
+        cmts = paginator.page(page)
+    except PageNotAnInteger:
+        cmts = paginator.page(1)
+    except EmptyPage:
+        cmts = paginator.page(paginator.num_pages)
+    print(statut.id)
+    return render(request, 'SocialMedia/groupe/comments/commentaires_groupe.html', {'comments':cmts, 'statutid':statutid, 'numPages':paginator.num_pages})
+
+
+def changephotoprofilgroupe(request, pk):
+    if request.user.is_authenticated:
+        photoform = PhotoForm(data=request.POST, files=request.FILES or None)
+        if request.method == "POST":
+            if photoform.is_valid():
+                photo = photoform.save()
+                groupe = Groupe.objects.get(id=pk)
+                groupe.photo_profil = photo
+                groupe.save()
+                context = {'status': 'success', 'url': photo.image.url}
+                return JsonResponse(context)
+            else:
+                context = {'status': 'fail', 'photo': 'Veuiller Salectionner Une Image'}
+                return JsonResponse(context)
+        else:
+            return redirect("SocialMedia:myprofil")
+    else:
+        messages.error(request, "Veuiller Se Connecter!")
+        return redirect("SocialMedia:login")
+
+
+def changephotocouverturegroupe(request, pk):
+    if request.user.is_authenticated:
+        photoform = PhotoForm(data=request.POST, files=request.FILES or None)
+        if request.method == "POST":
+            if photoform.is_valid():
+                photo = photoform.save()
+                groupe = Groupe.objects.get(id=pk)
+                groupe.photo_couverture = photo
+                groupe.save()
+                context = {'status': 'success', 'url': photo.image.url}
+                return JsonResponse(context)
+            else:
+                context = {'status': 'fail', 'photo': 'Veuiller Salectionner Une Image'}
+                return JsonResponse(context)
+        else:
+            return redirect("SocialMedia:myprofil")
+    else:
+        messages.error(request, "Veuiller Se Connecter!")
+        return redirect("SocialMedia:login")
 
 
 # EndHaytham
-
+#Chipop
 def test(request):
     return render(request, 'SocialMedia/test.html')
-
 
 def ajouterLangue(request):
     data = request.POST.get('data', None)
@@ -1157,7 +1162,6 @@ def ajouterLangue(request):
 
     return JsonResponse({'messagee': 'HELLO'}, safe=False)
 
-
 def getModifierLangue(request):
     id_langue = request.GET.get('id_langue', None)
 
@@ -1171,7 +1175,6 @@ def getModifierLangue(request):
 
     return render(request, 'SocialMedia/myprofil/modals/modal_modifier_langue.html',
                   {'formModifierLangue': formModifierLangue,'id_langue':id_langue})
-
 
 def modifierLangue(request):
     data = request.POST.get('data', None)
@@ -1191,9 +1194,7 @@ def modifierLangue(request):
         return render(request, 'SocialMedia/myprofil/informations/liste_langues.html', {'langues': langues})
     else:
         return JsonResponse({'messagee': 'Invalid'}, safe=False)
-
     return JsonResponse({'messagee': 'HELLO'}, safe=False)
-
 
 def supprimerLangue(request):
 
@@ -1206,4 +1207,4 @@ def supprimerLangue(request):
     langues = LangueProfil.objects.filter(profil=request.user.profil)
     # return JsonResponse({'messagee': 'La langue a été ajoutée avec succès','langues':serializers.serialize('langues', langues) }, safe=False)
     return render(request, 'SocialMedia/myprofil/informations/liste_langues.html', {'langues': langues})
->>>>>>> 68cd73ce6f68bee380ae5c1b2bdd506f818082d5
+

@@ -1,0 +1,59 @@
+{% load staticfiles %}
+    <div class="activity--comments fs--12">
+                        {% for comment in comments %}
+                        <ul class="acomment--items nav">
+                    <li>
+                        <div class="acomment--item clearfix">
+                            <div class="acomment--avatar">
+                                <a href="">
+                                    <img src="{{ comment.user.photo_profil.image.url }}" alt="">
+                                </a>
+                            </div>
+
+                            <div class="acomment--info">
+                                <div class="acomment--header">
+                                    <p>commentaire de <a href="{% url 'SocialMedia:getProfil' comment.user.id %}">{{ comment.user.user.username }}</a></p>
+                                </div>
+
+                                <div class="acomment--meta">
+                                    <p><i class="fa mr--8 fa-clock-o"></i>{{ comment.date_commentaire }}</p>
+                                </div>
+
+                                <div class="acomment--content">
+                                    <p>{{ comment.comment }}.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                            <div style="    background-color: #e7e7e7;    padding-bottom: 4px;">
+                                            <hr style="margin-top: 5px; margin-bottom: 5px;">
+                                            <div class="row ml--15">
+                                                <div class="col-md-4">
+                                                <button style="font-size:13px;padding: 0px 8px;" class="bttn-pill bttn-md bttn-danger {% if user.profil in comment.likes.all %} hidden{% endif %}">
+                                                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Like
+                                                </button>
+
+                                                <button style="font-size: 13px;padding: 0px 8px;" class="bttn-pill bttn-md bttn-danger {% if user.profil not in comment.likes.all %} hidden{% endif %}">
+                                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i> Unlike
+                                                </button>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                <h2 class="h6 fw--400 fs--12">Likes: <code class="h6 fw--600 text-darkest">{{ comment.likes.all.count }}</code></h2>
+                                                </div>
+                                            </div>
+
+                            </div>
+                    {% endfor %}
+            </div>
+    {% if statut.commentaire_set.all.count > 0 and not comments %}
+                                <button id="btLoadMoreComments" data-statutid="{{ statut.id }}" data-page="1" onclick="getMoreComments(this)" class="bttn-unite bttn-md bttn-royal" style="font-size: 12px;">
+                                    <span>Voir plus<i class="fa ml--10 fa-caret-right"></i></span>
+                                </button>
+    {% elif comments and comments.has_next %}
+                                <button id="btLoadMoreComments" data-statutid="{{ statutid }}" data-page="{{ comments.next_page_number }}" onclick="getMoreComments(this)" class="bttn-unite bttn-md bttn-royal" style="font-size: 12px;">
+                                    <span>Voir plus<i class="fa ml--10 fa-caret-right"></i></span>
+                                </button>
+    {% endif %}

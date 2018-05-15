@@ -68,7 +68,7 @@
 
                 <!-- Header Navbar Logo Start -->
                 <div class="header--navbar-logo navbar-brand">
-                    <a href="/reseausocial/home/">
+                    <a href="{% url 'SocialMedia:home' %}">
                         <h2 class="menu-title">ESPR</h2>
                     </a>
                 </div>
@@ -88,7 +88,7 @@
                                 <div class="product--quantity">
                                     <div class="input-group input-group-menu">
                                         <input type="text" name="keywords" placeholder="Contacts, jobs, groupes..."
-                                               style="  padding-left: 1px; padding-right: 15px;">
+                                               style=" font-family: sans-serif;">
 
                                         <div class="input-group-addon text-default search-icon-menu"
                                              onclick="javascript:document.forms['search-form'].submit();">
@@ -207,6 +207,16 @@
 	
 	<!-- ==== SweetJs Script ==== -->
     <script src="{% static 'SocialMedia/js/sweetalert2.js' %}"></script>
+
+
+    <!-- ==== WayPoint Script ==== -->
+    <script src="{% static 'SocialMedia/js/jquery.waypoints.min.js' %}"></script>
+
+    <!-- ==== infinite Script ==== -->
+    <script src="{% static 'SocialMedia/js/infinite.min.js' %}"></script>
+
+
+
 
     <!-- ==== Custom Script ==== -->
     <script src="{% static 'SocialMedia/js/custom.js' %}"></script>

@@ -104,7 +104,6 @@
 							    {% if profil.pays is not None or profil.pays is not None %}{{ profil.ville }}, {{ profil.pays }} <i class="fa fa-globe" aria-hidden="true"></i>{% endif %}
 
                             </p>
-                                    <div id="navTop"></div>
 
                         </div>
 
@@ -113,6 +112,7 @@
 			<!-- Cover Header End -->
 
 				</div>
+                                    <div id="navTop"></div>
 
                     <!-- Main Content Start -->
                     <div class="row main--content pt--40"  data-trigger="stickyScroll" style=";width:95%;margin-left:auto;margin-right:auto;">
@@ -667,6 +667,19 @@
             event.preventDefault();
             var form_data = new FormData($(this)[0]);
             var statut = $("#bloque").find('input').eq(1).val();
+            swal({
+          title: "Attention",
+          text: "Êtes-vous sur de bloquer {{ profil.user.username }}",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'Non',
+          confirmButtonText: 'Oui'
+        }).then((result) => {
+          if (!result.value) {
+            return false;
+          }else{
             $.ajax({xhr: function () {
                     var xhr = new window.XMLHttpRequest();
                     xhr.upload.addEventListener("progress", function (e) {
@@ -707,10 +720,12 @@
                 stop: function (e) {
                     swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
                 }
-            });
-        })
+        });
+          }
+        });
 
-    function printData(dt){
+});
+                function printData(dt){
 
     if(!dt.is_blocked) {
             if (dt.is_friend) {

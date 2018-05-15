@@ -8,7 +8,9 @@ var toggleNumber;
 
 $(document).ready( function() {
 
-$('#photoform .input-group, #photoprofilform .input-group').find(':text').val('');
+
+
+$('#photoform .input-group, #photoprofilform .input-group, #photoformgroupe .input-group, #photoprofilformgroupe .input-group').find(':text').val('');
 
 
 
@@ -17,7 +19,7 @@ $('#photoform .input-group, #photoprofilform .input-group').find(':text').val(''
         $(".modal-footer").show();
         $("#photo, #photo1").hide();
         $(".uploadp, .uploadprogress").addClass('hidden');
-        $("#photoform input[type=text], #photoprofilform input[type=text]").val('');
+        $("#photoform input[type=text], #photoprofilform input[type=text], #photoformgroupe input[type=text], #photoprofilformgroupe input[type=text]").val('');
     });
 
 
