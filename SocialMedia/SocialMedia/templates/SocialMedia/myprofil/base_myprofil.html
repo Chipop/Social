@@ -5,6 +5,13 @@
 {% block content %}
 
     {% block modals %}
+
+        <div class="modal_form_modifier_informations" data-trigger="stickyScroll">
+            {% include 'SocialMedia/myprofil/modals/modal_modifier_informations.html' %}
+        </div>
+        <div class="modal_form_modifier_informations_profil" data-trigger="stickyScroll">
+            {% include 'SocialMedia/myprofil/modals/modal_modifier_informations_profil.html' %}
+        </div>
         <!-- line modal for cover -->
         <div id="#formcover">
             <div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
@@ -147,7 +154,7 @@
                              
 
 
-                            <div style="width: auto;padding-bottom: 30px;">
+                            <div style="width: auto;padding-bottom: 10px;">
                                 <div class="cover--avatar online" data-overlay="0.3" data-overlay-color="primary">
 
                                     <div class="photprofilcontainer">
@@ -167,23 +174,9 @@
                                     </div>
 
                                 </div>
-                                <div class="cover--user-name">
-
-                                    <h2 class="h3 fw--600">{{ user.first_name }} {{ user.last_name }}</h2>
-                                </div>
                                 <div class="row">
-                                    <div class="col">
-                                        <a href="{% url 'SocialMedia:editAbout' %}"><i
-                                                class="fa fa-pencil-square-o float--right"
-                                                style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
-                                    </div>
-                                    <div class="col">
-                                        <a href="javascript:void(0)"><i class="fa fa-plus-square float--right"
-                                                                        style="font-size:20px;margin-right: 20px;"
-                                                                        aria-hidden="true"></i></a>
-                                    </div>
-                                </div>
 
+<<<<<<< HEAD
                                 <div class="cover--user-desc fw--400 fs--18 fstyle--i text-darkest"
                                      style="margin-top: 0;">
                                     <p style="margin: 0;">
@@ -206,7 +199,20 @@
 
                                     </p>
                                     <hr>
+=======
+>>>>>>> d5a4491f9b709cb18afa2f9d6a528df99ed6be21
 
+                                    <div class="col-xs-12 profile--info">
+                                        <a href="javascript:return false">
+                                            <i class="fa fa-pencil float--right" style="font-size:20px; padding-right: 10px;"
+                                               aria-hidden="true"
+                                               data-id="{{ benevolat.id }}"
+                                               onclick="remplir_formulaire_changer_informations_profil(this)"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-xs-12 liste_informations_profil">
+                                        {% include 'SocialMedia/myprofil/informations/liste_informations_profil.html' %}
+                                    </div>
                                 </div>
 
                             </div>
@@ -245,19 +251,12 @@
                 {% block sideBar %}
 
                     <!-- Main Sidebar Start -->
-                    <div class="col-md-4 main--sidebar pb--60" data-trigger="stickyScroll">
-                        <!-- Widget Start -->
-                        <div class="widget">
-                            <h2 class="h4 fw--700 widget--title">Informations supplémentaires</h2>
+                    <div class="col-md-4 main--sidebar pb--60 liste_informations" data-trigger="stickyScroll">
+                        {% include 'SocialMedia/myprofil/informations/liste_informations.html' %}
+                    </div>
+                    <!-- Main Sidebar End -->
 
-                            <!-- Buddy Finder Widget Start -->
-                            <div class="buddy-finder--widget">
-                                <form action="#">
-                                    <div class="row">
-                                        <div class="col-xs-12 col-xxs-12 h6">
-                                            Date de naissance
-                                        </div>
-
+<<<<<<< HEAD
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12 col-xxs-12" style="padding-left:20px;">
@@ -294,62 +293,9 @@
                                             {{ user.email }}
                                         </div>
                                     </div>
-
-                                </form>
-                            </div>
-                            <!-- Buddy Finder Widget End -->
-                        </div>
-                        <!-- Widget End -->
-
-                        <!-- Widget Start -->
-                        <div class="widget">
-                            <h2 class="h4 fw--700 widget--title">Réseaux sociaux</h2>
-
-                            <!-- Text Widget Start -->
-                            <div class="row">
-                                <div class="col-xs-1 col-xxs-1">
-
-                                    <a href="{{ user.profil.facebook }}" target="_blank" class="btn-link"><i
-                                            style="font-size:20px;color:#3b5999" class="fa fa-facebook-square"
-                                            aria-hidden="true"></i></a>
-                                </div>
-                                <div class="col-xs-1 col-xxs-1">
-
-                                    <a href="{{ user.profil.youtube }}" target="_blank" class="btn-link"><i
-                                            style="font-size:20px;color:#cd201f" class="fa fa-youtube-square"
-                                            aria-hidden="true"></i></a>
-                                </div>
-                                <div class="col-xs-1 col-xxs-1">
-
-
-                                    <a href="{{ user.profil.instagram }}" target="_blank" class="btn-link"><i
-                                            style="font-size:20px;color:#e4405f" class="fa fa-instagram"
-                                            aria-hidden="true"></i></a>
-                                </div>
-                                <div class="col-xs-1 col-xxs-1">
-
-                                    <a href="{{ user.profil.linkedin }}" target="_blank" class="btn-link"><i
-                                            style="font-size:20px;color:#0077B5" class="fa fa-linkedin-square"
-                                            aria-hidden="true"></i></a>
-                                </div>
-
-                                <div class="col-xs-1 col-xxs-1">
-
-                                    <a href="{{ user.profil.twitter }}" target="_blank" class="btn-link"><i
-                                            style="font-size:20px;color:#0077B5" class="fa fa-twitter-square"
-                                            aria-hidden="true"></i></a>
-                                </div>
-
-
-                            </div>
-                            <!-- Text Widget End -->
-                        </div>
-                        <!-- Widget End -->
-
+=======
                     </div>
-                    <!-- Main Sidebar End -->
-
-                    </div>
+>>>>>>> d5a4491f9b709cb18afa2f9d6a528df99ed6be21
 
                 {% endblock %}
 
@@ -367,19 +313,117 @@
 
 {% block scripts %}
     {{ block.super }}
+
+    <!-- Script settings crsf token with ajax-->
     <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(
+                            cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
 
-        {% if messages %}
-            {% for msg in messages %}
-                swal({
-                    title: '{{ msg }}',
-                    animation: false,
-                    customClass: 'animated tada',
-                    type: '{{ msg.tags }}'
-                });
-            {% endfor %}
-        {% endif %}
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
 
+        /*
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        */
+    </script>
+
+    <!-- Script de qui regle les formulaires : Width des champs Date + remplissage des suggestions pour les champs comme Entreprise,Poste -->
+    <script>
+        function fixForms() {
+
+            /* Styling Experience SelectDateWidget + autocomplete Field */
+
+            $("#id_date_debut_day").css("display", "none");
+            $("#id_date_fin_day").css("display", "none");
+
+            $("#id_date_debut_month").css({"width": "100px"});
+            $("#id_date_debut_month").addClass("col-xs-4")
+            $("#id_date_debut_year").addClass("col-xs-4")
+            $("#id_date_debut_year").css({"width": "100", "margin-left": "15px"});
+
+            $("#id_date_fin_month").css({"width": "100px"});
+            $("#id_date_fin_month").addClass("col-xs-4")
+            $("#id_date_fin_year").addClass("col-xs-4")
+            $("#id_date_fin_year").css({"width": "100", "margin-left": "15px"});
+
+            /* End Styling Experience SelectDateWidget */
+
+            /* Styling Formation SelectDateWidget */
+
+            $("[name=date_debut_day]").css("display", "none");
+            $("[name=date_fin_day]").css("display", "none");
+            $("[name=annee_fin_day]").css("display", "none");
+            $("[name=annee_debut_month]").css("display", "none");
+            $("[name=annee_fin_month]").css("display", "none");
+            $("[name=annee_debut_day]").css("display", "none");
+
+
+            $("[name=date_fin_month]").css({"width": "100px"});
+            $("[name=date_fin_year]").css({"width": "100", "margin-left": "15px"});
+            $("[name=date_fin_month]").addClass("col-xs-4")
+            $("[name=date_fin_year]").addClass("col-xs-4")
+
+            $("[name=date_debut_month]").css({"width": "100px"});
+            $("[name=date_debut_year]").css({"width": "100", "margin-left": "15px"});
+            $("[name=date_debut_month]").addClass("col-xs-4")
+            $("[name=date_debut_year]").addClass("col-xs-4")
+
+
+            $("[name=annee_debut_month]").css({"width": "100px"});
+            $("[name=annee_debut_month]").addClass("col-xs-4");
+            $("[name=annee_debut_year]").addClass("col-xs-4");
+            $("[name=annee_debut_year]").css({"width": "100",});
+
+            $("[name=annee_fin_month]").css({"width": "100px"});
+            $("[name=annee_fin_month]").addClass("col-xs-4");
+            $("[name=annee_fin_year]").addClass("col-xs-4");
+            $("[name=annee_fin_year]").css({"width": "100",});
+
+            $("[name=date_naissance_day]").css({"width": "100px"});
+            $("[name=date_naissance_month]").css({"width": "100px"});
+            $("[name=date_naissance_year]").css({"width": "100px"});
+            $("[name=date_naissance_month]").css({"width": "100", "margin-left": "15px"});
+            $("[name=date_naissance_year]").css({"width": "100", "margin-left": "15px"});
+            $("[name=date_naissance_day]").addClass("col-xs-4");
+            $("[name=date_naissance_month]").addClass("col-xs-4");
+            $("[name=date_naissance_year]").addClass("col-xs-4");
+
+
+            /* End Styling Formation SelectDateWidget */
+
+            /* Suggestions Fields */
+            $('.ecole_suggestion').attr("data-list", "{{ nom_ecoles }}")
+            $('.poste_suggestion').attr("data-list", "{{ nom_postes }}")
+            $('.entreprise_suggestion').attr("data-list", "{{ nom_entreprises }}")
+            $('.organisme_suggestion').attr("data-list", "{{ nom_organismes }}")
+            /* End Suggestion Fields */
+        }
+    </script>
+
+    <!-- Script de Submit photo profil + couverture -->
+    <script>
         $("#photoform").on("submit", function (event) {
             console.log($('#photoprofilform .input-group').find(':text').val());
             if ($('#photoform .input-group').find(':text').val().length == 0) {
@@ -510,10 +554,180 @@
 
         });
 
-        function MontrerAjouterLangue(){
-            $('#AjouterLangue').css("display","block")
-        };
+    </script>
 
+    <!-- Script de Modification de la sidebar Informations -->
+    <script> /* Script de modification de la sidebar Informations */
+
+    /* Modification d'une informations */
+    /* 1- Remplissage du formulaire Modification d'une informations */
+
+    /* Envoi de l'id avec ajax et chargement du formulaire rempli */
+    function remplir_formulaire_changer_informations(clicked_button) {
+        id_informations = clicked_button.getAttribute('data-id')
+
+        $.ajax({
+
+            url: "{% url 'SocialMedia:getModifierInformations' %}",
+            type: 'GET',
+            data: {id_informations: id_informations},
+
+            success: function (response) {
+                if (response.message_erreur != null) {
+                    swal(response.message_erreur)
+                }
+                else {
+                    $('.modal_form_modifier_informations').html(response);
+                    fixForms();
+                }
+            },
+
+            error: function () {
+                swal('Une erreur s\'est produite.')
+            },
+
+            complete: function () {
+                $("#squarespaceModifierInformations").modal("toggle");
+            },
+
+        });
+
+    }
+
+    /* 2-  Envoi du formulaire  Modifier informations => Vrai modification */
+    $('.modal_form_modifier_informations').on('click', "#btn_modifier_informations", function (event) {
+        event.preventDefault();
+        var form_data = new FormData($('#form_modifier_informations')[0]);
+
+        $.ajax({
+
+            url: "{% url 'SocialMedia:modifierInformations' %}",
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: form_data,
+
+            beforeSend: function (xhr, settings) {
+                var csrftoken = getCookie('csrftoken');
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+                $('#mymodifierinformationsSpinner').addClass('spinner');
+                $("#btn_modifier_informations").prop("disabled", true);
+
+            },
+
+            success: function (response) {
+                if(response.modal )
+                {
+                    $('.actualized_form_modifier_informations').html(response.modal);
+                    fixForms();
+                }
+                else
+                {
+                    $('#squarespaceModifierInformations').modal('hide')
+                    swal("Succes", "Les informations ont été mises à jour.", "success")
+                    $('.liste_informations').html(response.liste_informations);
+                }
+            },
+
+            error: function () {
+                swal('Une erreur s\'est produite.')
+            },
+
+            complete: function () {
+                $('#mymodifierinformationsSpinner').removeClass('spinner');
+                $("#btn_modifier_informations").prop("disabled", false);
+            },
+
+        });
+    });
+    </script>
+
+    <!-- Script de Modification de Informations Profil -->
+    <script> /* Script de modification de  Informations Profil */
+
+    /* Modification d'une informations */
+    /* 1- Remplissage du formulaire Modification d'une informations */
+
+    /* Envoi de l'id avec ajax et chargement du formulaire rempli */
+    function remplir_formulaire_changer_informations_profil(clicked_button) {
+        $.ajax({
+
+            url: "{% url 'SocialMedia:getModifierInformationsProfil' %}",
+            type: 'GET',
+
+            success: function (response) {
+                if (response.message_erreur != null) {
+                    swal(response.message_erreur)
+                }
+                else {
+                    $('.modal_form_modifier_informations_profil').html(response);
+                    fixForms();
+                }
+            },
+
+            error: function () {
+                swal('Une erreur s\'est produite.')
+            },
+
+            complete: function () {
+                $("#squarespace_modifier_InformationsProfil").modal("toggle");
+            },
+
+        });
+
+    }
+
+    /* 2-  Envoi du formulaire  Modifier informations => Vrai modification */
+    $('.modal_form_modifier_informations_profil').on('click', "#btn_modifier_InformationsProfil", function (event) {
+        event.preventDefault();
+        var form_data = new FormData($('#form_modifier_InformationsProfil')[0]);
+        console.log(form_data)
+        $.ajax({
+
+            url: "{% url 'SocialMedia:modifierInformationsProfil' %}",
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: form_data,
+
+            beforeSend: function (xhr, settings) {
+                var csrftoken = getCookie('csrftoken');
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+                $('#mymodifierInformationsProfilSpinner').addClass('spinner');
+                $("#btn_modifier_InformationsProfil").prop("disabled", true);
+
+            },
+
+            success: function (response) {
+                if(response.modal )
+                {
+                    $('#actualized_form_modifier_informations_profil').html(response.modal);
+                    fixForms();
+                }
+                else
+                {
+                    $('#squarespace_modifier_InformationsProfil').modal('hide')
+                    swal("Succes", "Les informations ont été mises à jour.", "success")
+                    $('.liste_informations_profil').html(response.liste_informations_profil);
+                }
+            },
+
+            error: function () {
+                swal('Une erreur s\'est produite.')
+
+            },
+
+            complete: function () {
+                $('#mymodifierInformationsProfilSpinner').removeClass('spinner');
+                $("#btn_modifier_InformationsProfil").prop("disabled", false);
+            },
+
+        });
+    });
     </script>
 
 {% endblock %}

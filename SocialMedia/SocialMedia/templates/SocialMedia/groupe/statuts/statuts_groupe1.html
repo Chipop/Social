@@ -14,7 +14,8 @@
 
 
       <div id="ember1581" class="feed-shared-actor feed-shared-actor--with-control-menu ember-view"><a data-control-id="W1C4B5y7iMwQGAR0mwPlgw==" data-control-name="actor_picture" target="_self" href="{{ statut.publisher.photo_profil.image.url }}" id="ember1586" class="feed-shared-actor__image app-aware-link ember-view">    <span data-entity-hovercard-id="urn:li:fs_miniProfile:ACoAAA8BYqEBCGLg_vT_ca6mMEqkpp9nVffJ3hc" class="js-feed-shared-actor__avatar">
-      <div id="ember1597" class="feed-shared-actor__avatar ivm-image-view-model ember-view">  <div id="ember1602" class="display-flex ember-view"><!---->    <div id="ember1607" class="presence-entity presence-entity--size-3 ember-view"><div aria-label="{{ statut.publisher.user.username }}" id="ember1614" class="ivm-view-attr__img--centered feed-shared-actor__avatar-image EntityPhoto-circle-3 presence-entity__image EntityPhoto-circle-3 ember-view" style="background-image: url('{{ statut.publisher.photo_profil.image.url }}');">  <span class="visually-hidden">Bill Gates</span>
+      <div id="ember1597" class="feed-shared-actor__avatar ivm-image-view-model ember-view">
+          <div id="ember1602" class="display-flex ember-view"><!---->    <div id="ember1607" class="presence-entity presence-entity--size-3 ember-view"><div aria-label="{{ statut.publisher.user.username }}" id="ember1614" class="ivm-view-attr__img--centered feed-shared-actor__avatar-image EntityPhoto-circle-3 presence-entity__image EntityPhoto-circle-3 ember-view" style="background-image: url('{{ statut.publisher.photo_profil.image.url }}');">  <span class="visually-hidden">Bill Gates</span>
 </div>
 
 <div id="ember1617" class="presence-indicator  presence-entity__indicator presence-entity__indicator--size-3 hidden presence-indicator--size-3 ember-view"></div>
@@ -40,7 +41,7 @@
       </span>
 
       <span class="feed-shared-actor__sub-description Sans-13px-black-55%">
-        <div id="ember1629" class="feed-shared-text-view white-space-pre-wrap break-words ember-view"><span aria-hidden="false"><span id="ember1640" class="ember-view"><span>Published • {{ statut.date_statut }}</span></span></span><!----></div>
+        <div id="ember1629" class="feed-shared-text-view white-space-pre-wrap break-words ember-view"><span aria-hidden="false"><span id="ember1640" class="ember-view"><span>Published • {{ statut.date_statut|timesince }}</span></span></span><!----></div>
       </span>
 </a></div>
 
@@ -112,4 +113,63 @@
 <!----><!----><!---->          </div>
 
 </div>
-                            </div>
+
+<div id="ember3143" class="feed-shared-comment-box feed-shared-comment-box--has-avatar ember-view">  <div id="ember3144" class="feed-shared-comment-box__avatar-image ml0 feed-shared-avatar-image b0 member ember-view">  <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="avatar member EntityPhoto-circle-1 ghost-person" alt="HAYTHAM DAHRI">
+</div>
+
+<div class="feed-shared-comment-box__form-container flex-grow-1">
+<!---->  <form data-submit-control-name="comment_post" class="feed-shared-comment-box__form" data-ember-action="" data-ember-action-3145="3145">
+<div id="ember3154" class="feed-shared-comment-textarea ember-view"><div id="ember3159" class="feed-shared-comment-textarea__mentions-input mentions-input ember-view"><!---->
+<div class="mentions-highlighter-container" style="max-height: 31em;">
+  <pre class="mentions-highlighter" style="line-height: 16px; padding: 0px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: 100%; font-size: 12px; font-family: -apple-system, system-ui, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira Sans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droid Sans&quot;, &quot;Lucida Grande&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;;"><!----></pre>
+      <div class="feed-shared-comment-textarea__autoresized-area">
+    <pre class="feed-shared-comment-textarea__text-box-clone Sans-13px-black-70%"><span></span><br></pre>
+    <textarea rows="1" placeholder="Add a comment…" data-control-name="comment" id="comment-textarea-ember3154" dir="ltr" class="Sans-13px-black-70% feed-shared-comment-textarea__text-box">
+    </textarea>
+  </div>
+
+</div>
+
+  <div id="ember3164" class="ember-view"><!----></div>
+</div>            <div id="ember3165" class="feed-shared-comment-box__camera-icon button sharing-share-action-media tap-target ember-view"><label for="ember3165-upload-photo" class="sharing-share-action-media__upload-input-label
+  ">
+
+  <span class="svg-icon-wrap"><li-icon aria-hidden="true" type="camera-icon" class="sharing-share-action-media__upload-camera-icon" size="large"><svg viewBox="0 0 24 24" width="24px" height="24px" x="0" y="0" preserveAspectRatio="xMinYMin meet" class="artdeco-icon" focusable="false"><path d="M21,6H18L16.5,3h-9L6,6H3A1,1,0,0,0,2,7V19a1,1,0,0,0,1,1H21a1,1,0,0,0,1-1V7A1,1,0,0,0,21,6ZM7.36,8l1.5-3h6.28l1.5,3H20v2H16.58a5,5,0,0,0-9.16,0H4V8H7.36Zm7.76,4A3.13,3.13,0,1,1,12,8.88,3.13,3.13,0,0,1,15.13,12ZM4,18V11H7.1a5,5,0,1,0,9.8,0H20v7H4Z" class="large-icon" style="fill: currentColor"></path></svg></li-icon></span>
+
+  <span class="sharing-subaction-bar__button-text">
+    Images
+  </span>
+
+</label>
+</div>
+
+</div>
+<!---->
+<!---->  </form>
+</div>
+</div>
+
+{% for comment in statut.commentaire_set.all|slice:"1" %}
+    {% include "SocialMedia/groupe/comments/commentaires_groupe1.html" %}
+{% endfor %}
+
+{% if statut.commentaire_set.all.count > 0 and not comments %}
+                                <div class="feed-shared-comments-list__show-previous-container">
+      <button id="show_prev" data-control-name="more_comments" class="hoverable-link-text button feed-shared-comments-list__show-previous-button Sans-13px-black-55%" data-ember-action="" data-ember-action-3134="3134">
+        <span aria-hidden="true">Load more comments</span>
+<!---->      </button>
+    </div>
+              </div>
+<!---->          </div>
+    {% elif comments and comments.has_next %}
+                                <div class="feed-shared-comments-list__show-previous-container">
+      <button id="show_prev" data-control-name="more_comments" class="hoverable-link-text button feed-shared-comments-list__show-previous-button Sans-13px-black-55%" data-ember-action="" data-ember-action-3134="3134">
+        <span aria-hidden="true">Load more comments</span>
+<!---->      </button>
+    </div>
+              </div>
+<!---->          </div>
+    {% endif %}
+
+
+</div>
