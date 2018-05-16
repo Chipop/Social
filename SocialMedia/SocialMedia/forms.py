@@ -2,6 +2,7 @@ from django import forms
 from .models import *
 from main_app.models import *
 from django.contrib.auth.models import User
+from datetime import datetime
 
 
 class PhotoForm(forms.ModelForm):
@@ -15,6 +16,11 @@ class PhotoForm(forms.ModelForm):
 class demandeForm(forms.Form):
     demande = forms.IntegerField(widget=forms.HiddenInput)
     statut = forms.IntegerField(widget=forms.HiddenInput)
+
+
+class demandeGroupeForm(forms.Form):
+    demande = forms.IntegerField(widget=forms.HiddenInput)
+    reponse = forms.IntegerField(widget=forms.HiddenInput)
 
 
 class UserInterfaceInfos(forms.Form):
@@ -73,6 +79,71 @@ class UserFormationEdit(forms.Form):
 class FormAjouterLangue(forms.ModelForm):
     class Meta:
         model = LangueProfil
-        fields = '__all__'
+        fields = ['langue', 'niveau']
 
 
+class FormExperience(forms.ModelForm):
+    actuel = models.BooleanField("Ceci est mon poste actuel")
+    date_debut = forms.DateField(widget=forms.SelectDateWidget(years=range(datetime.now().year + 10, 1970, -1)))
+    date_fin = forms.DateField(widget=forms.SelectDateWidget(years=range(datetime.now().year + 10, 1970, -1)))
+
+    class Meta:
+        model = Experience
+        fields = ['nom_entreprise', 'nom_poste', 'date_debut', 'date_fin', 'actuel', 'description', 'lieu']
+
+
+class FormFormation(forms.ModelForm):
+    annee_debut = forms.DateField(widget=forms.SelectDateWidget(years=range(datetime.now().year + 10, 1970, -1)))
+    annee_fin = forms.DateField(widget=forms.SelectDateWidget(years=range(datetime.now().year + 10, 1970, -1)))
+
+    class Meta:
+        model = Formation
+        fields = ['nom_ecole', 'titre_formation', 'domaine', 'annee_debut', 'annee_fin', 'activite_et_associations',
+                  'description']
+
+
+class FormBenevolat(forms.ModelForm):
+    date_debut = forms.DateField(widget=forms.SelectDateWidget(years=range(datetime.now().year + 10, 1970, -1)))
+    date_fin = forms.DateField(widget=forms.SelectDateWidget(years=range(datetime.now().year + 10, 1970, -1)))
+
+    class Meta:
+        model = ActionBenevole
+        fields = ['nom_organisme', 'nom_poste', 'cause', 'date_debut', 'date_fin', 'description']
+
+
+class FormInformations(forms.ModelForm):
+    date_naissance = forms.DateField(required=True,
+                                     widget=forms.SelectDateWidget(years=range(datetime.now().year, 1940, -1)))
+
+    class Meta:
+        model = Profil
+        fields = ['date_naissance', 'website', 'tel', 'facebook', 'youtube', 'instagram', 'linkedin', 'twitter']
+
+
+class FormInformationsProfil(forms.ModelForm):
+    class Meta:
+        model = Profil
+        fields = ['formation_profil', 'experience_profil', 'resume', 'ville', 'pays']
+
+
+class FormInformationsUser(forms.ModelForm):
+    first_name = forms.CharField(required=True, max_length=30)
+    last_name = forms.CharField(required=True, max_length=100)
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name')
+
+
+class FormCreerEmploiEntreprise(forms.ModelForm):
+    class Meta:
+        model = Entreprise
+        fields = ['nom']
+
+
+class FormCreerEntreprise(forms.ModelForm):
+    a_propos = forms.Textarea()
+    logo = forms.ImageField(required=True)
+    class Meta:
+        model = Entreprise
+        fields = ['nom',"typeEntreprise",'logo','a_propos','siege_social','annee_creation','specialisation']

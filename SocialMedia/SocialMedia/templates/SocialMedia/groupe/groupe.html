@@ -1,0 +1,160 @@
+{% extends "SocialMedia/groupe/base_groupe.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% block title %}{{ groupe.nom }}{% endblock %}
+
+{% block contentGroupe %}
+                            <!-- Profile Details Start -->
+                            <div class="profile--details fs--14">
+                                <!-- Profile Item Start -->
+                                <div class="profile--item">
+                                    <div class="profile--heading">
+                                        <h3 class="h4 fw--700">
+                                            <span class="mr--4">A Propos</span>
+                                            <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                            <a href="{% url 'SocialMedia:editAbout' %}" ><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                                        </h3>
+                                    </div>
+
+
+                                    <div class="profile--info">
+
+                                    </div>
+                                </div>
+                                <!-- Profile Item End -->
+
+                            <hr style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);">
+
+                                <!-- Profile Item Start -->
+                                <div class="profile--item">
+                                    <div class="profile--heading">
+                                        <h3 class="h4 fw--700">
+                                            <span class="mr--4">Biography</span>
+                                            <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                            <a href="javascript:void(0)"><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                                        </h3>
+                                    </div>
+
+                                    <div class="profile--info">
+                                        <p>Hello ! I’m <a href="{% url 'SocialMedia:myprofil' %}">{{ user.first_name }} {{ user.last_name }}</a>. {{ user.profil.biography }}</p>
+                                    </div>
+                                </div>
+                                <!-- Profile Item End -->
+
+
+                                <hr style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);">
+
+
+                                <!-- Profile Item Start -->
+                                <div class="profile--item">
+
+                                    <div class="profile--heading">
+                                        <h3 class="h4 fw--700">
+                                            <span class="mr--4">Experiences Professionnelles</span>
+                                            <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                        </h3>
+                                    </div>
+
+                                    <div class="profile--info">
+
+                                    </div>
+                                </div>
+                                <!-- Profile Item End -->
+
+                            <hr style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);">
+
+                                <!-- Profile Item Start -->
+                                <div class="profile--item">
+
+                                    <div class="profile--heading">
+                                        <h3 class="h4 fw--700">
+                                            <span class="mr--4">Formation</span>
+                                            <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                        </h3>
+                                    </div>
+
+                                </div>
+                                <!-- Profile Item End -->
+
+                                <hr style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);">
+
+                                <!-- Profile Item Start -->
+                                <div class="profile--item">
+
+                                    <div class="profile--heading">
+                                        <h3 class="h4 fw--700">
+                                            <span class="mr--4">Actions Benevoles</span>
+                                            <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                        </h3>
+                                    </div>
+
+
+                                </div>
+                                <!-- Profile Item End -->
+
+                            <hr style="box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);">
+
+                                <!-- Profile Item Start -->
+                                <div class="profile--item">
+                                    <div class="profile--heading">
+                                        <h3 class="h4 fw--700">
+                                            <span class="mr--4">Contact</span>
+                                            <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                            <a href="javascript:void(0)"><i class="fa fa-pencil-square-o float--right" style="font-size:20px;" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)"><i class="fa fa-plus-square float--right" style="font-size:20px;margin-right: 20px;" aria-hidden="true"></i></a>
+                                        </h3>
+                                    </div>
+
+                                    <div class="profile--info">
+                                        <table class="table">
+                                            <tr>
+                                                <th class="fw--700 text-darkest">Genre</th>
+                                                <td><a class="h6 fa--400 text-darkest" href="#">{{ user.profil.genre }}</a></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="fw--700 text-darkest">Phone</th>
+                                                <td><a class="h6 fa--400 text-darkest" href="tel:+16105598246">{{ user.profil.tel }}</a></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="fw--700 text-darkest">E-mail</th>
+                                                <td><a class="h6 fa--400 text-darkest" href="#"><span class="__cf_email__" data-cfemail="4622232b2906233e272b362a236825292b">{% if user.email is not None %}{{ user.email }}{% else %}PROTECTED{% endif %}</span></a></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="fw--700 text-darkest">Website</th>
+                                                <td><a class="h6 fa--400 text-darkest" href="{{ user.profil.website }}" target="_blank">{{ user.profil.website }}</a></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="fw--700 text-darkest">Address</th>
+                                                <td class="h6 fa--400 text-darkest">{{ user.profil.adresse_profile|default:"Non Rempli" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="fw--700 text-darkest">Address</th>
+                                                <td class="h6 fa--400 text-darkest">{{ user.profil.service|default:"Non Rempli" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="fw--700 text-darkest">Civilité</th>
+                                                <td class="h6 fa--400 text-darkest">{{ user.profil.civilité|default:"Non Rempli" }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- Profile Item End -->
+                            </div>
+
+
+                            <!-- Profile Details End -->
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+    {{ block.super }}
+
+{% endblock %}
+
+
+

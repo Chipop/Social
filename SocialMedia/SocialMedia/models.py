@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 import os.path
+from itertools import chain
+from django.db.models import Max
 
 
 # Create your models here.
@@ -23,7 +25,7 @@ class Groupe(models.Model):
     photo_profil = models.OneToOneField('main_app.Image', on_delete=models.CASCADE, related_name="groupe_photo")
     photo_couverture = models.OneToOneField('main_app.Image', on_delete=models.CASCADE, related_name="profil_cover")
     admins = models.ManyToManyField('main_app.Profil', related_name="admin")
-    mederators = models.ManyToManyField('main_app.Profil', related_name="moderateur")
+    moderators = models.ManyToManyField('main_app.Profil', related_name="moderateur")
     creator = models.OneToOneField('main_app.Profil', on_delete=models.CASCADE, related_name="createur")
     adherents = models.ManyToManyField('main_app.Profil', related_name="adherent")
 
@@ -151,10 +153,19 @@ class ReseauSocialFile(models.Model):
 class Poste(models.Model):
     nom_poste = models.CharField(max_length=300)
 
+    @staticmethod
+    def noms_postes():
+        noms_postes = ""
+        for poste in Poste.objects.all():
+            noms_postes += poste.nom_poste + ","
+        return noms_postes[:-1]
+
+    def __str__(self):
+        return self.nom_poste
+
 
 class OffreEmploi(models.Model):
     TYPES_EMPLOI = (('plein', 'Plein temps'), ('partiel', 'Temps partiel'))
-
     tel = models.IntegerField()
     email = models.EmailField()
     pays = models.CharField(max_length=300)
@@ -176,6 +187,7 @@ class OffreEmploi(models.Model):
     profil_postulants = models.ManyToManyField('main_app.Profil', related_name="profil_postulants", blank=True)
 
 
+
 class Experience(models.Model):
     entreprise = models.ForeignKey('main_app.Entreprise', on_delete=models.CASCADE, null=True, blank=True)
     nom_entreprise = models.CharField(max_length=300)
@@ -186,11 +198,33 @@ class Experience(models.Model):
     actuel = models.BooleanField()
     description = models.TextField(null=True, blank=True)
     profil = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE)
+    lieu = models.CharField( max_length=300)
+
+    def regler_date(self):
+        self.date_debut = self.date_debut.replace(day=1)
+        self.date_fin = self.date_fin.replace(day=1)
+
+    @staticmethod
+    def get_user_experiences(user):
+        exp = Experience.objects.filter(profil=user.profil).exclude(date_fin=None).order_by('-date_fin') # Experiences passées
+        exp2 = Experience.objects.filter(profil = user.profil,date_fin=None) # Experience actuelle
+        return list(chain(exp2, exp))
+
+    def __str__(self):
+        return self.nom_poste +" à "+ self.nom_entreprise
 
 
 class Ecole(models.Model):
     nom = models.CharField(max_length=300)
     logo = models.ImageField(upload_to="SocialMedia/Image/")
+
+    @staticmethod
+    def noms_ecoles():
+        noms_ecoles = ""
+        for ecole in Ecole.objects.all():
+            noms_ecoles += ecole.nom + ","
+
+        return noms_ecoles[:-1]
 
     def __str__(self):
         return self.nom
@@ -201,20 +235,42 @@ class Formation(models.Model):
     ecole = models.ForeignKey(Ecole, on_delete=models.CASCADE, null=True, blank=True)
     nom_ecole = models.CharField(max_length=300)
     domaine = models.CharField(max_length=300, null=True, blank=True)
-    resultat_obtenu = models.CharField(max_length=300, null=True, blank=True)
     activite_et_associations = models.TextField(null=True, blank=True)
     annee_debut = models.DateField()
     annee_fin = models.DateField()
     description = models.TextField(null=True, blank=True)
     profil = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE)
 
+    @staticmethod
+    def get_last_formation(user):
+        max_annee_fin = Formation.objects.filter(profil=user.profil).aggregate(Max('annee_fin'))['annee_fin__max']
+        return Formation.objects.filter(profil=user.profil,annee_fin=max_annee_fin).first()
+
+    def regler_date(self):
+        self.date_debut = self.annee_debut.replace(day=1)
+        self.date_fin = self.annee_fin.replace(day=1)
+        self.date_fin = self.annee_debut.replace(month=1)
+        self.date_fin = self.annee_fin.replace(month=1)
+
+    @staticmethod
+    def get_user_formations(user):
+        return Formation.objects.filter(profil=user.profil).order_by('-annee_fin') # Formations passées
+
     def __str__(self):
-        return self.titre_formation
+        return self.titre_formation +" à "+ self.nom_ecole
 
 
 class Organisme(models.Model):
     nom = models.CharField(max_length=300)
     logo = models.ImageField(upload_to="SocialMedia/Image/")
+
+    @staticmethod
+    def noms_organismes():
+        noms_organismes = ""
+        for organisme in Organisme.objects.all():
+            noms_organismes += organisme.nom + ","
+
+        return noms_organismes[:-1]
 
     def __str__(self):
         return self.nom
@@ -230,6 +286,14 @@ class ActionBenevole(models.Model):
     date_fin = models.DateField()
     description = models.TextField(null=True, blank=True)
     profil = models.ForeignKey('main_app.Profil', on_delete=models.CASCADE)
+
+    @staticmethod
+    def get_user_benevolats(user):
+        return ActionBenevole.objects.filter(profil=user.profil).order_by('-date_fin')  # Benevolats passés
+
+    def regler_date(self):
+        self.date_debut = self.date_debut.replace(day=1)
+        self.date_fin = self.date_fin.replace(day=1)
 
     def __str__(self):
         return self.profil.user.first_name + " " + self.profil.user.last_name + " fait  " + self.nom_poste + " à " + self.nom_organisme

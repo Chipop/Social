@@ -1,0 +1,356 @@
+{% extends "SocialMedia/groupe/base_groupe.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% block title %}{{ groupe.nom }} - Demandes{% endblock %}
+{% block contentGroupe %}
+                        <!-- Filter Nav Start -->
+                            <div class="filter--nav pb--60 clearfix">
+                                <div class="filter--link float--left">
+                                    <h2 class="h4"><a href="members.html" class="btn-link">{{ groupe.admins.all.count|add:groupe.moderators.all.count|add:groupe.adherents.all.count|add:1 }} Membres.</a></h2>
+                                </div>
+                                <div class="filter--options float--right">
+                                    <label>
+                                        <span class="fs--14 ff--primary fw--500 text-darker">Show By :</span>
+
+                                        <select name="membersfilter" class="form-control form-sm" data-trigger="selectmenu">
+                                            <option value="last-active" selected>Last Active</option>
+                                            <option value="new-registered">New Registerd</option>
+                                            <option value="alphabetical">Alphabetical</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- Filter Nav End -->
+
+                            <!-- Member Items Start -->
+                        {% if nbdemandes != 0 %}
+                            <div class="member--items">
+                                <div id="requests" class="row">
+                            {% for demande in demandesGroupe %}
+                                    <div class="col-sm-4 demande{{ demande.id }}">
+                                        <!-- Member Item Start -->
+                                        <div class="member--item online">
+                                            <div class="img img-circle">
+                                                <a href="{% url 'SocialMedia:getProfil' demande.emetteur_id %}" class="btn-link">
+                                                    <img src="{{ demande.emetteur.photo_profil.image.url|default:'/media/SocialMedia/default.jpg' }}" style="max-height: 55px;height: 100px;" alt="">
+                                                </a>
+                                            </div>
+
+                                            <div class="name">
+                                                <h3 class="h6 fs--12">
+                                                    <a href="{% url 'SocialMedia:getProfil' demande.emetteur.id %}" class="btn-link">{{ demande.emetteur }}</a>
+                                                </h3>
+                                            </div>
+
+                                            <div class="activity">
+                                                <p><i class="fa mr--8 fa-clock-o"></i>{{ demande.emetteur.user.last_login|safe|date:'M. d, Y, g:i A' }}{{ demande.emetteur.user.last_login|default_if_none:"Non Connecté" }}</p>
+                                            </div>
+
+                                            <div class="actions" style="white-space: nowrap;">
+                                                <ul class="nav">
+                                                    <li>
+                                                        <a href="#" title="Accepter" class="btn-lin" data-toggle="tooltip" data-placement="bottom">
+                                                            <form id="acceptDemande" data-id="Demande acceptée" action="{% url 'SocialMedia:demandesGroupe' groupe.id %}" method="POST">
+                                                                {% csrf_token %}
+                                                                    {% render_field formDemande.demande value=demande.id %}
+                                                                    {% render_field formDemande.reponse value=1 %}
+                                                                <button type="submit" class="btn-link" ><i class="fa fa-check-circle-o" aria-hidden="true"></i></button>
+                                                            </form>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" title="Refuser" class="btn-link" data-toggle="tooltip" data-placement="bottom">
+                                                            <form id="refuseDemande" data-id="Demande refusée" action="{% url 'SocialMedia:demandesGroupe' groupe.id %}" method="POST">
+                                                                {% csrf_token %}
+                                                                    {% render_field formDemande.demande value=demande.id %}
+                                                                    {% render_field formDemande.reponse value=0 %}
+                                                                    <button type="submit" class="btn-link" ><i class="fa fa-remove" aria-hidden="true"></i></button>
+                                                            </form>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                            {% endfor %}
+                                </div>
+                            </div>
+                                        <!-- Member Item End -->
+                            {% else %}
+                                <h2 class="h4 fw--700 widget--title">le groupe n'a aucune demande de jointure.</h2>
+                            {% endif %}
+                                <div class="row text-center">
+                                <img id="loadingImage hidden" class="img-rounded hidden" height="150" width="150" src="{% static 'SocialMedia/Loading_icon.gif' %}" />
+                                </div>
+
+                            <!-- Page Count Start -->
+                            <div class="page--count pt--30">
+                                <label class="ff--primary fs--14 fw--500 text-darker">
+                                    <span>Viewing</span>
+                                    {% if demandesGroupe.has_previous %}
+                                        <button id="btfirst" href="?page=1" class="btn-link"><i class="fa fa-caret-left"></i><i class="fa fa-caret-left"></i></button>
+                                        <button id="btprevious" page="{{ demandesGroupe.previous_page_number }}" class="btn-link"><i class="fa fa-caret-left"></i></button>
+                                    {% else %}
+                                        <button id="btfirst" href="1" class="btn-link"><i class="fa fa-caret-left"></i><i class="fa fa-caret-left"></i></button>
+                                        <button id="btprevious" page="1" class="btn-link"><i class="fa fa-caret-left"></i></button>
+                                    {% endif %}
+                                        <input id="RequestsPageNum" type="number" name="page-count" value="{{ demandesGroupe.number }}" class="form-control form-sm">
+                                    {% if demandesGroupe.has_next %}
+                                        <button id="btnext" page="{{ demandesGroupe.next_page_number }}" class="btn-link"><i class="fa fa-caret-right"></i></button>
+                                        <button id="btlast" page="{{ demandesGroupe.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i><i class="fa fa-caret-right"></i></button>
+                                    {% else %}
+                                        <button id="btnext" page="{{ demandesGroupe.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i></button>
+                                        <button id="btlast" page="{{ demandesGroupe.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i><i class="fa fa-caret-right"></i></button>
+                                    {% endif %}
+                                        <span id="numPages">{{ demandesGroupe.paginator.num_pages }}</span>
+
+                                </label>
+                            </div>
+                            <!-- Page Count End -->
+
+
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+<script>
+
+	$('.profil_links_menu li').removeClass('active');
+    $('.profil_links_menu li:eq(2)').addClass('active');
+
+
+    function printRequests(emetteurId, demandeId, results)
+    {
+            profilURL = "{% url 'SocialMedia:getProfil' 999999 %}".replace(999999, emetteurId);
+            demandefield = '{% render_field formDemande.demande value=999999 %}'.replace(999999, demandeId);
+            actionURL = "{% url 'SocialMedia:demandesGroupe' 999999 %}".replace(999999, {{ groupe.id }});
+            csrf = "{% csrf_token %}".replace(/'/g, '"');
+            NewData = '<div class="col-sm-4 demande'+demandeId+'" >' +
+            '<div class="member--item online">' +
+
+                '<div class="img img-circle">' +
+                '<a href="'+profilURL+'" class="btn-link"><img src="'+results.photo_profil+'" style="max-height: 55px;height: 100px;" alt=""></a>' +
+                '</div>' +
+
+            '<div class="name">' +
+            '<h3 class="h6 fs--12">' +
+            '<a href="'+profilURL+'" class="btn-link">'+results.username+'</a></h3>' +
+            '</div>' +
+
+                '<div class="activity"><p><i class="fa mr--8 fa-clock-o"></i>'+results.last_login+'</p></div>' +
+
+                    '<div class="actions" style="white-space: nowrap;">' +
+                        '<ul class="nav"><li><a href="#" title="Accepter" class="btn-lin" data-toggle="tooltip" data-placement="bottom">' +
+                        '<form id="acceptDemande" data-id="Demande accepté" action="'+actionURL+'" method="POST">'+csrf+demandefield+
+                        '{% render_field formDemande.reponse value=1 %}'+
+                        '<button type="submit" class="btn-link" ><i class="fa fa-check-circle-o" aria-hidden="true"></i></button>' +
+                        '</form></a></li>' +
+                        '<li><a href="#" title="Refuser" class="btn-link" data-toggle="tooltip" data-placement="bottom">' +
+                        '<form id="acceptDemande" data-id="Demande refusée" action='+actionURL+' method="POST">'+csrf+demandefield+
+                        '{% render_field formDemande.reponse value=0 %}'+
+                        '<button type="submit" class="btn-link" ><i class="fa fa-remove" aria-hidden="true"></i></button></form></a></li>' +
+                        '<li><a href="#" title="Bloquer" class="btn-link" data-toggle="tooltip" data-placement="bottom">' +
+                        '</ul></div></div></div>';
+           /* setTimeout(function(){
+                    $("#requests").text(NewData);
+                }, 1000);*/
+           $("#requests").append(NewData);
+           //console.log(demandeId);
+           //console.log(NewData);
+    }
+
+    function getUserAjax(emetteur_id,id)
+    {
+        $.ajax({
+            url: '{% url "SocialMedia:AjaxUser" %}',
+            type: 'GET',
+            data : {
+                    'pid': emetteur_id
+                   },
+            dataType: 'json',
+            success: function(data) {
+                if( data.statut ) {
+                        printRequests(emetteur_id,id, data);
+                }else
+                    {
+                        swal({
+                          type: 'error',
+                          title: 'Erreur',
+                          text: 'Veuiller actualiser la page puis ressayer',
+                        })
+                    }
+            },
+            error: function() {
+                swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
+            },
+            stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
+
+            }
+        });
+    }
+
+	$('body').on( "submit","#acceptDemande, #refuseDemande, #bloqueDemande", function(event) {
+	event.preventDefault();
+    var form_data = new FormData($(this)[0]);
+    message = $(this).data('id');
+    //console.log(message);
+    $.ajax({
+        url: '{% url "SocialMedia:demandesGroupe" groupe.id %}',
+        type: $(this).attr('method'),
+        processData: false,
+        contentType: false,
+        data : form_data,
+        success: function(data) {
+            var i=1;
+            swal(data.reponse)
+            if( data.statut ) {
+                    if( data.nbdemandes == 0)
+                    {
+                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Aucune demande pour joindre le groupe n'a été envoyée</h2>");$("#RequestsPageNum").val('1');
+                        $("#btfirst").hide(250);
+                        $("#btnext").hide(250);
+                        $("#btlast").hide(250);
+                        $("#btnext").hide(250);
+                        $("#btprevious").hide(250);
+                        $("#nbdemandeBadge").text(data.nbdemandes);
+                        const toast = swal.mixin({
+                          toast: true,
+                          position: 'top-end',
+                          showConfirmButton: false,
+                          timer: 3000
+                        });
+                        toast({
+                          type: 'success',
+                          title: data.message,
+                        })
+                    }else{
+                        $('.demande'+data.demande).fadeOut(100, function(){
+                            $("#requests").empty();
+                            const toast = swal.mixin({
+                          toast: true,
+                          position: 'top-end',
+                          showConfirmButton: false,
+                          timer: 3000
+                        });
+
+                        toast({
+                          type: 'success',
+                          title: data.message,
+                        });
+                            getGroupeRequests($("#RequestsPageNum").val());
+                            $("#nbdemandeBadge").text(data.nbdemandes);
+                        });
+                    }
+            }else
+                {
+                    swal({
+                      type: 'error',
+                      title: 'Erreur',
+                      text: 'Veuiller actualiser la page puis ressayer',
+                    })
+                }
+        },
+        error: function() { },
+        stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
+            swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
+        }
+    });
+
+});
+
+
+
+
+    function getGroupeRequests(page)
+    {
+        $.ajax({
+        url: '{% url "SocialMedia:demandesGroupeViaAjax" groupe.id %}',
+        data : {'page':page},
+        dataType: 'json',
+        success: function(data) {
+            if( data.statut ) {
+                var i=1;
+                    if( data.nbdemandes == 0)
+                    {
+                        $("#requests").html("<h2 class='h4 fw--700 widget--title'>Aucune demande pour joindre le groupe n'a été envoyée</h2>");
+                        $("#RequestsPageNum").val('1');
+                        $("#btfirst").hide(250);
+                        $("#btnext").hide(250);
+                        $("#btlast").hide(250);
+                        $("#btnext").hide(250);
+                        $("#btprevious").hide(250);
+                        $("#nbdemandeBadge").text(data.nbdemandes);
+                    }else{
+                        $("#loadingImage").removeClass('hidden');
+                            $('#requests').empty();
+                            $.each(data.demandesGroupe,function(key, value){
+                                    getUserAjax(value.emetteur_id,value.id);
+                            });
+                            $("#nbdemandeBadge").text(data.nbdemandes);
+                            $("#btprevious").attr('page', data.previous_page_number);
+                            $("#btnext").attr('page', data.next_page_number);
+                            $("#btlast").attr('page', data.num_pages);
+                            $("#RequestsPageNum").val(data.current_page);
+                            $("#numPages").text(data.num_pages);
+                            if( !data.has_next )
+                            {
+                                $("#btnext").hide(250);
+                                $("#btlast").hide(250);
+                            }else
+                            {
+                                $("#btnext").show(250);
+                                $("#btlast").show(250);
+                            }
+
+                            if( !data.has_previous )
+                            {
+                                $("#btprevious").hide(250);
+                                $("#btfirst").hide(250);
+                            }else
+                            {
+                                $("#btprevious").show(250);
+                                $("#btfirst").show(250);
+                            }
+
+                            if( data.NumPagesExcessed )
+                            {
+                                $("#RequestsPageNum").text(data.num_pages);
+                            }
+
+                    }
+            }else
+                {
+                    swal({
+                      type: 'error',
+                      title: 'Erreur',
+                      text: 'Veuiller actualiser la page puis ressayer',
+                    })
+                }
+        },
+        error: function() { },
+        stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
+            swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
+        }
+    });
+    }
+
+    $("body").on('click', '#btfirst, #btprevious, #btnext, #btlast', function(event){
+        event.preventDefault();
+        pagenum=$(this).attr('page');
+        getGroupeRequests(pagenum);
+    });
+
+    $('#RequestsPageNum').on('keypress', function(e) {
+        if(e.which == 13) {
+         pageNum = $(this).val();
+         getGroupeRequests(pageNum);
+        }
+    });
+
+
+
+</script>
+{% endblock %}
+
+
+

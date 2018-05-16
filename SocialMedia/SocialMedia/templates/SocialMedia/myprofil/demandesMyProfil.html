@@ -3,22 +3,6 @@
 {% load widget_tweaks %}
 {% block title %}{{ user.username }} - Demandes{% endblock %}
 {% block contentProfil %}
-                        <!-- Filter Nav Start -->
-                            <div class="filter--nav pb--50 clearfix">
-                                <div class="filter--options float--right">
-                                    <label>
-                                        <span class="fs--14 ff--primary fw--500 text-darker">Show By :</span>
-
-                                        <select name="membersfilter" class="form-control form-sm" data-trigger="selectmenu">
-                                            <option value="last-active" selected>Last Active</option>
-                                            <option value="new-registered">New Registerd</option>
-                                            <option value="alphabetical">Alphabetical</option>
-                                        </select>
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- Filter Nav End -->
-
                             <!-- Member Items Start -->
                         {% if nbdemandes != 0 %}
                             <div class="member--items">
@@ -47,7 +31,7 @@
                                                 <ul class="nav">
                                                     <li>
                                                         <a href="#" title="Accepter" class="btn-lin" data-toggle="tooltip" data-placement="bottom">
-                                                            <form id="acceptDemande" action="{% url 'SocialMedia:demandes' %}" method="POST">
+                                                            <form id="acceptDemande" data-id="Demande acceptée" action="{% url 'SocialMedia:demandes' %}" method="POST">
                                                                 {% csrf_token %}
                                                                     {% render_field formDemande.demande value=demande.id %}
                                                                     {% render_field formDemande.statut value=1 %}
@@ -57,7 +41,7 @@
                                                     </li>
                                                     <li>
                                                         <a href="#" title="Refuser" class="btn-link" data-toggle="tooltip" data-placement="bottom">
-                                                            <form id="refuseDemande" action="{% url 'SocialMedia:demandes' %}" method="POST">
+                                                            <form id="refuseDemande" data-id="Demande refusée" action="{% url 'SocialMedia:demandes' %}" method="POST">
                                                                 {% csrf_token %}
                                                                     {% render_field formDemande.demande value=demande.id %}
                                                                     {% render_field formDemande.statut value=2 %}
@@ -67,7 +51,7 @@
                                                     </li>
                                                     <li>
                                                         <a href="#" title="Bloquer" class="btn-link" data-toggle="tooltip" data-placement="bottom">
-                                                            <form id="bloqueDemande" action="{% url 'SocialMedia:demandes' %}" method="POST">
+                                                            <form id="bloqueDemande" data-id="Utilisateur bloquée" action="{% url 'SocialMedia:demandes' %}" method="POST">
                                                                 {% csrf_token %}
                                                                     {% render_field formDemande.demande value=demande.id %}
                                                                     {% render_field formDemande.statut value=3 %}
@@ -84,7 +68,7 @@
                             </div>
                                         <!-- Member Item End -->
                             {% else %}
-                                <h2 class="h4 fw--700 widget--title">Vous N'avez Aucune Demande D'Amis</h2>
+                                <h2 class="h4 fw--700 widget--title">Vous n'avez aucune demande de contact actuellement.</h2>
                             {% endif %}
                                 <div class="row text-center">
                                 <img id="loadingImage hidden" class="img-rounded hidden" height="150" width="150" src="{% static 'SocialMedia/Loading_icon.gif' %}" />
@@ -93,7 +77,6 @@
                             <!-- Page Count Start -->
                             <div class="page--count pt--30">
                                 <label class="ff--primary fs--14 fw--500 text-darker">
-                                    <span>Viewing</span>
                                     {% if demandesAmis.has_previous %}
                                         <button id="btfirst" href="?page=1" class="btn-link"><i class="fa fa-caret-left"></i><i class="fa fa-caret-left"></i></button>
                                         <button id="btprevious" page="{{ demandesAmis.previous_page_number }}" class="btn-link"><i class="fa fa-caret-left"></i></button>
@@ -101,7 +84,9 @@
                                         <button id="btfirst" href="1" class="btn-link"><i class="fa fa-caret-left"></i><i class="fa fa-caret-left"></i></button>
                                         <button id="btprevious" page="1" class="btn-link"><i class="fa fa-caret-left"></i></button>
                                     {% endif %}
-                                        <input id="RequestsPageNum" type="number" name="page-count" value="{{ demandesAmis.number }}" class="form-control form-sm">
+                                        <input id="RequestsPageNum" type="number" name="page-count" value="{{ demandesAmis.number }}" class="form-control form-sm"> /
+
+                                        <span id="numPages">{{ demandesAmis.paginator.num_pages }}</span>
                                     {% if demandesAmis.has_next %}
                                         <button id="btnext" page="{{ demandesAmis.next_page_number }}" class="btn-link"><i class="fa fa-caret-right"></i></button>
                                         <button id="btlast" page="{{ demandesAmis.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i><i class="fa fa-caret-right"></i></button>
@@ -109,12 +94,9 @@
                                         <button id="btnext" page="{{ demandesAmis.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i></button>
                                         <button id="btlast" page="{{ demandesAmis.paginator.num_pages }}" class="btn-link"><i class="fa fa-caret-right"></i><i class="fa fa-caret-right"></i></button>
                                     {% endif %}
-                                        <span id="numPages">{{ demandesAmis.paginator.num_pages }}</span>
 
                                 </label>
                             </div>
-                            <!-- Page Count End -->
-
 
 {% endblock %}
 
@@ -147,16 +129,16 @@
 
                     '<div class="actions" style="white-space: nowrap;">' +
                         '<ul class="nav"><li><a href="#" title="Accepter" class="btn-lin" data-toggle="tooltip" data-placement="bottom">' +
-                        '<form id="acceptDemande" action="{% url 'SocialMedia:demandes' %}" method="POST">'+csrf+demandefield+
+                        '<form id="acceptDemande" data-id="Demande accepté" action="{% url 'SocialMedia:demandes' %}" method="POST">'+csrf+demandefield+
                         '{% render_field formDemande.statut value=1 %}'+
                         '<button type="submit" class="btn-link" ><i class="fa fa-check-circle-o" aria-hidden="true"></i></button>' +
                         '</form></a></li>' +
                         '<li><a href="#" title="Refuser" class="btn-link" data-toggle="tooltip" data-placement="bottom">' +
-                        '<form id="refuseDemande" action="{% url 'SocialMedia:demandes' %}" method="POST">'+csrf+demandefield+
+                        '<form id="refuseDemande" data-id="Demande refusée" action="{% url 'SocialMedia:demandes' %}" method="POST">'+csrf+demandefield+
                         '{% render_field formDemande.statut value=2 %}'+
                         '<button type="submit" class="btn-link" ><i class="fa fa-remove" aria-hidden="true"></i></button></form></a></li>' +
                         '<li><a href="#" title="Bloquer" class="btn-link" data-toggle="tooltip" data-placement="bottom">' +
-                        '<form id="bloqueDemande" action="{% url 'SocialMedia:demandes' %}" method="POST">'+csrf+demandefield+
+                        '<form id="bloqueDemande" data-id="Utilisateur bloqué" action="{% url 'SocialMedia:demandes' %}" method="POST">'+csrf+demandefield+
                         '{% render_field formDemande.statut value=3 %}'+
                         '<button type="submit" class="btn-link" ><i class="fa fa-ban" aria-hidden="true"></i></button>' +
                         '</form></a></li></ul></div></div></div>';
@@ -185,12 +167,12 @@
                         swal({
                           type: 'error',
                           title: 'Erreur',
-                          text: 'Veuiller actualiser la page puis ressayer',
+                          text: 'Veuiller actualiser la page puis réessayer',
                         })
                     }
             },
             error: function() {
-                swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
+            swal("Erreur", "Une erreur de réseau est survenue.", "error");
             },
             stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
 
@@ -201,6 +183,8 @@
 	$('body').on( "submit","#acceptDemande, #refuseDemande, #bloqueDemande", function(event) {
 	event.preventDefault();
     var form_data = new FormData($(this)[0]);
+    message = $(this).data('id');
+    console.log(message);
     $.ajax({
         url: '{% url "SocialMedia:demandes" %}',
         type: $(this).attr('method'),
@@ -219,23 +203,34 @@
                         $("#btnext").hide(250);
                         $("#btprevious").hide(250);
                         $("#nbdemandeBadge").text(data.nbdemandes);
+                        const toast = swal.mixin({
+                          toast: true,
+                          position: 'top-end',
+                          showConfirmButton: false,
+                          timer: 3000
+                        });
+                        console.log($(this).data('id'));
+                        toast({
+                          type: 'success',
+                          title: message,
+                        })
                     }else{
                         $('.demande'+data.demande).fadeOut(100, function(){
                             $("#requests").empty();
                             console.log(data.demandesAmis);
+                            const toast = swal.mixin({
+                          toast: true,
+                          position: 'top-end',
+                          showConfirmButton: false,
+                          timer: 3000
+                        });
+
+                        toast({
+                          type: 'success',
+                          title: message,
+                        });
                             getUserRequets($("#RequestsPageNum").val());
                             $("#nbdemandeBadge").text(data.nbdemandes);
-                            const toast = swal.mixin({
-                              toast: true,
-                              position: 'top-end',
-                              showConfirmButton: false,
-                              timer: 3000
-                            });
-
-                            toast({
-                              type: 'success',
-                              title: data.message,
-                            })
                         });
                     }
             }else
@@ -243,13 +238,13 @@
                     swal({
                       type: 'error',
                       title: 'Erreur',
-                      text: 'Veuiller actualiser la page puis ressayer',
+                      text: 'Veuillez actualiser la page puis réessayer',
                     })
                 }
         },
         error: function() { },
         stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
-            swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
+            swal("Erreur", "Une erreur de réseau est survenue.", "error");
         }
     });
 
@@ -320,13 +315,13 @@
                     swal({
                       type: 'error',
                       title: 'Erreur',
-                      text: 'Veuiller actualiser la page puis ressayer',
+                      text: 'Veuillez actualiser la page puis réessayer',
                     })
                 }
         },
         error: function() { },
         stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
-            swal("Veuiller Verifier Votre Connexion Reseau Puis Ressayer", "Erreur Fatale", "error");
+            swal("Erreur", "Une erreur de réseau est survenue.", "error");
         }
     });
     }

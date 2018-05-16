@@ -29,7 +29,7 @@
                                 <!-- Member Item Start -->
                                 <div class="member--item online">
                                     <div class="img img-circle">
-                                        <a href="member-activity-personal.html" class="btn-link">
+                                        <a href="{% url 'SocialMedia:getProfil' profil.id %}" class="btn-link">
                                             <img src="{{ profil.photo_profil.image.url }}" alt=""
                                                  style="  height: 55px;  ">
                                         </a>
@@ -37,7 +37,7 @@
 
                                     <div class="name">
                                         <h3 class="h6 fs--12">
-                                            <a href="member-activity-personal.html"
+                                            <a href="{% url 'SocialMedia:getProfil' profil.id %}"
                                                class="btn-link">{{ profil.user.first_name | title }} {{ profil.user.last_name | upper }}</a>
                                         </h3>
                                     </div>
@@ -121,7 +121,7 @@
                             <!-- Member Item Start -->
                             <div class="member--item online">
                                 <div class="img">
-                                    <a href="member-activity-personal.html" class="btn-link">
+                                    <a href="{% url 'SocialMedia:getProfil' offre.id %}" class="btn-link">
                                         <img src="{{ offre.entreprise.logo.url }}" alt=""
                                              style="  height: 55px;  ">
                                     </a>
@@ -129,7 +129,7 @@
 
                                 <div class="name">
                                     <h3 class="h6 fs--12">
-                                        <a href="member-activity-personal.html"
+                                        <a href="{% url 'SocialMedia:getProfil' offre.id %}"
                                            class="btn-link">{{ offre.nom_poste }}</a>
                                     </h3>
                                 </div>
@@ -192,14 +192,14 @@
                         <div class="col-md-3 col-xs-6 col-xxs-12">
                             <!-- Box Item Start -->
                             <div class="box--item text-center">
-                                <a href="group-home.html" class="img" data-overlay="0.1">
+                                <a href="{% url 'SocialMedia:groupe' groupe.id %}" class="img" data-overlay="0.1">
                                     <img src="{{ groupe.photo_profil.image.url }}" alt="" style="height: 100px;">
                                 </a>
 
                                 <div class="info">
 
                                     <div class="title">
-                                        <h2 class="h6"><a href="group-home.html">{{ groupe.nom }}</a></h2>
+                                        <h2 class="h6"><a href="{% url 'SocialMedia:groupe' groupe.id %}">{{ groupe.nom }}</a></h2>
                                     </div>
 
                                     <div class="meta">

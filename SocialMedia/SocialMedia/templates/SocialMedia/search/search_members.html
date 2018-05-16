@@ -28,7 +28,7 @@
                                 <!-- Member Item Start -->
                                 <div class="member--item online">
                                     <div class="img img-circle">
-                                        <a href="member-activity-personal.html" class="btn-link">
+                                        <a href="{% url 'SocialMedia:getProfil' profil.id %}" class="btn-link">
                                             <img src="{{ profil.photo_profil.image.url }}" alt=""
                                                  style="  height: 55px;  ">
                                         </a>
@@ -36,7 +36,7 @@
 
                                     <div class="name">
                                         <h3 class="h6 fs--12">
-                                            <a href="member-activity-personal.html"
+                                            <a href="{% url 'SocialMedia:getProfil' profil.id %}"
                                                class="btn-link">{{ profil.user.first_name | title }} {{ profil.user.last_name | upper }}</a>
                                         </h3>
                                     </div>

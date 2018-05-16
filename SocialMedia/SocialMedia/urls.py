@@ -9,7 +9,7 @@ app_name = "SocialMedia"
 urlpatterns = [
     path('profil/', views.profil, name='myprofil'),
     path('ajaxuser/', views.ajaxUser, name="AjaxUser"),
-    path('profil/demandes', views.demandesProfil, name="demandes"),
+    path('profil/demandes/', views.demandesProfil, name="demandes"),
     path('profil/media', views.mediaProfil, name="mediaProfil"),
     path('supprimer-ami/', views.suprimerAmi, name="supprimerAmi"),
     url('rechercher-amis', views.rechercherAmis, name="rechercherAmis"),
@@ -23,13 +23,6 @@ urlpatterns = [
 
     path('demandeajax', views.demandeViaAjax, name="demandeViaAjax"),
 
-    path('profil/editInterface/', views.editInterface, name="editInterface"),
-
-    path('profil/edit-about/', views.editAbout, name="editAbout"),
-
-    path('profil/edit-experience/<int:pk>/', views.editExperience, name="editExperience"),
-
-    path('profil/edit-formation/<int:pk>/', views.editFormation, name="editFormation"),
 
     path('home/', views.home, name="home"),
 
@@ -42,12 +35,37 @@ urlpatterns = [
     path('search/', views.search, name="search"),
 
     path('test',views.test,name="test"),
+    #Langue my profil
     path('myprofil/ajouterLangue/', views.ajouterLangue, name="ajouterLangue"),
+    path('myprofil/getModifierLangue/', views.getModifierLangue, name="getModifierLangue"),
     path('myprofil/modifierLangue/', views.modifierLangue, name="modifierLangue"),
     path('myprofil/supprimerLangue/', views.supprimerLangue, name="supprimerLangue"),
-    path('myprofil/getModifierLangue/', views.getModifierLangue, name="getModifierLangue"),
+    #Experience myprofil
+    path('myprofil/ajouterExperience/', views.ajouterExperience, name="ajouterExperience"),
+    path('myprofil/supprimerExperience/', views.supprimerExperience, name="supprimerExperience"),
+    path('myprofil/getModifierExperience/', views.getModifierExperience, name="getModifierExperience"),
+    path('myprofil/modifierExperience/', views.modifierExperience, name="modifierExperience"),
+    #Formation myprofil
+    path('myprofil/ajouterFormation/', views.ajouterFormation, name="ajouterFormation"),
+    path('myprofil/supprimerFormation/', views.supprimerFormation, name="supprimerFormation"),
+    path('myprofil/getModifierFormation/', views.getModifierFormation, name="getModifierFormation"),
+    path('myprofil/modifierFormation/', views.modifierFormation, name="modifierFormation"),
+    #Benevolar myprofil
+    path('myprofil/ajouterBenevolat/', views.ajouterBenevolat, name="ajouterBenevolat"),
+    path('myprofil/supprimerBenevolat/', views.supprimerBenevolat, name="supprimerBenevolat"),
+    path('myprofil/getModifierBenevolat/', views.getModifierBenevolat, name="getModifierBenevolat"),
+    path('myprofil/modifierBenevolat/', views.modifierBenevolat, name="modifierBenevolat"),
+    #Informations myprofil
+    path('myprofil/getModifierInformations/', views.getModifierInformations, name="getModifierInformations"),
+    path('myprofil/modifierInformations/', views.modifierInformations, name="modifierInformations"),
+    #InformationsProfil myprofil
+    path('myprofil/getModifierInformationsProfil/', views.getModifierInformationsProfil, name="getModifierInformationsProfil"),
+    path('myprofil/modifierInformationsProfil/', views.modifierInformationsProfil, name="modifierInformationsProfil"),
+    # Offre d'emplois
+    path('creer_offre/', views.creer_offre, name="creer_offre"),
+    path('creer_entreprise/', views.creer_entreprise, name="creer_entreprise"),
 
-    ##Haytham
+    #Haytham
 
     path('profil/<int:pk>/follow', views.followProfil, name="followProfil"),
 
@@ -58,4 +76,10 @@ urlpatterns = [
     path('profil/<int:pk>', views.getProfil, name='getProfil'),
 
     path('profil/<int:pk>/groupes', views.getProfilGroupes, name='getProfilGroupes'),
+
+    path('groupe/<int:pk>/', views.groupe, name="groupe"),
+
+    path('groupe/<int:pk>/demandes/', views.demandesGroupe, name="demandesGroupe"),
+
+    path('groupe/<int:pk>/ajax-demandes-groupe/', views.demandesGroupeViaAjax, name="demandesGroupeViaAjax"),
 ]
